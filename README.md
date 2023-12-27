@@ -6,8 +6,8 @@ This is an official starter for Convex.
 
 - [x] Setup Convex folder as a package and make sure it works
 - [x] Make sure Convex is working in web
-- [ ] Make sure Convex is working on mobile – issue here
-- [ ] Troubleshoot QR code not showing up on mobile app terminal
+- [x] Make sure Convex is working on mobile
+- [x] Troubleshoot QR code not showing up on mobile app terminal
 
 - [ ] Finish adding auth + backend functionality to mobile app
 - [ ] Finish adding auth + backend functionality to web app
