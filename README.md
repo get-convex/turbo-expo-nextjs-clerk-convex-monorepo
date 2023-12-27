@@ -5,10 +5,13 @@ This is an official starter for Convex.
 ## Todos
 
 - [x] Setup Convex folder as a package and make sure it works
+- [x] Make sure Convex is working in web
+- [ ] Make sure Convex is working on mobile – issue here
+- [ ] Troubleshoot QR code not showing up on mobile app terminal
+
 - [ ] Finish adding auth + backend functionality to mobile app
-- [ ] Migrate mobile app to TypeScript
 - [ ] Finish adding auth + backend functionality to web app
-- [ ] [Maybe] Troubleshoot QR code not showing up on mobile app
+- [ ] Migrate mobile app to TypeScript
 - [ ] [Maybe] Figure out env from Next.js after
 - [ ] [Maybe] migrate to pnpm
 
