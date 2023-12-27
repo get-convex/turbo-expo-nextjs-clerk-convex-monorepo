@@ -1,9 +1,9 @@
 {
-  "name": "notescontract",
+  "name": "notes-native",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "App.js",
   "scripts": {
-    "start": "expo start",
+    "dev": "expo start --ios",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"

@@ -2,6 +2,14 @@
 
 This is an official starter for Convex.
 
+## Todos
+
+- [ ] Setup Convex folder as a package and make sure it works
+- [ ] Finish adding auth + backend functionality to mobile app
+- [ ] Migrate mobile app to TypeScript
+- [ ] Finish adding auth + backend functionality to web app
+- [ ] [Maybe] migrate to pnpm
+
 ## Using this example
 
 Run the following command:
@@ -18,7 +26,6 @@ This monorepo template includes the following packages/apps:
 
 - `native`: a [react-native](https://reactnative.dev/) app built with [expo](https://docs.expo.dev/)
 - `web`: a [Next.js](https://nextjs.org/) app built with [react-native-web](https://necolas.github.io/react-native-web/)
-- `@repo/ui`: a stub [react-native](https://reactnative.dev/) component library shared by both `web` and `native` applications
 - `@repo/convex`: the convex folder with the schema and shared cloud functions by both `web` and `native` applications
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
