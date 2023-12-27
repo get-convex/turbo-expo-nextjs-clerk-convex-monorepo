@@ -4,10 +4,12 @@ This is an official starter for Convex.
 
 ## Todos
 
-- [ ] Setup Convex folder as a package and make sure it works
+- [x] Setup Convex folder as a package and make sure it works
 - [ ] Finish adding auth + backend functionality to mobile app
 - [ ] Migrate mobile app to TypeScript
 - [ ] Finish adding auth + backend functionality to web app
+- [ ] [Maybe] Troubleshoot QR code not showing up on mobile app
+- [ ] [Maybe] Figure out env from Next.js after
 - [ ] [Maybe] migrate to pnpm
 
 ## Using this example
@@ -15,7 +17,9 @@ This is an official starter for Convex.
 Run the following command:
 
 ```sh
-npm
+npm i
+npm run dev # to run the web + convex
+cd apps/native; npx expo start # to run the mobile app
 ```
 
 ## What's inside?
