@@ -4,7 +4,8 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore",
+    "start native": "cd ./apps/native; npx expo start"
   },
   "devDependencies": {
     "prettier": "^3.1.0",
@@ -13,7 +14,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@9.8.1",
+  "packageManager": "yarn@1.22.19",
   "workspaces": [
     "apps/*",
     "packages/*"

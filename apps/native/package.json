@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "App.js",
   "scripts": {
-    "dev": "npx expo start",
+    "start": "npx expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
