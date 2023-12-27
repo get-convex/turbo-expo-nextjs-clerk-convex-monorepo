@@ -1,0 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
+.font-montserrat {
+  font-family: "Montserrat", sans-serif;
+}
+
+.linear_gradient {
+  background: linear-gradient(
+    267deg,
+    #fff -9.43%,
+    #040218 -9.42%,
+    #fff 4.63%,
+    #d2e4f2 127.55%
+  );
+}
+
+.bg_image {
+  background: linear-gradient(
+      181deg,
+      rgba(255, 255, 255, 0) 57.92%,
+      #fff 97.09%,
+      rgba(255, 255, 255, 0) 127.09%
+    ),
+    url("/images/background.png"),
+    lightgray 0% 0% / 261.2499952316284px 261.2499952316284px repeat;
+}
+.button {
+  border-radius: 8px;
+  background: linear-gradient(
+    267deg,
+    #0983df -9.43%,
+    #040218 -9.42%,
+    #0d87e1 4.63%,
+    #0983df 127.55%
+  );
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+/* .bg_circle {
+  background-image: url("/images/blue-circle.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+} */
