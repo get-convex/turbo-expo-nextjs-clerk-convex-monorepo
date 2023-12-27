@@ -1,0 +1,14 @@
+{
+  "name": "@notes/db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "convex dev"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "convex": "^1.4.1"
+  }
+}
