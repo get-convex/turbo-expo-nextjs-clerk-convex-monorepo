@@ -1,5 +1,5 @@
-import Header from "@/components/notes/Header";
-import Notes from "@/components/notes/Notes";
+import Header from '@/components/Header';
+import Notes from '@/components/notes/Notes';
 
 export default function Home() {
   return (
