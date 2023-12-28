@@ -1,8 +1,10 @@
 'use client';
-import { ReactNode } from 'react';
-import { ConvexProvider, ConvexReactClient } from '@notes/db';
 
-// const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+import { ReactNode } from 'react';
+import { ConvexReactClient } from 'convex/react';
+import { ConvexProviderWithClerk } from 'convex/react-clerk';
+import { ClerkProvider, useAuth } from '@clerk/clerk-react';
+
 const convex = new ConvexReactClient(
   'https://giddy-kookabura-511.convex.cloud'
 );
@@ -12,5 +14,11 @@ export default function ConvexClientProvider({
 }: {
   children: ReactNode;
 }) {
-  return <ConvexProvider client={convex}>{children}</ConvexProvider>;
+  return (
+    <ClerkProvider publishableKey="pk_test_YW1wbGUtY2FtZWwtMC5jbGVyay5hY2NvdW50cy5kZXYk">
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        {children}
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
+  );
 }

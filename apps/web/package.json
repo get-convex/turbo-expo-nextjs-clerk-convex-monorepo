@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^4.30.2",
+    "@clerk/nextjs": "^4.29.1",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.1.1",
+    "@notes/db": "*",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18",
-    "@notes/db": "*"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
