@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-const BenifitsCard = () => {
-  return (
-    <div>BenifitsCard</div>
-  )
-}
+const BenefitsCard = () => {
+  return <div>BenefitsCard</div>;
+};
 
-export default BenifitsCard
+export default BenefitsCard;

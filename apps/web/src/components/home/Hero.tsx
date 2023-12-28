@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
 const Hero = () => {
   return (
@@ -12,11 +12,11 @@ const Hero = () => {
               The Ultimate <br /> Note-Taking Experience
             </h2>
             <p className="font-montserrat sm:pb-16 max-w-[680px] text-black text-xl sm:text-3xl not-italic font-normal leading-[103.3%] tracking-[-0.5px] sm:tracking-[-0.75px] pb-11">
-              Notez.io harnesses the power of artificial intelligence to
+              UseNotes harnesses the power of artificial intelligence to
               revolutionize the way you capture, organize, and recall your
               thoughts
             </p>
-            <Link href={"/notes"}>
+            <Link href={'/notes'}>
               <button className="button gap-2.5 px-8 py-4 font-montserrat text-white text-xl sm:text-3xl not-italic font-semibold leading-[90.3%] tracking-[-0.5px] sm:tracking-[-0.75px]">
                 Get Started
               </button>
@@ -26,7 +26,7 @@ const Hero = () => {
             <div className="relative max-w-[570px] w-full h-[380px] sm:h-[680px]">
               <div className="absolute z-10 inset-0 flex justify-center items-center bg-[#0983DF99] opacity-40 blur-[102px] rounded-[673px]">
                 <Image
-                  src={"/images/hero_image_bg.svg"}
+                  src={'/images/hero_image_bg.svg'}
                   width={541}
                   height={673}
                   alt="hero"
@@ -35,7 +35,7 @@ const Hero = () => {
               </div>
               <div className=" absolute z-50 inset-0 flex justify-center items-center">
                 <Image
-                  src={"/images/hero.png"}
+                  src={'/images/hero.png'}
                   width={561}
                   height={456}
                   alt="hero"

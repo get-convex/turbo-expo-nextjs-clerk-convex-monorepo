@@ -37,7 +37,6 @@ This Turborepo has some additional tools already setup for you:
 - [x] Make sure Convex is working in web
 - [x] Make sure Convex is working on mobile
 - [x] Troubleshoot QR code not showing up on mobile app terminal
-
 - [ ] Finish adding auth + backend functionality to mobile app
 - [ ] Finish adding auth + backend functionality to web app
 - [ ] Migrate mobile app to TypeScript

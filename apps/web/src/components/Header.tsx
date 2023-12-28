@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
 //@ts-nocheck
-import React from "react";
-import { Fragment, ReactNode } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import Logo from "./common/Logo";
-import Link from "next/link";
+import React from 'react';
+import { Fragment, ReactNode } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
+import Logo from './common/Logo';
+import Link from 'next/link';
 
 type NavigationItem = {
   name: string;
@@ -16,12 +16,12 @@ type NavigationItem = {
 };
 
 const navigation: NavigationItem[] = [
-  { name: "Benifits", href: "#benifits", current: true },
-  { name: "Reviews", href: "#reviews", current: false },
+  { name: 'Benefits', href: '#Benefits', current: true },
+  { name: 'Reviews', href: '#reviews', current: false },
 ];
 
 function classNames(...classes: string[]): string {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Example() {
@@ -46,7 +46,7 @@ export default function Example() {
                           <Link
                             href={item.href}
                             className="text-[#2D2D2D] text-center text-xl not-italic font-normal leading-[normal]"
-                            aria-current={item.current ? "page" : undefined}
+                            aria-current={item.current ? 'page' : undefined}
                           >
                             {item.name}
                           </Link>
@@ -95,7 +95,7 @@ export default function Example() {
                   as={Link}
                   href={item.href}
                   className="text-[#2D2D2D] text-center text-xl not-italic font-normal leading-[normal]"
-                  aria-current={item.current ? "page" : undefined}
+                  aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}
                 </Disclosure.Button>
