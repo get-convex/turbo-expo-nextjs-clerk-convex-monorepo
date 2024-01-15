@@ -42,4 +42,5 @@ This Turborepo has some additional tools already setup for you:
 - [ ] Add all functionality to web app
 - [ ] Add all functionality to mobile app
 - [ ] Migrate mobile app to TypeScript
+- [ ] Review all the code
 - [ ] [Maybe] Figure out how to grab env vars for Next.js app from .env

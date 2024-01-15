@@ -2,12 +2,7 @@ import { View, StatusBar } from 'react-native';
 import { useFonts } from 'expo-font';
 import { LogBox } from 'react-native';
 import Navigation from './src/navigation/Navigation';
-import { ConvexReactClient, ConvexProvider } from '@notes/db';
-
-// Initialize Convex client.
-const convex = new ConvexReactClient(
-  'https://giddy-kookabura-511.convex.cloud'
-);
+import ConvexClientProvider from './ConvexClientProvider';
 
 export default function App() {
   LogBox.ignoreLogs(['Warning: ...']);
@@ -33,7 +28,7 @@ export default function App() {
     Platform.OS === 'ios' ? 50 : StatusBar.currentHeight;
 
   return (
-    <ConvexProvider client={convex}>
+    <ConvexClientProvider>
       <View style={{ flex: 1 }}>
         <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: '#0D87E1' }}>
           <StatusBar
@@ -44,6 +39,6 @@ export default function App() {
         </View>
         <Navigation />
       </View>
-    </ConvexProvider>
+    </ConvexClientProvider>
   );
 }

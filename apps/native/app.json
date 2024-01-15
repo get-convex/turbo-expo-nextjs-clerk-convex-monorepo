@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#0D87E1"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -22,6 +20,9 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
+    },
+    "extra": {
+      "clerkPublishableKey": "pk_test_YW1wbGUtY2FtZWwtMC5jbGVyay5hY2NvdW50cy5kZXYk"
     },
     "web": {
       "favicon": "./assets/favicon.png"
