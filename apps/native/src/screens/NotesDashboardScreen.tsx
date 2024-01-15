@@ -11,11 +11,14 @@ import {
 } from "react-native";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import { api, useQuery } from "@notes/db";
 
 const NotesDashboardScreen = ({ navigation }) => {
   const { userId } = useAuth();
+  const user = useUser();
+  const imageUrl = user.user.imageUrl;
+  const firstName = user.user.firstName;
 
   const allNotes = useQuery(api.notes.getNotes, { userId: userId });
   const [search, setSearch] = useState("");
@@ -48,12 +51,14 @@ const NotesDashboardScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.yourNotesContainer}>
+        {/* @ts-ignore, for css purposes */}
         <Image style={styles.avatarSmall} />
         <Text style={styles.title}>Your Notes</Text>
-        <Image
-          style={styles.avatarSmall}
-          source={require("../assets/icons/avatar.png")}
-        />
+        {imageUrl ? (
+          <Image style={styles.avatarSmall} source={{ uri: imageUrl }} />
+        ) : (
+          <Text>{firstName}</Text>
+        )}
       </View>
       <View style={styles.searchContainer}>
         <Feather
@@ -132,6 +137,7 @@ const styles = StyleSheet.create({
   avatarSmall: {
     width: 28,
     height: 28,
+    borderRadius: 10,
   },
   searchContainer: {
     flexDirection: "row",
