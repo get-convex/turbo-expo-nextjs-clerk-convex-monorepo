@@ -1,32 +1,13 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { api, useQuery } from "@notes/db";
-import { SignInButton } from "@clerk/clerk-react";
-// import { useSignUp } from "@clerk/clerk-expo";
 import { useOAuth } from "@clerk/clerk-expo";
 import { AntDesign } from "@expo/vector-icons";
 
 const LoginScreen = ({ navigation }) => {
   const tasks = useQuery(api.notes.getNotes, {});
   console.log({ tasks });
-
-  // const { isLoaded, signUp, setActive } = useSignUp();
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = React.useState("");
-  // const [emailError, setEmailError] = useState("");
-
-  // const validateEmail = (email) => {
-  //   var re = /\S+@\S+\.\S+/;
-  //   return re.test(email);
-  // };
 
   const { startOAuthFlow: startGoogleAuthFlow } = useOAuth({
     strategy: "oauth_google",
@@ -35,7 +16,7 @@ const LoginScreen = ({ navigation }) => {
     strategy: "oauth_apple",
   });
 
-  const onPress = async (authType) => {
+  const onPress = async (authType: string) => {
     try {
       if (authType === "google") {
         const { createdSessionId, setActive } = await startGoogleAuthFlow();
@@ -55,26 +36,6 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  // const handleContinueWithEmail = async () => {
-  //   if (!email) {
-  //     setEmailError("Email address is required");
-  //     return;
-  //   }
-  //   if (!validateEmail(email)) {
-  //     setEmailError("Please enter a valid email address");
-  //     return;
-  //   }
-  //   setEmailError("");
-  //   if (email & password) {
-  //     await signUp.create({
-  //       emailAddress,
-  //       password,
-  //     });
-  //     navigation.navigate("NotesDashboardScreen");
-  //   }
-  //   setEmail("");
-  // };
-
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -86,42 +47,6 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.subtitle}>
           Welcome back! Please enter your details.
         </Text>
-
-        {/* <SignInButton /> */}
-
-        {/* <TextInput
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            setEmailError(""); // Clear error when user is typing
-          }}
-          placeholder="Enter your email"
-          style={styles.input}
-          placeholderTextColor={"#667085"}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        {!!emailError && <Text style={styles.errorText}>{emailError}</Text>}
-        <TextInput
-          value={password}
-          style={styles.input}
-          placeholder="Password..."
-          placeholderTextColor="#000"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        /> */}
-        {/* <TouchableOpacity
-          style={styles.buttonEmail}
-          onPress={handleContinueWithEmail}
-        >
-          <Text style={styles.buttonText}>Continue with email</Text>
-        </TouchableOpacity>
-
-        <View style={styles.dividerContainer}>
-          <View style={styles.divider} />
-          <Text style={styles.dividerText}>OR</Text>
-          <View style={styles.divider} />
-        </View> */}
         <TouchableOpacity
           style={styles.buttonGoogle}
           onPress={() => onPress("google")}

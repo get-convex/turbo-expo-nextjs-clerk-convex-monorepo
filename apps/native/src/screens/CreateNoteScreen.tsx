@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,52 +8,58 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
-  Animated
+  Animated,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { width } = Dimensions.get("window");
 
 export default function CreateNoteScreen({ navigation }) {
-    const [isAdvancedSummarizationEnabled, setIsAdvancedSummarizationEnabled] = useState(false);
-    const footerY = new Animated.Value(0); 
-    const toggleAdvancedSummarization = () => {
-        setIsAdvancedSummarizationEnabled(!isAdvancedSummarizationEnabled);
-      };
-    useEffect(() => {
-      const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+  const [isAdvancedSummarizationEnabled, setIsAdvancedSummarizationEnabled] =
+    useState(false);
+  const footerY = new Animated.Value(0);
+  const toggleAdvancedSummarization = () => {
+    setIsAdvancedSummarizationEnabled(!isAdvancedSummarizationEnabled);
+  };
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
         // Slide down the footer
         Animated.timing(footerY, {
           toValue: 1,
           duration: 300,
           useNativeDriver: true,
         }).start();
-      });
-      const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
         // Slide up the footer
         Animated.timing(footerY, {
           toValue: 0,
           duration: 300,
           useNativeDriver: true,
         }).start();
-      });
-  
-      // Clean up function
-      return () => {
-        keyboardDidShowListener.remove();
-        keyboardDidHideListener.remove();
-      };
-    }, []);
-  
-    // Calculate the position of the footer based on the Animated.Value
-    const footerTranslateY = footerY.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 100], // Adjust this range according to the height of your footer
-    });
-  
-  
+      }
+    );
+
+    // Clean up function
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  // Calculate the position of the footer based on the Animated.Value
+  const footerTranslateY = footerY.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 100], // Adjust this range according to the height of your footer
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -79,55 +85,67 @@ export default function CreateNoteScreen({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-   
-     <KeyboardAwareScrollView
-     showsVerticalScrollIndicator={false}
-     contentContainerStyle={{paddingBottom:100}}
-     >
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Title</Text>
-        <TextInput
-          style={styles.inputField}
-          placeholder="Note Title"
-          placeholderTextColor="#A9A9A9"
-        />
-        <Text style={styles.inputLabel}>Comments</Text>
-        <TextInput
-          style={[styles.inputField, styles.inputFieldMulti]}
-          multiline
-          placeholder="Note Comments"
-          placeholderTextColor="#A9A9A9"
-        />
-      </View>
-      <Text style={{...styles.inputLabel,paddingHorizontal:27,marginTop:10}}>AI Features</Text>
 
-      {/* Advanced Summarization Section */}
-      <View style={styles.advancedSummarizationContainer}>
-        <View style={styles.advancedSummarizationCheckboxContainer}>
-          <TouchableOpacity onPress={toggleAdvancedSummarization} style={styles.checkbox}>
-            {isAdvancedSummarizationEnabled && <AntDesign name="check" size={RFValue(12.5)} color="#0D87E1" />}
-          </TouchableOpacity>
-          <Text style={styles.advancedSummarizationText}>Advanced Summarization</Text>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Title</Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Note Title"
+            placeholderTextColor="#A9A9A9"
+          />
+          <Text style={styles.inputLabel}>Comments</Text>
+          <TextInput
+            style={[styles.inputField, styles.inputFieldMulti]}
+            multiline
+            placeholder="Note Comments"
+            placeholderTextColor="#A9A9A9"
+          />
         </View>
-        <Text style={styles.advancedSummarizationSubtext}>
-          Check this box if you want to generate a summary of your note using AI
+        <Text
+          style={{ ...styles.inputLabel, paddingHorizontal: 27, marginTop: 10 }}
+        >
+          AI Features
         </Text>
-      </View>
+
+        {/* Advanced Summarization Section */}
+        <View style={styles.advancedSummarizationContainer}>
+          <View style={styles.advancedSummarizationCheckboxContainer}>
+            <TouchableOpacity
+              onPress={toggleAdvancedSummarization}
+              style={styles.checkbox}
+            >
+              {isAdvancedSummarizationEnabled && (
+                <AntDesign name="check" size={RFValue(12.5)} color="#0D87E1" />
+              )}
+            </TouchableOpacity>
+            <Text style={styles.advancedSummarizationText}>
+              Advanced Summarization
+            </Text>
+          </View>
+          <Text style={styles.advancedSummarizationSubtext}>
+            Check this box if you want to generate a summary of your note using
+            AI
+          </Text>
+        </View>
       </KeyboardAwareScrollView>
       <Animated.View
-      style={[
-        styles.newNoteButtonContainer,
-        { transform: [{ translateY: footerTranslateY }] },
-      ]}
-    >
-      <TouchableOpacity
-        onPress={() => navigation.navigate('CreateNoteScreen')}
-        style={styles.newNoteButton}
+        style={[
+          styles.newNoteButtonContainer,
+          { transform: [{ translateY: footerTranslateY }] },
+        ]}
       >
-        <AntDesign name="pluscircle" size={20} color="#fff" />
-        <Text style={styles.newNoteButtonText}>Create a New Note</Text>
-      </TouchableOpacity>
-    </Animated.View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("CreateNoteScreen")}
+          style={styles.newNoteButton}
+        >
+          <AntDesign name="pluscircle" size={20} color="#fff" />
+          <Text style={styles.newNoteButtonText}>Create a New Note</Text>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 }
@@ -187,23 +205,23 @@ const styles = StyleSheet.create({
     fontFamily: "MLight",
     color: "#000",
     borderRadius: 8,
-    paddingHorizontal:14,
-    paddingVertical:12.5,
+    paddingHorizontal: 14,
+    paddingVertical: 12.5,
     borderWidth: 1,
     borderColor: "#D9D9D9",
   },
   inputFieldMulti: {
     minHeight: 228,
-    textAlignVertical: 'top',
-    paddingTop:10
+    textAlignVertical: "top",
+    paddingTop: 10,
   },
   advancedSummarizationContainer: {
     paddingHorizontal: 27,
     marginTop: 10,
   },
   advancedSummarizationCheckboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   checkbox: {
@@ -212,10 +230,10 @@ const styles = StyleSheet.create({
     borderRadius: RFValue(5),
     borderWidth: 1,
     borderColor: "#0D87E1",
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: RFValue(10),
-    backgroundColor:'#F9F5FF',
+    backgroundColor: "#F9F5FF",
   },
   advancedSummarizationText: {
     fontSize: RFValue(15),
@@ -226,16 +244,16 @@ const styles = StyleSheet.create({
     fontSize: RFValue(12.5),
     fontFamily: "MRegular",
     color: "#A9A9A9",
-    paddingHorizontal:30
+    paddingHorizontal: 30,
   },
   newNoteButton: {
-    flexDirection: 'row',
-    backgroundColor: '#0D87E1',
+    flexDirection: "row",
+    backgroundColor: "#0D87E1",
     borderRadius: 7,
     width: width / 1.6,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
     minHeight: 44,
     position: "absolute",
     bottom: 35,
@@ -249,7 +267,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   newNoteButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: RFValue(15),
     fontFamily: "MMedium",
     marginLeft: 10,
@@ -257,7 +275,7 @@ const styles = StyleSheet.create({
   newNoteButtonContainer: {
     position: "absolute",
     bottom: 0,
-    alignSelf: 'center',
+    alignSelf: "center",
     // ... other styles you need
   },
 });

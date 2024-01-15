@@ -38,10 +38,10 @@ This Turborepo has some additional tools already setup for you:
 - [x] Make sure Convex is working on mobile
 - [x] Troubleshoot QR code not showing up on mobile app terminal
 - [x] Add auth to web app
-- [ ] Add auth to mobile app
+- [x] Add auth to mobile app
+- [x] Migrate mobile app to TypeScript
 - [ ] Add all functionality to web app
 - [ ] Add all functionality to mobile app
-- [ ] Migrate mobile app to TypeScript
 - [ ] Review all the code
 - [ ] [Maybe] Figure out how to grab env vars for Next.js app from .env
 - [ ] [Maybe] Add email verification to mobile app

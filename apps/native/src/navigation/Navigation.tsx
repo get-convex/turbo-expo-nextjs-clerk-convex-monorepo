@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "../screens/LoginScreenNew";
+import LoginScreen from "../screens/LoginScreen";
 import NotesDashboardScreen from "../screens/NotesDashboardScreen";
 import InsideNoteScreen from "../screens/InsideNoteScreen";
 import CreateNoteScreen from "../screens/CreateNoteScreen";

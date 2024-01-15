@@ -1,7 +1,7 @@
 {
   "name": "notes-native",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "dev": "expo start",
     "start": "expo start",
