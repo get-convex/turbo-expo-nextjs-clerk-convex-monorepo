@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useSignUp } from '@clerk/clerk-expo';
+import * as React from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useSignUp } from "@clerk/clerk-expo";
 
 export default function LoginScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
 
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [emailAddress, setEmailAddress] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [emailAddress, setEmailAddress] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [pendingVerification, setPendingVerification] = React.useState(false);
-  const [code, setCode] = React.useState('');
+  const [code, setCode] = React.useState("");
 
   // start the sign up process.
   const onSignUpPress = async () => {
@@ -26,7 +26,7 @@ export default function LoginScreen() {
       });
 
       // send the email.
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
 
       // change the UI to our pending section.
       setPendingVerification(true);
