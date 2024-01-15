@@ -40,8 +40,8 @@ This Turborepo has some additional tools already setup for you:
 - [x] Add auth to web app
 - [x] Add auth to mobile app
 - [x] Migrate mobile app to TypeScript
-- [ ] Add all functionality to web app
 - [ ] Add all functionality to mobile app
+- [ ] Add all functionality to web app
 - [ ] Review all the code
 - [ ] [Maybe] Figure out how to grab env vars for Next.js app from .env
 - [ ] [Maybe] Add email verification to mobile app

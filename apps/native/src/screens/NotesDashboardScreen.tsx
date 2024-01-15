@@ -7,36 +7,22 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  Switch,
   Dimensions,
 } from "react-native";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useAuth } from "@clerk/clerk-expo";
+import { api, useQuery } from "@notes/db";
 
 const NotesDashboardScreen = ({ navigation }) => {
   const { userId } = useAuth();
 
-  console.log({ userId });
-
-  const [notes, setNotes] = useState([]);
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const allNotes = useQuery(api.notes.getNotes, { userId: userId });
   const [search, setSearch] = useState("");
 
-  const toggleSwitch = () => {
-    setIsSwitchOn((previousState) => !previousState);
-    if (!isSwitchOn) {
-      setNotes([
-        { id: "1", title: "My Trip to Paris" },
-        { id: "2", title: "Things to do tomorrow" },
-        { id: "3", title: "Workout plans" },
-        { id: "4", title: "Show to watch" },
-        { id: "5", title: "Go-to Restaurants" },
-      ]);
-    } else {
-      setNotes([]);
-    }
-  };
+  const finalNotes = search
+    ? allNotes.filter((note) => note.title.includes(search))
+    : allNotes;
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -83,8 +69,7 @@ const NotesDashboardScreen = ({ navigation }) => {
           style={styles.searchInput}
         />
       </View>
-
-      {notes.length === 0 ? (
+      {!finalNotes || finalNotes.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyStateText}>
             Create your first note to{"\n"}get started
@@ -92,9 +77,9 @@ const NotesDashboardScreen = ({ navigation }) => {
         </View>
       ) : (
         <FlatList
-          data={notes}
+          data={finalNotes}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           style={styles.notesList}
           contentContainerStyle={{
             marginTop: 19,
@@ -103,16 +88,6 @@ const NotesDashboardScreen = ({ navigation }) => {
           }}
         />
       )}
-
-      <View style={styles.switchContainer}>
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isSwitchOn ? "#fff" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isSwitchOn}
-        />
-      </View>
 
       <TouchableOpacity
         onPress={() => navigation.navigate("CreateNoteScreen")}

@@ -1,14 +1,10 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
-import { api, useQuery } from "@notes/db";
 import { useOAuth } from "@clerk/clerk-expo";
 import { AntDesign } from "@expo/vector-icons";
 
 const LoginScreen = ({ navigation }) => {
-  const tasks = useQuery(api.notes.getNotes, {});
-  console.log({ tasks });
-
   const { startOAuthFlow: startGoogleAuthFlow } = useOAuth({
     strategy: "oauth_google",
   });

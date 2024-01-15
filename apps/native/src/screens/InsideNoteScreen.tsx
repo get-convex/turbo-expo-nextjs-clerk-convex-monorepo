@@ -14,13 +14,14 @@ const { width } = Dimensions.get("window");
 
 export default function InsideNoteScreen({ route, navigation }) {
   const { item } = route.params;
+  console.log({ item });
   const [activeTab, setActiveTab] = useState("original"); // State to manage active tab
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Image
-          source={require("../assets/icons/logo2small.png")} // Replace with your logo image file
+          source={require("../assets/icons/logo2small.png")}
           style={styles.logo}
         />
       </View>
@@ -34,12 +35,7 @@ export default function InsideNoteScreen({ route, navigation }) {
         </TouchableOpacity>
 
         <Text style={styles.title}>{item.title}</Text>
-        <TouchableOpacity>
-          <Image
-            style={styles.arrowBack}
-            source={require("../assets/icons/saveIcon.png")}
-          />
-        </TouchableOpacity>
+        <TouchableOpacity></TouchableOpacity>
       </View>
 
       <ScrollView
@@ -47,13 +43,12 @@ export default function InsideNoteScreen({ route, navigation }) {
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         <View style={styles.contentContainer}>
-          {activeTab === "original" && (
-            <Text style={styles.contentTitle}>A Dreamy Escape to Paris</Text>
-          )}
           <Text style={styles.contentDescription}>
             {activeTab === "original"
-              ? `Paris, the City of Light, has always held a magnetic allure, and my recent journey to this enchanting metropolis exceeded all expectations. From iconic landmarks to quaint cobblestone streets, every moment in Paris felt like a chapter in a timeless romance.\n\nNo trip to Paris is complete without a visit to the Eiffel Tower. Standing beneath its towering structure, the city unfolded before me like a masterpiece. The Louvre, with its grandeur and cultural treasures, offered a journey through art and history, leaving me awe-inspired.`
-              : "Coming soon..."}
+              ? item.content
+              : item.summary
+                ? item.summary
+                : "No summary available"}
           </Text>
         </View>
       </ScrollView>

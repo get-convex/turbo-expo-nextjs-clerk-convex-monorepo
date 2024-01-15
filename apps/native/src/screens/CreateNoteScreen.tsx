@@ -13,16 +13,24 @@ import {
 import { RFValue } from "react-native-responsive-fontsize";
 import { AntDesign } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { api, useMutation } from "@notes/db";
+import { useAuth } from "@clerk/clerk-expo";
 
 const { width } = Dimensions.get("window");
 
 export default function CreateNoteScreen({ navigation }) {
+  const createNote = useMutation(api.notes.createNote);
+  const { userId } = useAuth();
+
   const [isAdvancedSummarizationEnabled, setIsAdvancedSummarizationEnabled] =
     useState(false);
+  const [noteContent, setNoteContent] = useState("");
+  const [noteTitle, setNoteTitle] = useState("");
   const footerY = new Animated.Value(0);
   const toggleAdvancedSummarization = () => {
     setIsAdvancedSummarizationEnabled(!isAdvancedSummarizationEnabled);
   };
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -60,6 +68,16 @@ export default function CreateNoteScreen({ navigation }) {
     outputRange: [0, 100], // Adjust this range according to the height of your footer
   });
 
+  const createUserNote = async () => {
+    await createNote({
+      userId,
+      title: noteTitle,
+      content: noteContent,
+      isSummary: isAdvancedSummarizationEnabled,
+    });
+    navigation.navigate("NotesDashboardScreen");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -93,12 +111,16 @@ export default function CreateNoteScreen({ navigation }) {
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Title</Text>
           <TextInput
+            value={noteTitle}
+            onChangeText={(val: string) => setNoteTitle(val)}
             style={styles.inputField}
             placeholder="Note Title"
             placeholderTextColor="#A9A9A9"
           />
-          <Text style={styles.inputLabel}>Comments</Text>
+          <Text style={styles.inputLabel}>Content</Text>
           <TextInput
+            value={noteContent}
+            onChangeText={(val: string) => setNoteContent(val)}
             style={[styles.inputField, styles.inputFieldMulti]}
             multiline
             placeholder="Note Comments"
@@ -119,7 +141,12 @@ export default function CreateNoteScreen({ navigation }) {
               style={styles.checkbox}
             >
               {isAdvancedSummarizationEnabled && (
-                <AntDesign name="check" size={RFValue(12.5)} color="#0D87E1" />
+                <AntDesign
+                  name="check"
+                  size={RFValue(12.5)}
+                  color="#0D87E1"
+                  aria-checked
+                />
               )}
             </TouchableOpacity>
             <Text style={styles.advancedSummarizationText}>
@@ -138,10 +165,7 @@ export default function CreateNoteScreen({ navigation }) {
           { transform: [{ translateY: footerTranslateY }] },
         ]}
       >
-        <TouchableOpacity
-          onPress={() => navigation.navigate("CreateNoteScreen")}
-          style={styles.newNoteButton}
-        >
+        <TouchableOpacity onPress={createUserNote} style={styles.newNoteButton}>
           <AntDesign name="pluscircle" size={20} color="#fff" />
           <Text style={styles.newNoteButtonText}>Create a New Note</Text>
         </TouchableOpacity>

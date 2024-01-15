@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "convex": "^1.4.1"
+    "convex": "^1.4.1",
+    "openai": "^4.24.7"
   }
 }
