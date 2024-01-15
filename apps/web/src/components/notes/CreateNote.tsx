@@ -1,14 +1,33 @@
-"use client";
-import { Fragment, useRef, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import Checkbox from "./Checkbox";
+'use client';
+
+import { Fragment, useRef, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import Image from 'next/image';
+import Checkbox from './Checkbox';
+import { api, useMutation } from '@notes/db';
+import { useUser } from '@clerk/clerk-react';
 
 export default function CreateNote() {
   const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
+  const { user } = useUser();
+  const userId = user?.id;
   const cancelButtonRef = useRef(null);
+
+  const createNote = useMutation(api.notes.createNote);
+
+  const createUserNote = async () => {
+    await createNote({
+      userId: userId!,
+      title,
+      content,
+      isSummary: isChecked,
+    });
+    setOpen(false);
+  };
 
   return (
     <>
@@ -18,14 +37,14 @@ export default function CreateNote() {
           className="button text-[#EBECEF] flex gap-4 justify-center items-center text-center px-8 sm:px-16 py-2"
         >
           <Image
-            src={"/images/Add.png"}
+            src={'/images/Add.png'}
             width={40}
             height={40}
             alt="search"
             className="float-right sm:w-[40px] sm:h-[40px] w-6 h-6"
           />
           <span className="text-[17px] sm:text-3xl not-italic font-medium leading-[79%] tracking-[-0.75px]">
-            {" "}
+            {' '}
             New Note
           </span>
         </button>
@@ -86,6 +105,8 @@ export default function CreateNote() {
                                 type="text"
                                 placeholder="Note Title"
                                 autoComplete="title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
                                 className="border shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] rounded-lg border-solid border-[#D0D5DD] bg-white w-full py-2.5 px-[14px] text-black text-[17px] not-italic font-light leading-[90.3%] tracking-[-0.425px] sm:text-2xl"
                               />
                             </div>
@@ -105,7 +126,8 @@ export default function CreateNote() {
                                 rows={8}
                                 placeholder="Start your note "
                                 className="block w-full rounded-md border-0 py-1.5  border-[#D0D5DD] text-2xl shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:leading-6 text-black text-[17px] not-italic font-light leading-[90.3%] tracking-[-0.425px] sm:text-2xl"
-                                defaultValue={""}
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
                               />
                             </div>
                             <p className="text-black text-[17px] sm:text-2xl not-italic font-medium leading-[90.3%] tracking-[-0.6px]">
@@ -113,7 +135,10 @@ export default function CreateNote() {
                             </p>
                           </div>
 
-                          <Checkbox />
+                          <Checkbox
+                            isChecked={isChecked}
+                            checkHandler={() => setIsChecked(!isChecked)}
+                          />
                         </div>
                       </div>
                     </>
@@ -122,7 +147,7 @@ export default function CreateNote() {
                     <button
                       type="button"
                       className="button text-white text-center text-[17px] sm:text-2xl not-italic font-semibold leading-[90.3%] tracking-[-0.6px] px-[70px] py-2"
-                      onClick={() => setOpen(false)}
+                      onClick={createUserNote}
                     >
                       Create
                     </button>

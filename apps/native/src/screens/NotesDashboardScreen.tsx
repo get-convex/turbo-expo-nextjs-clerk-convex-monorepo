@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,11 +8,11 @@ import {
   Image,
   FlatList,
   Dimensions,
-} from "react-native";
-import { Feather, AntDesign } from "@expo/vector-icons";
-import { RFValue } from "react-native-responsive-fontsize";
-import { useAuth, useUser } from "@clerk/clerk-expo";
-import { api, useQuery } from "@notes/db";
+} from 'react-native';
+import { Feather, AntDesign } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { useAuth, useUser } from '@clerk/clerk-expo';
+import { api, useQuery } from '@notes/db';
 
 const NotesDashboardScreen = ({ navigation }) => {
   const { userId } = useAuth();
@@ -21,16 +21,20 @@ const NotesDashboardScreen = ({ navigation }) => {
   const firstName = user.user.firstName;
 
   const allNotes = useQuery(api.notes.getNotes, { userId: userId });
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const finalNotes = search
-    ? allNotes.filter((note) => note.title.includes(search))
+    ? allNotes.filter(
+        (note) =>
+          note.title.toLowerCase().includes(search.toLowerCase()) ||
+          note.content.toLowerCase().includes(search.toLowerCase())
+      )
     : allNotes;
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("InsideNoteScreen", {
+        navigation.navigate('InsideNoteScreen', {
           item: item,
         })
       }
@@ -45,7 +49,7 @@ const NotesDashboardScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Image
-          source={require("../assets/icons/logo2small.png")} // Replace with your logo image file
+          source={require('../assets/icons/logo2small.png')} // Replace with your logo image file
           style={styles.logo}
         />
       </View>
@@ -77,7 +81,7 @@ const NotesDashboardScreen = ({ navigation }) => {
       {!finalNotes || finalNotes.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyStateText}>
-            Create your first note to{"\n"}get started
+            Create your first note to{'\n'}get started
           </Text>
         </View>
       ) : (
@@ -89,13 +93,13 @@ const NotesDashboardScreen = ({ navigation }) => {
           contentContainerStyle={{
             marginTop: 19,
             borderTopWidth: 0.5,
-            borderTopColor: "rgba(0, 0, 0, 0.59)",
+            borderTopColor: 'rgba(0, 0, 0, 0.59)',
           }}
         />
       )}
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("CreateNoteScreen")}
+        onPress={() => navigation.navigate('CreateNoteScreen')}
         style={styles.newNoteButton}
       >
         <AntDesign name="pluscircle" size={20} color="#fff" />
@@ -108,29 +112,29 @@ const NotesDashboardScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   header: {
-    backgroundColor: "#0D87E1",
+    backgroundColor: '#0D87E1',
     height: 67,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
     width: 46,
     height: 46,
     borderRadius: 20,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   title: {
     fontSize: RFValue(17.5),
-    fontFamily: "MMedium",
-    alignSelf: "center",
+    fontFamily: 'MMedium',
+    alignSelf: 'center',
   },
   yourNotesContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 13,
     marginTop: 19,
   },
@@ -140,10 +144,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: "grey",
+    borderColor: 'grey',
     borderRadius: 10,
     padding: 10,
     marginHorizontal: 15,
@@ -155,8 +159,8 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: RFValue(15),
-    fontFamily: "MRegular",
-    color: "#2D2D2D",
+    fontFamily: 'MRegular',
+    color: '#2D2D2D',
   },
   notesList: {
     flex: 1,
@@ -164,28 +168,28 @@ const styles = StyleSheet.create({
   noteItem: {
     padding: 20,
     borderBottomWidth: 0.5,
-    borderBottomColor: "rgba(0, 0, 0, 0.59)",
+    borderBottomColor: 'rgba(0, 0, 0, 0.59)',
 
-    backgroundColor: "#F9FAFB",
+    backgroundColor: '#F9FAFB',
   },
   noteText: {
     fontSize: 16,
-    fontFamily: "MLight",
-    color: "#2D2D2D",
+    fontFamily: 'MLight',
+    color: '#2D2D2D',
   },
 
   newNoteButton: {
-    flexDirection: "row",
-    backgroundColor: "#0D87E1",
+    flexDirection: 'row',
+    backgroundColor: '#0D87E1',
     borderRadius: 7,
-    width: Dimensions.get("window").width / 1.6,
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
+    width: Dimensions.get('window').width / 1.6,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     minHeight: 44,
-    position: "absolute",
+    position: 'absolute',
     bottom: 35,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -196,32 +200,32 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   newNoteButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: RFValue(15),
-    fontFamily: "MMedium",
+    fontFamily: 'MMedium',
     marginLeft: 10,
   },
   switchContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: 20,
     right: 20,
   },
   emptyStateText: {
-    textAlign: "center",
-    alignSelf: "center",
+    textAlign: 'center',
+    alignSelf: 'center',
     fontSize: RFValue(15),
-    color: "grey",
-    fontFamily: "MLight",
+    color: 'grey',
+    fontFamily: 'MLight',
   },
   emptyState: {
-    width: "100%",
-    height: "35%",
+    width: '100%',
+    height: '35%',
     marginTop: 19,
-    backgroundColor: "#F9FAFB",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#F9FAFB',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 0.5,
-    borderColor: "rgba(0, 0, 0, 0.59)",
+    borderColor: 'rgba(0, 0, 0, 0.59)',
   },
 });
 
