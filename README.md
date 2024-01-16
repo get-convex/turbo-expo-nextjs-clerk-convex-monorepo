@@ -9,8 +9,7 @@ This is an official TypeScript starter for Convex that comes with a landing page
 2. Run the following commands to install dependencies and run both the web and mobile apps:
 
 ```sh
-yarn
-yarn dev
+yarn && yarn dev
 ```
 
 ## What's inside?
