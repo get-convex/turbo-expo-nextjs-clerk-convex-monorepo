@@ -1,5 +1,4 @@
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
 interface Props {
   data: {
     feature?: boolean;
@@ -14,7 +13,7 @@ const TestTimonialCard = ({ data }: Props) => {
   return (
     <div
       className={`max-w-[370px] w-full space-y-8 h-auto shrink-0 rounded-[20px] border-[1.5px] border-solid border-[#EAECF0] px-[35px] pt-14 pb-20 ${
-        data.feature ? "bg-primary" : "bg-white"
+        data.feature ? 'bg-primary' : 'bg-white'
       } $}`}
     >
       <div className="flex gap-2">
@@ -32,7 +31,7 @@ const TestTimonialCard = ({ data }: Props) => {
       </div>
       <blockquote
         className={` text-lg not-italic font-normal leading-[26px] font-montserrat ${
-          data.feature ? "text-white" : "text-[#313234]"
+          data.feature ? 'text-white' : 'text-[#313234]'
         }`}
       >
         <span className="text-lg">&ldquo;</span>
@@ -52,14 +51,14 @@ const TestTimonialCard = ({ data }: Props) => {
         <div className="">
           <h3
             className={` text-xl not-italic font-medium leading-[normal] font-montserrat ${
-              data.feature ? "text-white" : "text-[#25262B]"
+              data.feature ? 'text-white' : 'text-[#25262B]'
             }`}
           >
             {data.name}
           </h3>
           <p
             className={` text-base not-italic font-medium leading-[normal] font-montserrat ${
-              data.feature ? "text-white" : "text-[#555F68]"
+              data.feature ? 'text-white' : 'text-[#555F68]'
             }`}
           >
             {data.designation}

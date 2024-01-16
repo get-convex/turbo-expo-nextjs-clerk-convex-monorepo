@@ -1,10 +1,10 @@
-"use client";
-import { Fragment, useRef, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+'use client';
+import { Fragment, useRef, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
-export default function DeleteNote() {
+export default function DeleteNote({ deleteAction }: any) {
   const [open, setOpen] = useState(false);
 
   const cancelButtonRef = useRef(null);
@@ -13,7 +13,7 @@ export default function DeleteNote() {
     <>
       <Image
         onClick={() => setOpen(true)}
-        src={"/images/delete.svg"}
+        src={'/images/delete.svg'}
         width={20}
         height={20}
         alt="search"
@@ -80,9 +80,12 @@ export default function DeleteNote() {
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                      onClick={() => setOpen(false)}
+                      onClick={() => {
+                        deleteAction();
+                        setOpen(false);
+                      }}
                     >
-                        Delete
+                      Delete
                     </button>
                     <button
                       type="button"

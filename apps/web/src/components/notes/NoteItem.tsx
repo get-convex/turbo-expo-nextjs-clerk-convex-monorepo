@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import DeleteNote from './DeleteNote';
 
 export interface NoteProps {
   note: {
@@ -21,15 +21,7 @@ const NoteItem = ({ note, deleteNote }: NoteProps) => {
       <p className="hidden md:flex text-[#2D2D2D] text-center text-xl not-italic font-extralight leading-[114.3%] tracking-[-0.5px]">
         {new Date(Number(note._creationTime)).toLocaleDateString()}
       </p>
-      <button onClick={() => deleteNote({ noteId: note._id })}>
-        <Image
-          src={'/images/delete.svg'}
-          width={20}
-          height={20}
-          alt="search"
-          className="cursor-pointer"
-        />
-      </button>
+      <DeleteNote deleteAction={() => deleteNote({ noteId: note._id })} />
     </div>
   );
 };

@@ -4,7 +4,9 @@ This is an official TypeScript starter for Convex that comes with a landing page
 
 ## Using this example
 
-Run the following commands to install dependencies and run both the web and mobile apps:
+1. Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
+
+2. Run the following commands to install dependencies and run both the web and mobile apps:
 
 ```sh
 yarn
@@ -30,19 +32,3 @@ This Turborepo has some additional tools already setup for you:
 - [Expo](https://docs.expo.dev/) for native development
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [Prettier](https://prettier.io) for code formatting
-
-## Todos
-
-- [x] Setup Convex folder as a package and make sure it works
-- [x] Make sure Convex is working in web
-- [x] Make sure Convex is working on mobile
-- [x] Troubleshoot QR code not showing up on mobile app terminal
-- [x] Add auth to web app
-- [x] Add auth to mobile app
-- [x] Migrate mobile app to TypeScript
-- [x] Add all functionality to mobile app
-- [x] Add all functionality to web app
-- [x] Test search functionality on both
-- [ ] Review all the code
-- [ ] [Maybe] Figure out how to grab env vars for Next.js app from .env
-- [ ] [Maybe] Add email verification to mobile app

@@ -1,6 +1,7 @@
 import React from 'react';
 import Logo from '../common/Logo';
 import Menu from '../common/Menu';
+
 const menuItems = [
   {
     title: 'Home',
