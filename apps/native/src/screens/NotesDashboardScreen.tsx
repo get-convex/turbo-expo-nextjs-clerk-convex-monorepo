@@ -17,8 +17,8 @@ import { api, useQuery } from '@notes/db';
 const NotesDashboardScreen = ({ navigation }) => {
   const { userId } = useAuth();
   const user = useUser();
-  const imageUrl = user.user.imageUrl;
-  const firstName = user.user.firstName;
+  const imageUrl = user?.user?.imageUrl;
+  const firstName = user?.user?.firstName;
 
   const allNotes = useQuery(api.notes.getNotes, { userId: userId });
   const [search, setSearch] = useState('');
@@ -61,7 +61,7 @@ const NotesDashboardScreen = ({ navigation }) => {
         {imageUrl ? (
           <Image style={styles.avatarSmall} source={{ uri: imageUrl }} />
         ) : (
-          <Text>{firstName}</Text>
+          <Text>{firstName ? firstName : ''}</Text>
         )}
       </View>
       <View style={styles.searchContainer}>
