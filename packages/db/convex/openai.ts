@@ -1,4 +1,3 @@
-
 import OpenAI from "openai";
 import { action, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
