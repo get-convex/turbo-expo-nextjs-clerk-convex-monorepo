@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "convex dev"
+    "dev": "convex dev",
+    "setup": "convex dev --until-success"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "convex": "^1.4.1",
+    "convex": "^1.8.0",
     "openai": "^4.24.7"
   }
 }

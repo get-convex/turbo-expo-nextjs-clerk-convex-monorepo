@@ -4,9 +4,19 @@ This is an official TypeScript starter for Convex that comes with a landing page
 
 ## Using this example
 
-1. Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
+1. Configure Convex:
 
-2. Run the following commands to install dependencies and run both the web and mobile apps:
+```sh
+cd packages/db
+npm run setup
+cd ../..
+```
+
+2. Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
+
+- Use the CONVEX_URL in packages/db/.env.local for NEXT_PUBLIC_CONVEX_URL
+
+1. Run the following commands to install dependencies and run both the web and mobile apps:
 
 ```sh
 yarn && yarn dev

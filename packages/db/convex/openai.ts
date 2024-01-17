@@ -1,11 +1,18 @@
-("use node");
 
 import OpenAI from "openai";
 import { action, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
+import { missingEnvVariableUrl } from "./utils";
 
 const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey)
+  throw new Error(
+    missingEnvVariableUrl(
+      "OPENAI_API_KEY",
+      "https://platform.openai.com/account/api-keys"
+    )
+  );
 const openai = new OpenAI({ apiKey });
 
 export const summary = action({
