@@ -14,9 +14,17 @@ npm run setup
 cd ../..
 ```
 
+The script will log you into Convex if you aren't already and prompt you to
+create a project (free). It will then wait to deploy your code until you
+[set the environment variables in the dashboard](https://dashboard.convex.dev/deployment/settings/environment-variables?var=OPENAI_API_KEY&var=CLERK_ISSUER_URL):
+- Configure Clerk with [this guide](https://docs.convex.dev/auth/clerk).
+- The CLERK_ISSUER_URL can be found in the "convex" template [here](https://dashboard.clerk.com/last-active?path=jwt-templates) and add it to your environment variables.
+- Add the OPENAI_API_KEY from https://platform.openai.com/account/api-keys
+
 3. Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
 
 - Use the CONVEX_URL in packages/db/.env.local for NEXT_PUBLIC_CONVEX_URL
+- The Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys)
 
 4. Run the following command to run both the web and mobile apps:
 

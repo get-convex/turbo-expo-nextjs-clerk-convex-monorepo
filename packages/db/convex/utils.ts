@@ -11,5 +11,4 @@ export function missingEnvVariableUrl(envVarName: string, whereToGet: string) {
     deploymentName +
     `/settings?var=${envVarName}`
   );
-  return;
 }
