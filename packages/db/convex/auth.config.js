@@ -1,8 +1,8 @@
 export default {
   providers: [
     {
-      domain: 'https://ample-camel-0.clerk.accounts.dev/',
-      applicationID: 'convex',
+      domain: process.env.CLERK_ISSUER_URL,
+      applicationID: "convex",
     },
   ],
 };
