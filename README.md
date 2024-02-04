@@ -17,9 +17,10 @@ cd ../..
 The script will log you into Convex if you aren't already and prompt you to
 create a project (free). It will then wait to deploy your code until you
 [set the environment variables in the dashboard](https://dashboard.convex.dev/deployment/settings/environment-variables?var=OPENAI_API_KEY&var=CLERK_ISSUER_URL):
+
 - Configure Clerk with [this guide](https://docs.convex.dev/auth/clerk).
-- The CLERK_ISSUER_URL can be found in the "convex" template [here](https://dashboard.clerk.com/last-active?path=jwt-templates) and add it to your environment variables.
-- Add the OPENAI_API_KEY from https://platform.openai.com/account/api-keys
+- The CLERK_ISSUER_URL can be found in the "convex" template [here](https://dashboard.clerk.com/last-active?path=jwt-templates). Make sure to add it to your environment variables on Convex.
+- Add the OPENAI_API_KEY from [OpenAI](https://platform.openai.com/account/api-keys) to your Convex environment variables as well.
 
 3. Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
 
