@@ -5,9 +5,11 @@ import { api } from '../convex/_generated/api';
 // Get all notes for a specific user
 export const getNotes = query({
   args: {
-    userId: v.string(),
+    userId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    if (!args.userId) return null;
+
     const notes = await ctx.db
       .query('notes')
       .filter((q) => q.eq(q.field('userId'), args.userId))
