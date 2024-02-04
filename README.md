@@ -4,9 +4,11 @@ This is an official TypeScript starter for Convex that comes with a landing page
 
 ## Using this example
 
-1. Install dependencies with `yarn`.
+**1)** Install dependencies with `yarn`.
 
-2. Configure Convex:
+**2)** Configure Convex:
+
+> Note: The following commands will throw an error and ask you to add the appropriate environment variables to proceed. Continue reading on for how to do that.
 
 ```sh
 cd packages/db
@@ -18,16 +20,15 @@ The script will log you into Convex if you aren't already and prompt you to
 create a project (free). It will then wait to deploy your code until you
 [set the environment variables in the dashboard](https://dashboard.convex.dev/deployment/settings/environment-variables?var=OPENAI_API_KEY&var=CLERK_ISSUER_URL):
 
-- Configure Clerk with [this guide](https://docs.convex.dev/auth/clerk).
-- The CLERK_ISSUER_URL can be found in the "convex" template [here](https://dashboard.clerk.com/last-active?path=jwt-templates). Make sure to add it to your environment variables on Convex.
-- Add the OPENAI_API_KEY from [OpenAI](https://platform.openai.com/account/api-keys) to your Convex environment variables as well.
+Configure Clerk with [this guide](https://docs.convex.dev/auth/clerk). Then add the `CLERK_ISSUER_URL` found in the "convex" template [here](https://dashboard.clerk.com/last-active?path=jwt-templates), to your Convex environment variables.
 
-3. Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
+After that, add the `OPENAI_API_KEY` env var from [OpenAI](https://platform.openai.com/account/api-keys) to your Convex environment variables and this should complete your Convex setup.
 
-- Use the CONVEX_URL in packages/db/.env.local for NEXT_PUBLIC_CONVEX_URL
-- The Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys)
+**3)** Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
 
-4. Run the following command to run both the web and mobile apps:
+Use the `CONVEX_URL` in packages/db/.env.local for `NEXT_PUBLIC_CONVEX_URL`. Also, the Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys).
+
+**4)** Run the following command to run both the web and mobile apps:
 
 ```sh
 yarn dev
