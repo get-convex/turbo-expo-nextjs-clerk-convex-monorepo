@@ -2,7 +2,6 @@
   "name": "@packages/db",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
   "scripts": {
     "dev": "convex dev",
     "setup": "convex dev --until-success"
