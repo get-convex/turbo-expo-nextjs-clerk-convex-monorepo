@@ -4,7 +4,7 @@ This is an official TypeScript starter for Convex that comes with a landing page
 
 ## Using this example
 
-**1)** Install dependencies with `yarn`.
+**1)** Install dependencies with `npm i`, `pnpm i`, or `yarn`.
 
 **2)** Configure Convex:
 
@@ -31,6 +31,8 @@ Use the `CONVEX_URL` in packages/db/.env.local for `NEXT_PUBLIC_CONVEX_URL`. Als
 **4)** Run the following command to run both the web and mobile apps:
 
 ```sh
+npm run dev
+# Or if you installed with yarn:
 yarn dev
 ```
 
