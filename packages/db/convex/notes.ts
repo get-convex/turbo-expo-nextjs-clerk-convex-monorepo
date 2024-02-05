@@ -1,6 +1,6 @@
 import { mutation, query } from './_generated/server';
 import { v } from 'convex/values';
-import { api } from '../convex/_generated/api';
+import { internal } from '../convex/_generated/api';
 
 // Get all notes for a specific user
 export const getNotes = query({
@@ -44,7 +44,7 @@ export const createNote = mutation({
     const noteId = await ctx.db.insert('notes', { userId, title, content });
 
     if (isSummary) {
-      await ctx.scheduler.runAfter(0, api.openai.summary, {
+      await ctx.scheduler.runAfter(0, internal.openai.summary, {
         id: noteId,
         title,
         content,

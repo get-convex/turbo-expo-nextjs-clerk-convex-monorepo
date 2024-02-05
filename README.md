@@ -22,7 +22,7 @@ create a project (free). It will then wait to deploy your code until you
 
 Configure Clerk with [this guide](https://docs.convex.dev/auth/clerk). Then add the `CLERK_ISSUER_URL` found in the "convex" template [here](https://dashboard.clerk.com/last-active?path=jwt-templates), to your Convex environment variables.
 
-After that, add the `OPENAI_API_KEY` env var from [OpenAI](https://platform.openai.com/account/api-keys) to your Convex environment variables and this should complete your Convex setup.
+After that, optionally add the `OPENAI_API_KEY` env var from [OpenAI](https://platform.openai.com/account/api-keys) to your Convex environment variables to get AI summaries.
 
 **3)** Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
 
