@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import NoteItem from './NoteItem';
 import CreateNote from './CreateNote';
-import { api, useMutation, useQuery } from '@notes/db';
+import { api } from '@packages/db/convex/_generated/api';
+import { useQuery, useMutation } from 'convex/react';
 import { useUser } from '@clerk/clerk-react';
 import { useState } from 'react';
 

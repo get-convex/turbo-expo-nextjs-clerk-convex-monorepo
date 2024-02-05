@@ -12,7 +12,8 @@ import {
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useAuth, useUser } from '@clerk/clerk-expo';
-import { api, useQuery } from '@notes/db';
+import { api } from '@packages/db/convex/_generated/api';
+import { useQuery } from 'convex/react';
 
 const NotesDashboardScreen = ({ navigation }) => {
   const { userId } = useAuth();

@@ -4,7 +4,8 @@ import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import Checkbox from './Checkbox';
-import { api, useMutation } from '@notes/db';
+import { api } from '@packages/db/convex/_generated/api';
+import { useMutation } from 'convex/react';
 import { useUser } from '@clerk/clerk-react';
 
 export default function CreateNote() {

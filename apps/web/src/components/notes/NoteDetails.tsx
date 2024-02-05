@@ -1,7 +1,8 @@
 'use client';
 
-import { api, useQuery } from '@notes/db';
-import { Id } from '@notes/db/convex/_generated/dataModel';
+import { api } from '@packages/db/convex/_generated/api';
+import { Id } from '@packages/db/convex/_generated/dataModel';
+import { useQuery } from 'convex/react';
 import ComplexToggle from '../home/ComplexToggle';
 import { useState } from 'react';
 

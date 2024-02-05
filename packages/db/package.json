@@ -1,5 +1,5 @@
 {
-  "name": "db",
+  "name": "@packages/db",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",

@@ -42,7 +42,7 @@ This monorepo template includes the following packages/apps:
 
 - `web`: a [Next.js 14](https://nextjs.org/) app with TailwindCSS and Clerk
 - `native`: a [React Native](https://reactnative.dev/) app built with [expo](https://docs.expo.dev/)
-- `@notes/db`: a [Convex](https://www.convex.dev/) folder with the database schema and shared functions
+- `@packages/db`: a [Convex](https://www.convex.dev/) folder with the database schema and shared functions
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 

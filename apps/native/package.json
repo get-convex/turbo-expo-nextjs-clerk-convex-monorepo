@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@clerk/clerk-expo": "^0.19.27",
-    "db": "*",
+    "@packages/db": "*",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "expo": "~48.0.21",

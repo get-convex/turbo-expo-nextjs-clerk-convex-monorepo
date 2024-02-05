@@ -1,10 +1,10 @@
 import Header from '@/components/Header';
 import NoteDetails from '@/components/notes/NoteDetails';
-import { Id } from '@notes/db/convex/_generated/dataModel';
+import { Id } from '@packages/db/convex/_generated/dataModel';
 
 export default function Page({ params }: { params: { slug: string } }) {
   return (
-    <main className='bg-[#F5F7FE] h-screen'>
+    <main className="bg-[#F5F7FE] h-screen">
       <Header />
       <NoteDetails noteId={params.slug as Id<'notes'>} />
     </main>
