@@ -24,9 +24,12 @@ Configure Clerk with [this guide](https://docs.convex.dev/auth/clerk). Then add 
 
 After that, optionally add the `OPENAI_API_KEY` env var from [OpenAI](https://platform.openai.com/account/api-keys) to your Convex environment variables to get AI summaries.
 
-**3)** Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
+**3)** Create a `.env` file using the `.example.env` as a template and fill out your Convex and Clerk environment variables.
 
-Use the `CONVEX_URL` in packages/db/.env.local for `NEXT_PUBLIC_CONVEX_URL`. Also, the Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys).
+There is one in each of apps/web and apps/native.
+
+- Use the `CONVEX_URL` in packages/db/.env.local for `{NEXT,EXPO}_PUBLIC_CONVEX_URL`.
+- The Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys).
 
 **4)** Run the following command to run both the web and mobile apps:
 
