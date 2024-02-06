@@ -28,7 +28,7 @@ const benefits = [
 
 const Benefits = () => {
   return (
-    <section id='Benefits' className='relative'>
+    <section id='Benefits' className='relative pointer-events-none'>
       <Image
         src={'/images/blue-circle.svg'}
         width={503}
