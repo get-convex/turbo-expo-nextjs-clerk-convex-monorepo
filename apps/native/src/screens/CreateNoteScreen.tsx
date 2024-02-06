@@ -116,8 +116,8 @@ export default function CreateNoteScreen({ navigation }) {
             value={noteTitle}
             onChangeText={(val: string) => setNoteTitle(val)}
             style={styles.inputField}
-            placeholder="Note Title"
-            placeholderTextColor="#A9A9A9"
+            placeholder='Note Title'
+            placeholderTextColor='#A9A9A9'
           />
           <Text style={styles.inputLabel}>Content</Text>
           <TextInput
@@ -125,8 +125,8 @@ export default function CreateNoteScreen({ navigation }) {
             onChangeText={(val: string) => setNoteContent(val)}
             style={[styles.inputField, styles.inputFieldMulti]}
             multiline
-            placeholder="Note Comments"
-            placeholderTextColor="#A9A9A9"
+            placeholder='Note Comments'
+            placeholderTextColor='#A9A9A9'
           />
         </View>
         <Text
@@ -145,9 +145,9 @@ export default function CreateNoteScreen({ navigation }) {
             >
               {isAdvancedSummarizationEnabled && (
                 <AntDesign
-                  name="check"
+                  name='check'
                   size={RFValue(12.5)}
-                  color="#0D87E1"
+                  color='#0D87E1'
                   aria-checked
                 />
               )}
@@ -170,7 +170,7 @@ export default function CreateNoteScreen({ navigation }) {
         ]}
       >
         <TouchableOpacity onPress={createUserNote} style={styles.newNoteButton}>
-          <AntDesign name="pluscircle" size={20} color="#fff" />
+          <AntDesign name='pluscircle' size={20} color='#fff' />
           <Text style={styles.newNoteButtonText}>Create a New Note</Text>
         </TouchableOpacity>
       </Animated.View>
