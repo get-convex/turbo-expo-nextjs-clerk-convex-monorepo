@@ -26,7 +26,7 @@ After that, add the `OPENAI_API_KEY` env var from [OpenAI](https://platform.open
 
 **3)** Create a `.env` file using the `.example.env` as a template and fill out your Convex, Clerk, and OpenAI environment variables.
 
-Use the `CONVEX_URL` in packages/db/.env.local for `NEXT_PUBLIC_CONVEX_URL`. Also, the Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys).
+Use the `CONVEX_URL` in packages/db/.env.local for `NEXT_PUBLIC_CONVEX_URL`. Also, the Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys). Make sure to also create a .env file inside of `apps/native` and add the 2 Convex variables there so the mobile app works well too.
 
 **4)** Run the following command to run both the web and mobile apps:
 

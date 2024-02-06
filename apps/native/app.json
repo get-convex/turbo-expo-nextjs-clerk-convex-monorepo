@@ -21,11 +21,9 @@
         "backgroundColor": "#ffffff"
       }
     },
-    "extra": {
-      "clerkPublishableKey": "pk_test_YW1wbGUtY2FtZWwtMC5jbGVyay5hY2NvdW50cy5kZXYk"
-    },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": ["expo-font"]
   }
 }
