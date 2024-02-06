@@ -14,7 +14,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { AntDesign } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { api } from '@packages/db/convex/_generated/api';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { useAuth } from '@clerk/clerk-expo';
 
 const { width } = Dimensions.get('window');
@@ -22,6 +22,7 @@ const { width } = Dimensions.get('window');
 export default function CreateNoteScreen({ navigation }) {
   const createNote = useMutation(api.notes.createNote);
   const { userId } = useAuth();
+  const openaiKeySet = useQuery(api.openai.openaiKeySet) ?? true;
 
   const [isAdvancedSummarizationEnabled, setIsAdvancedSummarizationEnabled] =
     useState(false);
@@ -139,7 +140,8 @@ export default function CreateNoteScreen({ navigation }) {
           <View style={styles.advancedSummarizationCheckboxContainer}>
             <TouchableOpacity
               onPress={toggleAdvancedSummarization}
-              style={styles.checkbox}
+              style={openaiKeySet ? styles.checkbox : styles.checkboxDisabled}
+              disabled={!openaiKeySet}
             >
               {isAdvancedSummarizationEnabled && (
                 <AntDesign
@@ -151,12 +153,13 @@ export default function CreateNoteScreen({ navigation }) {
               )}
             </TouchableOpacity>
             <Text style={styles.advancedSummarizationText}>
-              Advanced Summarization
+              Advanced Summarization {openaiKeySet ? '' : ' (Disabled)'}
             </Text>
           </View>
           <Text style={styles.advancedSummarizationSubtext}>
-            Check this box if you want to generate a summary of your note using
-            AI
+            {openaiKeySet
+              ? 'Check this box if you want to generate summaries using AI.'
+              : 'Please set OPENAI_API_KEY in your environment variables.'}
           </Text>
         </View>
       </KeyboardAwareScrollView>
@@ -255,6 +258,17 @@ const styles = StyleSheet.create({
     borderRadius: RFValue(5),
     borderWidth: 1,
     borderColor: '#0D87E1',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: RFValue(10),
+    backgroundColor: '#F9F5FF',
+  },
+  checkboxDisabled: {
+    width: RFValue(17.5),
+    height: RFValue(17.5),
+    borderRadius: RFValue(5),
+    borderWidth: 1,
+    borderColor: '#D9D9D9',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: RFValue(10),

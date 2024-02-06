@@ -5,7 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import Checkbox from './Checkbox';
 import { api } from '@packages/db/convex/_generated/api';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { useUser } from '@clerk/clerk-react';
 
 export default function CreateNote() {
@@ -19,6 +19,7 @@ export default function CreateNote() {
   const cancelButtonRef = useRef(null);
 
   const createNote = useMutation(api.notes.createNote);
+  const openaiKeySet = useQuery(api.openai.openaiKeySet) ?? true;
 
   const createUserNote = async () => {
     await createNote({
@@ -137,6 +138,7 @@ export default function CreateNote() {
                           </div>
 
                           <Checkbox
+                            openaiKeySet={openaiKeySet}
                             isChecked={isChecked}
                             checkHandler={() => setIsChecked(!isChecked)}
                           />

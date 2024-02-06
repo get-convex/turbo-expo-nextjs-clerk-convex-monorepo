@@ -1,8 +1,15 @@
 import OpenAI from 'openai';
-import { internalAction, internalMutation } from './_generated/server';
+import { internalAction, internalMutation, query } from './_generated/server';
 import { v } from 'convex/values';
 import { internal } from './_generated/api';
 import { missingEnvVariableUrl } from './utils';
+
+export const openaiKeySet = query({
+  args: {},
+  handler: async () => {
+    return !!process.env.OPENAI_API_KEY;
+  },
+});
 
 export const summary = internalAction({
   args: {
