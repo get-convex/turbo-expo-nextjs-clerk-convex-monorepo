@@ -40,9 +40,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.logo}
         />
         <Text style={styles.title}>Log in to your account</Text>
-        <Text style={styles.subtitle}>
-          Welcome back! Please enter your details.
-        </Text>
+        <Text style={styles.subtitle}>Welcome! Please login below.</Text>
         <TouchableOpacity
           style={styles.buttonGoogle}
           onPress={() => onPress('google')}
@@ -60,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.buttonApple}
           onPress={() => onPress('apple')}
         >
-          <AntDesign name="apple1" size={24} color="black" />
+          <AntDesign name='apple1' size={24} color='black' />
           <Text
             style={{ ...styles.buttonText, color: '#344054', marginLeft: 12 }}
           >
@@ -70,9 +68,7 @@ const LoginScreen = ({ navigation }) => {
 
         <View style={styles.signupContainer}>
           <Text style={{ fontFamily: 'Regular' }}>Don’t have an account? </Text>
-          <TouchableOpacity>
-            <Text style={styles.signupText}>Sign up</Text>
-          </TouchableOpacity>
+          <Text>Sign up above.</Text>
         </View>
       </View>
     </View>

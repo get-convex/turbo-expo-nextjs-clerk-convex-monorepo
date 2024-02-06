@@ -4,7 +4,7 @@ import { ConvexReactClient } from 'convex/react';
 import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 
-const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!);
+const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL);
 
 export default function ConvexClientProvider({ children }) {
   return (

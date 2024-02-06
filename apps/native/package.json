@@ -14,7 +14,7 @@
     "@packages/db": "*",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
-    "expo": "~50.0.5",
+    "expo": "^50.0.6",
     "expo-auth-session": "~5.4.0",
     "expo-font": "~11.10.2",
     "expo-random": "~13.6.0",
