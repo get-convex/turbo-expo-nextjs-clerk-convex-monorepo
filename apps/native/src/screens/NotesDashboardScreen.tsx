@@ -12,7 +12,7 @@ import {
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useAuth, useUser } from '@clerk/clerk-expo';
-import { api } from '@packages/db/convex/_generated/api';
+import { api } from '@packages/backend/convex/_generated/api';
 import { useQuery } from 'convex/react';
 
 const NotesDashboardScreen = ({ navigation }) => {
@@ -67,15 +67,15 @@ const NotesDashboardScreen = ({ navigation }) => {
       </View>
       <View style={styles.searchContainer}>
         <Feather
-          name="search"
+          name='search'
           size={20}
-          color="grey"
+          color='grey'
           style={styles.searchIcon}
         />
         <TextInput
           value={search}
           onChangeText={setSearch}
-          placeholder="Search"
+          placeholder='Search'
           style={styles.searchInput}
         />
       </View>
@@ -103,7 +103,7 @@ const NotesDashboardScreen = ({ navigation }) => {
         onPress={() => navigation.navigate('CreateNoteScreen')}
         style={styles.newNoteButton}
       >
-        <AntDesign name="pluscircle" size={20} color="#fff" />
+        <AntDesign name='pluscircle' size={20} color='#fff' />
         <Text style={styles.newNoteButtonText}>Create a New Note</Text>
       </TouchableOpacity>
     </View>

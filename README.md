@@ -30,7 +30,7 @@ Features include:
 > Note: The following commands will throw an error and ask you to add the appropriate environment variables to proceed. Continue reading on for how to do that.
 
 ```sh
-npm run setup --workspace packages/db
+npm run setup --workspace packages/backend
 ```
 
 The script will log you into Convex if you aren't already and prompt you to
@@ -45,7 +45,7 @@ After that, optionally add the `OPENAI_API_KEY` env var from [OpenAI](https://pl
 
 There is one in each of apps/web and apps/native.
 
-- Use the `CONVEX_URL` in packages/db/.env.local for `{NEXT,EXPO}_PUBLIC_CONVEX_URL`.
+- Use the `CONVEX_URL` in packages/backend/.env.local for `{NEXT,EXPO}_PUBLIC_CONVEX_URL`.
 - The Clerk publishable & secret keys can be found [here](https://dashboard.clerk.com/last-active?path=api-keys).
 
 **4)** Run the following command to run both the web and mobile apps:
@@ -62,7 +62,7 @@ This monorepo template includes the following packages/apps:
 
 - `web`: a [Next.js 14](https://nextjs.org/) app with TailwindCSS and Clerk
 - `native`: a [React Native](https://reactnative.dev/) app built with [expo](https://docs.expo.dev/)
-- `packages/db`: a [Convex](https://www.convex.dev/) folder with the database schema and shared functions
+- `packages/backend`: a [Convex](https://www.convex.dev/) folder with the database schema and shared functions
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 

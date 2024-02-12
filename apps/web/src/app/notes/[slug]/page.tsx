@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import NoteDetails from '@/components/notes/NoteDetails';
-import { Id } from '@packages/db/convex/_generated/dataModel';
+import { Id } from '@packages/backend/convex/_generated/dataModel';
 
 export default function Page({ params }: { params: { slug: string } }) {
   return (
