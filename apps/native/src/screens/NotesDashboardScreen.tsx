@@ -16,12 +16,11 @@ import { api } from '@packages/backend/convex/_generated/api';
 import { useQuery } from 'convex/react';
 
 const NotesDashboardScreen = ({ navigation }) => {
-  const { userId } = useAuth();
   const user = useUser();
   const imageUrl = user?.user?.imageUrl;
   const firstName = user?.user?.firstName;
 
-  const allNotes = useQuery(api.notes.getNotes, { userId: userId });
+  const allNotes = useQuery(api.notes.getNotes);
   const [search, setSearch] = useState('');
 
   const finalNotes = search

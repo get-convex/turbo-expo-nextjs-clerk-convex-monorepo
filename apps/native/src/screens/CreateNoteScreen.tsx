@@ -21,7 +21,6 @@ const { width } = Dimensions.get('window');
 
 export default function CreateNoteScreen({ navigation }) {
   const createNote = useMutation(api.notes.createNote);
-  const { userId } = useAuth();
   const openaiKeySet = useQuery(api.openai.openaiKeySet) ?? true;
 
   const [isAdvancedSummarizationEnabled, setIsAdvancedSummarizationEnabled] =
@@ -72,7 +71,6 @@ export default function CreateNoteScreen({ navigation }) {
 
   const createUserNote = async () => {
     await createNote({
-      userId,
       title: noteTitle,
       content: noteContent,
       isSummary: isAdvancedSummarizationEnabled,

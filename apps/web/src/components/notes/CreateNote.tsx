@@ -6,7 +6,6 @@ import Image from 'next/image';
 import Checkbox from './Checkbox';
 import { api } from '@packages/backend/convex/_generated/api';
 import { useMutation, useQuery } from 'convex/react';
-import { useUser } from '@clerk/clerk-react';
 
 export default function CreateNote() {
   const [open, setOpen] = useState(false);
@@ -14,8 +13,6 @@ export default function CreateNote() {
   const [content, setContent] = useState('');
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
-  const { user } = useUser();
-  const userId = user?.id;
   const cancelButtonRef = useRef(null);
 
   const createNote = useMutation(api.notes.createNote);
@@ -23,7 +20,6 @@ export default function CreateNote() {
 
   const createUserNote = async () => {
     await createNote({
-      userId: userId!,
       title,
       content,
       isSummary: isChecked,

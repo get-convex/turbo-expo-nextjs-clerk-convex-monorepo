@@ -9,14 +9,9 @@ import { useUser } from '@clerk/clerk-react';
 import { useState } from 'react';
 
 const Notes = () => {
-  const { user } = useUser();
-  const userId = user?.id;
-
-  console.log({ user });
-
   const [search, setSearch] = useState('');
 
-  const allNotes = useQuery(api.notes.getNotes, { userId: userId });
+  const allNotes = useQuery(api.notes.getNotes);
   const deleteNote = useMutation(api.notes.deleteNote);
 
   const finalNotes = search
