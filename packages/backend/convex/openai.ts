@@ -48,7 +48,7 @@ export const summary = internalAction({
     });
 
     // Pull the message content out of the response
-    const messageContent = output.choices[0].message.content;
+    const messageContent = output.choices[0]?.message.content;
 
     console.log({ messageContent });
 
