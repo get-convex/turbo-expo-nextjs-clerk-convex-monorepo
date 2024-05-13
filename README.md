@@ -25,13 +25,15 @@ include:
 
 ## Using this example
 
-**1)** Install dependencies with `yarn`.
+### 1. Install dependencies
 
-**2)** Configure Convex:
+Run `yarn` or `pnpm i`.
 
-> Note: The following commands will throw an error and ask you to add the
-> appropriate environment variables to proceed. Continue reading on for how to
-> do that.
+### 2. Configure Convex
+
+> Note: The following command will print an error and ask you to add the
+> appropriate environment variable to proceed. Continue reading on for how to do
+> that.
 
 ```sh
 npm run setup --workspace packages/backend
@@ -51,21 +53,27 @@ After that, optionally add the `OPENAI_API_KEY` env var from
 [OpenAI](https://platform.openai.com/account/api-keys) to your Convex
 environment variables to get AI summaries.
 
-**3)** Create a `.env` file using the `.example.env` as a template and fill out
-your Convex and Clerk environment variables.
+The `setup` command should now finish successfully.
 
-There is one in each of apps/web and apps/native.
+### 3. Configure both apps
 
-- Use the `CONVEX_URL` in packages/backend/.env.local for
+In each app directory (`apps/web`, `apps/native`) create a `.env.local` file
+using the `.example.env` as a template and fill out your Convex and Clerk
+environment variables.
+
+- Use the `CONVEX_URL` from `packages/backend/.env.local` for
   `{NEXT,EXPO}_PUBLIC_CONVEX_URL`.
 - The Clerk publishable & secret keys can be found
   [here](https://dashboard.clerk.com/last-active?path=api-keys).
 
-**4)** Run the following command to run both the web and mobile apps:
+### 4. Run both apps
+
+Run the following command to run both the web and mobile apps:
 
 ```sh
 npm run dev
 ```
+
 This will allow you to use the ⬆ and ⬇ keyboard keys to see logs for each
 of the Convex backend, web app, and mobile app separately.
 If you'd rather see all of the lod gs in one place, delete the
