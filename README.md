@@ -49,6 +49,9 @@ the `CLERK_ISSUER_URL` found in the "convex" template
 Convex environment variables
 [here](https://dashboard.convex.dev/deployment/settings/environment-variables&var=CLERK_ISSUER_URL).
 
+Make sure to enable **Google and Apple** as possible Social Connection
+providers, as these are used by the React Native login implementation.
+
 After that, optionally add the `OPENAI_API_KEY` env var from
 [OpenAI](https://platform.openai.com/account/api-keys) to your Convex
 environment variables to get AI summaries.
