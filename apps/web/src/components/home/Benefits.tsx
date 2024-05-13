@@ -7,7 +7,7 @@ const benefits = [
     image: "/images/goodNews.png",
   },
   {
-    title: "Seamless Synchronization",
+    title: "Seamless Sync",
     description:
       "Access your notes anytime, anywhere, with seamless cloud synchronization.",
     image: "/images/cloudSync.png",
