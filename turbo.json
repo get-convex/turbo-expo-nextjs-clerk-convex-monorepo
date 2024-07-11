@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "ui", "tui",
   "pipeline": {
     "build": {
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
