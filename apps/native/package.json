@@ -24,7 +24,8 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-responsive-fontsize": "^0.5.1",
     "react-native-safe-area-context": "4.8.2",
-    "react-native-screens": "~3.29.0"
+    "react-native-screens": "~3.29.0",
+    "use-sync-external-store": "^1.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.8"
