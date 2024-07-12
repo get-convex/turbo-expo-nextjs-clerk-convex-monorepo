@@ -14,6 +14,7 @@
     "@packages/backend": "*",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
+    "convex-helpers": "^0.1.47-alpha.0",
     "expo": "^51.0.20",
     "expo-auth-session": "~5.4.0",
     "expo-font": "~11.10.3",

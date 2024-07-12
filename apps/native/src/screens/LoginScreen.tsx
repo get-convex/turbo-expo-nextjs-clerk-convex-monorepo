@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useOAuth } from "@clerk/clerk-expo";
 import { AntDesign } from "@expo/vector-icons";
+import { zid } from "convex-helpers/server/zod";
 
 const LoginScreen = ({ navigation }) => {
   const { startOAuthFlow: startGoogleAuthFlow } = useOAuth({
@@ -12,6 +13,7 @@ const LoginScreen = ({ navigation }) => {
     strategy: "oauth_apple",
   });
 
+  zid("hi");
   const onPress = async (authType: string) => {
     try {
       if (authType === "google") {
