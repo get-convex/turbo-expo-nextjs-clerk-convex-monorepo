@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 .font-montserrat {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .linear_gradient {
@@ -29,7 +29,7 @@
       #fff 97.09%,
       rgba(255, 255, 255, 0) 127.09%
     ),
-    url('/images/background.png'),
+    url("/images/background.png"),
     lightgray 0% 0% / 261.2499952316284px 261.2499952316284px repeat;
 }
 .button {

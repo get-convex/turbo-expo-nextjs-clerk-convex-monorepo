@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,15 +9,15 @@ import {
   TextInput,
   Keyboard,
   Animated,
-} from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { AntDesign } from '@expo/vector-icons';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { api } from '@packages/backend/convex/_generated/api';
-import { useMutation, useQuery } from 'convex/react';
-import { useAuth } from '@clerk/clerk-expo';
+} from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
+import { AntDesign } from "@expo/vector-icons";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { api } from "@packages/backend/convex/_generated/api";
+import { useMutation, useQuery } from "convex/react";
+import { useAuth } from "@clerk/clerk-expo";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 export default function CreateNoteScreen({ navigation }) {
   const createNote = useMutation(api.notes.createNote);
@@ -25,8 +25,8 @@ export default function CreateNoteScreen({ navigation }) {
 
   const [isAdvancedSummarizationEnabled, setIsAdvancedSummarizationEnabled] =
     useState(false);
-  const [noteContent, setNoteContent] = useState('');
-  const [noteTitle, setNoteTitle] = useState('');
+  const [noteContent, setNoteContent] = useState("");
+  const [noteTitle, setNoteTitle] = useState("");
   const footerY = new Animated.Value(0);
   const toggleAdvancedSummarization = () => {
     setIsAdvancedSummarizationEnabled(!isAdvancedSummarizationEnabled);
@@ -34,7 +34,7 @@ export default function CreateNoteScreen({ navigation }) {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      "keyboardDidShow",
       () => {
         // Slide down the footer
         Animated.timing(footerY, {
@@ -42,10 +42,10 @@ export default function CreateNoteScreen({ navigation }) {
           duration: 300,
           useNativeDriver: true,
         }).start();
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      "keyboardDidHide",
       () => {
         // Slide up the footer
         Animated.timing(footerY, {
@@ -53,7 +53,7 @@ export default function CreateNoteScreen({ navigation }) {
           duration: 300,
           useNativeDriver: true,
         }).start();
-      }
+      },
     );
 
     // Clean up function
@@ -75,14 +75,14 @@ export default function CreateNoteScreen({ navigation }) {
       content: noteContent,
       isSummary: isAdvancedSummarizationEnabled,
     });
-    navigation.navigate('NotesDashboardScreen');
+    navigation.navigate("NotesDashboardScreen");
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Image
-          source={require('../assets/icons/logo2small.png')} // Replace with your logo image file
+          source={require("../assets/icons/logo2small.png")} // Replace with your logo image file
           style={styles.logo}
         />
       </View>
@@ -91,7 +91,7 @@ export default function CreateNoteScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             style={styles.arrowBack}
-            source={require('../assets/icons/arrow-back.png')}
+            source={require("../assets/icons/arrow-back.png")}
           />
         </TouchableOpacity>
 
@@ -99,7 +99,7 @@ export default function CreateNoteScreen({ navigation }) {
         <TouchableOpacity>
           <Image
             style={styles.arrowBack}
-            source={require('../assets/icons/saveIcon.png')}
+            source={require("../assets/icons/saveIcon.png")}
           />
         </TouchableOpacity>
       </View>
@@ -114,8 +114,8 @@ export default function CreateNoteScreen({ navigation }) {
             value={noteTitle}
             onChangeText={(val: string) => setNoteTitle(val)}
             style={styles.inputField}
-            placeholder='Note Title'
-            placeholderTextColor='#A9A9A9'
+            placeholder="Note Title"
+            placeholderTextColor="#A9A9A9"
           />
           <Text style={styles.inputLabel}>Content</Text>
           <TextInput
@@ -123,8 +123,8 @@ export default function CreateNoteScreen({ navigation }) {
             onChangeText={(val: string) => setNoteContent(val)}
             style={[styles.inputField, styles.inputFieldMulti]}
             multiline
-            placeholder='Note Comments'
-            placeholderTextColor='#A9A9A9'
+            placeholder="Note Comments"
+            placeholderTextColor="#A9A9A9"
           />
         </View>
         <Text
@@ -143,21 +143,21 @@ export default function CreateNoteScreen({ navigation }) {
             >
               {isAdvancedSummarizationEnabled && (
                 <AntDesign
-                  name='check'
+                  name="check"
                   size={RFValue(12.5)}
-                  color='#0D87E1'
+                  color="#0D87E1"
                   aria-checked
                 />
               )}
             </TouchableOpacity>
             <Text style={styles.advancedSummarizationText}>
-              Advanced Summarization {openaiKeySet ? '' : ' (Disabled)'}
+              Advanced Summarization {openaiKeySet ? "" : " (Disabled)"}
             </Text>
           </View>
           <Text style={styles.advancedSummarizationSubtext}>
             {openaiKeySet
-              ? 'Check this box if you want to generate summaries using AI.'
-              : 'Please set OPENAI_API_KEY in your environment variables.'}
+              ? "Check this box if you want to generate summaries using AI."
+              : "Please set OPENAI_API_KEY in your environment variables."}
           </Text>
         </View>
       </KeyboardAwareScrollView>
@@ -168,7 +168,7 @@ export default function CreateNoteScreen({ navigation }) {
         ]}
       >
         <TouchableOpacity onPress={createUserNote} style={styles.newNoteButton}>
-          <AntDesign name='pluscircle' size={20} color='#fff' />
+          <AntDesign name="pluscircle" size={20} color="#fff" />
           <Text style={styles.newNoteButtonText}>Create a New Note</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -179,40 +179,40 @@ export default function CreateNoteScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    backgroundColor: '#0D87E1',
+    backgroundColor: "#0D87E1",
     height: 67,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
     width: 46,
     height: 46,
     borderRadius: 20,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   underHeaderContainer: {
     width: width,
     height: 62,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 2,
-    borderBottomColor: '#D9D9D9',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    borderBottomColor: "#D9D9D9",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
   },
   arrowBack: {
     width: 20,
     height: 20,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   title: {
     fontSize: RFValue(17.5),
-    fontFamily: 'MMedium',
-    color: '#2D2D2D',
+    fontFamily: "MMedium",
+    color: "#2D2D2D",
   },
   inputContainer: {
     paddingHorizontal: 27,
@@ -220,25 +220,25 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: RFValue(15),
-    fontFamily: 'MMedium',
-    color: '#000',
+    fontFamily: "MMedium",
+    color: "#000",
     marginBottom: 6,
   },
   inputField: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     marginBottom: 30,
     fontSize: RFValue(15),
-    fontFamily: 'MLight',
-    color: '#000',
+    fontFamily: "MLight",
+    color: "#000",
     borderRadius: 8,
     paddingHorizontal: 14,
     paddingVertical: 12.5,
     borderWidth: 1,
-    borderColor: '#D9D9D9',
+    borderColor: "#D9D9D9",
   },
   inputFieldMulti: {
     minHeight: 228,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     paddingTop: 10,
   },
   advancedSummarizationContainer: {
@@ -246,8 +246,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   advancedSummarizationCheckboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   checkbox: {
@@ -255,46 +255,46 @@ const styles = StyleSheet.create({
     height: RFValue(17.5),
     borderRadius: RFValue(5),
     borderWidth: 1,
-    borderColor: '#0D87E1',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "#0D87E1",
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: RFValue(10),
-    backgroundColor: '#F9F5FF',
+    backgroundColor: "#F9F5FF",
   },
   checkboxDisabled: {
     width: RFValue(17.5),
     height: RFValue(17.5),
     borderRadius: RFValue(5),
     borderWidth: 1,
-    borderColor: '#D9D9D9',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "#D9D9D9",
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: RFValue(10),
-    backgroundColor: '#F9F5FF',
+    backgroundColor: "#F9F5FF",
   },
   advancedSummarizationText: {
     fontSize: RFValue(15),
-    fontFamily: 'MLight',
-    color: '#000',
+    fontFamily: "MLight",
+    color: "#000",
   },
   advancedSummarizationSubtext: {
     fontSize: RFValue(12.5),
-    fontFamily: 'MRegular',
-    color: '#A9A9A9',
+    fontFamily: "MRegular",
+    color: "#A9A9A9",
     paddingHorizontal: 30,
   },
   newNoteButton: {
-    flexDirection: 'row',
-    backgroundColor: '#0D87E1',
+    flexDirection: "row",
+    backgroundColor: "#0D87E1",
     borderRadius: 7,
     width: width / 1.6,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
     minHeight: 44,
-    position: 'absolute',
+    position: "absolute",
     bottom: 35,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 3,
@@ -304,15 +304,15 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   newNoteButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: RFValue(15),
-    fontFamily: 'MMedium',
+    fontFamily: "MMedium",
     marginLeft: 10,
   },
   newNoteButtonContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    alignSelf: 'center',
+    alignSelf: "center",
     // ... other styles you need
   },
 });

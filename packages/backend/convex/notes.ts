@@ -1,7 +1,7 @@
-import { mutation, query } from './_generated/server';
-import { v } from 'convex/values';
-import { internal } from '../convex/_generated/api';
-import { Auth } from 'convex/server';
+import { mutation, query } from "./_generated/server";
+import { v } from "convex/values";
+import { internal } from "../convex/_generated/api";
+import { Auth } from "convex/server";
 
 export const getUserId = async (ctx: { auth: Auth }) => {
   return (await ctx.auth.getUserIdentity())?.subject;
@@ -15,8 +15,8 @@ export const getNotes = query({
     if (!userId) return null;
 
     const notes = await ctx.db
-      .query('notes')
-      .filter((q) => q.eq(q.field('userId'), userId))
+      .query("notes")
+      .filter((q) => q.eq(q.field("userId"), userId))
       .collect();
 
     return notes;
@@ -26,7 +26,7 @@ export const getNotes = query({
 // Get note for a specific note
 export const getNote = query({
   args: {
-    id: v.optional(v.id('notes')),
+    id: v.optional(v.id("notes")),
   },
   handler: async (ctx, args) => {
     const { id } = args;
@@ -45,8 +45,8 @@ export const createNote = mutation({
   },
   handler: async (ctx, { title, content, isSummary }) => {
     const userId = await getUserId(ctx);
-    if (!userId) throw new Error('User not found');
-    const noteId = await ctx.db.insert('notes', { userId, title, content });
+    if (!userId) throw new Error("User not found");
+    const noteId = await ctx.db.insert("notes", { userId, title, content });
 
     if (isSummary) {
       await ctx.scheduler.runAfter(0, internal.openai.summary, {
@@ -62,7 +62,7 @@ export const createNote = mutation({
 
 export const deleteNote = mutation({
   args: {
-    noteId: v.id('notes'),
+    noteId: v.id("notes"),
   },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.noteId);

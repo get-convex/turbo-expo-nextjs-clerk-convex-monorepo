@@ -11,6 +11,6 @@ export function missingEnvVariableUrl(envVarName: string, whereToGet: string) {
 export function deploymentName() {
   const url = process.env.CONVEX_CLOUD_URL;
   if (!url) return undefined;
-  const regex = new RegExp('https://(.+).convex.cloud');
+  const regex = new RegExp("https://(.+).convex.cloud");
   return regex.exec(url)?.[1];
 }

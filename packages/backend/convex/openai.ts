@@ -1,8 +1,8 @@
-import OpenAI from 'openai';
-import { internalAction, internalMutation, query } from './_generated/server';
-import { v } from 'convex/values';
-import { internal } from './_generated/api';
-import { missingEnvVariableUrl } from './utils';
+import OpenAI from "openai";
+import { internalAction, internalMutation, query } from "./_generated/server";
+import { v } from "convex/values";
+import { internal } from "./_generated/api";
+import { missingEnvVariableUrl } from "./utils";
 
 export const openaiKeySet = query({
   args: {},
@@ -13,7 +13,7 @@ export const openaiKeySet = query({
 
 export const summary = internalAction({
   args: {
-    id: v.id('notes'),
+    id: v.id("notes"),
     title: v.string(),
     content: v.string(),
   },
@@ -23,8 +23,8 @@ export const summary = internalAction({
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       const error = missingEnvVariableUrl(
-        'OPENAI_API_KEY',
-        'https://platform.openai.com/account/api-keys'
+        "OPENAI_API_KEY",
+        "https://platform.openai.com/account/api-keys",
       );
       console.error(error);
       await ctx.runMutation(internal.openai.saveSummary, {
@@ -37,14 +37,14 @@ export const summary = internalAction({
     const output = await openai.chat.completions.create({
       messages: [
         {
-          role: 'system',
+          role: "system",
           content:
-            'You are a helpful assistant designed to output JSON in this format: {summary: string}',
+            "You are a helpful assistant designed to output JSON in this format: {summary: string}",
         },
-        { role: 'user', content: prompt },
+        { role: "user", content: prompt },
       ],
-      model: 'gpt-4-1106-preview',
-      response_format: { type: 'json_object' },
+      model: "gpt-4-1106-preview",
+      response_format: { type: "json_object" },
     });
 
     // Pull the message content out of the response
@@ -64,7 +64,7 @@ export const summary = internalAction({
 
 export const saveSummary = internalMutation({
   args: {
-    id: v.id('notes'),
+    id: v.id("notes"),
     summary: v.string(),
   },
   handler: async (ctx, { id, summary }) => {

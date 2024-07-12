@@ -1,6 +1,6 @@
-import { LogOut, PlusCircle, Paintbrush2 } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from './avatar';
-import { Button } from './button';
+import { LogOut, PlusCircle, Paintbrush2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Button } from "./button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +8,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './dropdown-menu';
-import Link from 'next/link';
-import { useClerk } from '@clerk/clerk-react';
+} from "./dropdown-menu";
+import Link from "next/link";
+import { useClerk } from "@clerk/clerk-react";
 
 export function UserNav({
   image,
@@ -30,7 +30,7 @@ export function UserNav({
           <Avatar className="h-10 w-10">
             <AvatarImage src={image} alt={name} />
             <AvatarFallback>
-              <img src={'/profile.png'} alt={name} />
+              <img src={"/profile.png"} alt={name} />
             </AvatarFallback>
           </Avatar>
         </Button>
