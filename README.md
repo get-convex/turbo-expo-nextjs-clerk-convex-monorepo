@@ -23,7 +23,7 @@ Features include:
 
 ## Using this example
 
-**1)** Install dependencies with `yarn` or `pnpm i`.
+**1)** Install dependencies with `yarn`.
 
 **2)** Configure Convex:
 

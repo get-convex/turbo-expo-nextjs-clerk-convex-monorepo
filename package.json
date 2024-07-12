@@ -1,4 +1,5 @@
 {
+  "name": "convex-monorepo",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
@@ -8,13 +9,14 @@
   },
   "devDependencies": {
     "prettier": "^3.1.0",
-    "turbo": "latest"
+    "turbo": "^2.0.6"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.8.0"
   },
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "packageManager": "yarn@1.22.19"
 }
