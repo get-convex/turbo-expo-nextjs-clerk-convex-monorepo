@@ -53,6 +53,10 @@ There is one in each of apps/web and apps/native.
 ```sh
 npm run dev
 ```
+This will allow you to use the ⬆ and ⬇ keyboard keys to see logs for each
+of the Convex backend, web app, and mobile app separately.
+If you'd rather see all of the lod gs in one place, delete the
+`"ui": "tui",` line in [turbo.json](./turbo.json).
 
 ## What's inside?
 
@@ -65,6 +69,8 @@ This monorepo template includes the following packages/apps:
 - `packages/backend`: a [Convex](https://www.convex.dev/) folder with the database schema and shared functions
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+To install a new package, `cd` into that directory, such as [packages/backend](./packages/backend/), and then run `yarn add mypackage@latest`
 
 ### Utilities
 
