@@ -27,7 +27,9 @@ include:
 
 ### 1. Install dependencies
 
-Run `yarn` or `pnpm i`.
+If you don't have `yarn` installed, run `npm install --global yarn`.
+
+Run `yarn`.
 
 ### 2. Configure Convex
 
