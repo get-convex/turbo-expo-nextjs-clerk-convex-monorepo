@@ -10,16 +10,17 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/core": "^7.26.7",
     "@clerk/clerk-expo": "^1.1.0",
     "@packages/backend": "*",
-    "@react-navigation/native-stack": "^6.10.0",
     "@react-navigation/native": "^6.1.17",
-    "expo-font": "^13.0.3",
+    "@react-navigation/native-stack": "^6.10.0",
     "expo": "^52.0.0",
+    "expo-font": "^13.0.3",
+    "react": "18.2.0",
+    "react-native": "0.76.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-responsive-fontsize": "^0.5.1",
-    "react-native": "0.76.0",
-    "react": "18.2.0",
     "use-sync-external-store": "^1.2.2"
   },
   "devDependencies": {
