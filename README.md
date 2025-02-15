@@ -111,7 +111,7 @@ This Turborepo has some additional tools already setup for you:
 # What is Convex?
 
 [Convex](https://convex.dev) is a hosted backend platform with a built-in
-database that lets you write your
+reactive database that lets you write your
 [database schema](https://docs.convex.dev/database/schemas) and
 [server functions](https://docs.convex.dev/functions) in
 [TypeScript](https://docs.convex.dev/typescript). Server-side database

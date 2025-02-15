@@ -15,7 +15,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { api } from "@packages/backend/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
-import { useAuth } from "@clerk/clerk-expo";
 
 const { width } = Dimensions.get("window");
 
