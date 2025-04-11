@@ -84,6 +84,16 @@ of the Convex backend, web app, and mobile app separately.
 If you'd rather see all of the lod gs in one place, delete the
 `"ui": "tui",` line in [turbo.json](./turbo.json).
 
+## Deploying
+
+In order to both deploy the frontend and Convex, run this as the build command from the apps/web directory:
+
+```sh
+cd ../../packages/backend && npx convex deploy --cmd 'cd ../../apps/app && turbo run build' --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL
+```
+
+There is a vercel.json file in the apps/web directory with this configuration for Vercel.
+
 ## What's inside?
 
 This monorepo template includes the following packages/apps:
