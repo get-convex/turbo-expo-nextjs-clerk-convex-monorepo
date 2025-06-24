@@ -23,11 +23,11 @@ export class ErrorBoundary extends Component<
           <>
             <p>
               Add{" "}
-              <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+              <code className="relative rounded-sm bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
                 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY={'"<your publishable key>"'}
               </code>{" "}
               to the{" "}
-              <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+              <code className="relative rounded-sm bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
                 .env
               </code>{" "}
               file

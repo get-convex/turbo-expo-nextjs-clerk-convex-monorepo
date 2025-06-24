@@ -30,10 +30,10 @@ export default function Header() {
           <div className="flex items-center bg-white h-16 sm:h-20">
             <div className="container px-2 sm:px-0">
               <div className="relative flex h-16 items-center justify-between">
-                <div className="flex sm:hidden flex-shrink-0 items-center">
+                <div className="flex sm:hidden shrink-0 items-center">
                   <Logo isMobile={true} />
                 </div>
-                <div className="sm:flex hidden flex-shrink-0 items-center">
+                <div className="sm:flex hidden shrink-0 items-center">
                   <Logo />
                 </div>
                 {pathname === "/" && (
@@ -89,7 +89,7 @@ export default function Header() {
                 )}
                 <div className="block sm:hidden">
                   {/* Mobile menu button*/}
-                  <Disclosure.Button className="relative inline-flex  items-center justify-center rounded-md p-2 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="relative inline-flex  items-center justify-center rounded-md p-2 text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Open main menu</span>
                     {open ? (

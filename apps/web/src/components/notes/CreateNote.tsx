@@ -123,7 +123,7 @@ export default function CreateNote() {
                                 name="description"
                                 rows={8}
                                 placeholder="Start your note "
-                                className="block w-full rounded-md border-0 py-1.5  border-[#D0D5DD] text-2xl shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:leading-6 text-black text-[17px] not-italic font-light leading-[90.3%] tracking-[-0.425px] sm:text-2xl"
+                                className="block w-full rounded-md border-0 py-1.5  border-[#D0D5DD] text-2xl shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:leading-6 text-black text-[17px] not-italic font-light leading-[90.3%] tracking-[-0.425px] sm:text-2xl"
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                               />

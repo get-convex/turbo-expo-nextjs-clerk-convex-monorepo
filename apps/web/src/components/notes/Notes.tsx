@@ -27,7 +27,7 @@ const Notes = () => {
         Your Notes
       </h1>
       <div className="px-5 sm:px-0">
-        <div className="bg-white flex items-center h-[39px] sm:h-[55px] rounded border border-solid gap-2 sm:gap-5 mb-10 border-[rgba(0,0,0,0.40)] px-3 sm:px-11">
+        <div className="bg-white flex items-center h-[39px] sm:h-[55px] rounded-sm border border-solid gap-2 sm:gap-5 mb-10 border-[rgba(0,0,0,0.40)] px-3 sm:px-11">
           <Image
             src={"/images/search.svg"}
             width={23}
