@@ -4,8 +4,10 @@ This is a modern TypeScript monorepo template with AI web and native apps
 featuring:
 
 - Turborepo: Monorepo management
-- Next.js 14: Web app & marketing page
-- React Native [Expo](https://expo.dev/): Mobile/native app
+- React 19: Latest React with concurrent features
+- Next.js 15: Web app & marketing page with App Router
+- Tailwind CSS v4: Modern CSS-first configuration
+- React Native [Expo SDK 53](https://expo.dev/): Mobile/native app with New Architecture
 - [Convex](https://convex.dev): Backend, database, server functions
 - [Clerk](https://clerk.dev): User authentication
 - OpenAI: Text summarization (optional)
@@ -100,7 +102,7 @@ This monorepo template includes the following packages/apps:
 
 ### Apps and Packages
 
-- `web`: a [Next.js 14](https://nextjs.org/) app with TailwindCSS and Clerk
+- `web`: a [Next.js 15](https://nextjs.org/) app with Tailwind CSS v4 and Clerk
 - `native`: a [React Native](https://reactnative.dev/) app built with
   [expo](https://docs.expo.dev/)
 - `packages/backend`: a [Convex](https://www.convex.dev/) folder with the
