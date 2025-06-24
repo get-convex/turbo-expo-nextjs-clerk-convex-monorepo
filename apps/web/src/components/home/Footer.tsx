@@ -8,7 +8,7 @@ const menuItems = [
     url: "/",
   },
   {
-    title: "Features",
+    title: "Benefits",
     url: "#Benefits",
   },
   {
