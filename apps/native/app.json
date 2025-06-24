@@ -1,6 +1,6 @@
 {
   "expo": {
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "name": "NotesContract",
     "slug": "NotesContract",
     "version": "1.0.0",
