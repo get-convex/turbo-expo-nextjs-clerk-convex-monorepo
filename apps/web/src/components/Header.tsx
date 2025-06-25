@@ -1,6 +1,6 @@
 "use client";
 
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "./common/Logo";
 import Link from "next/link";
@@ -89,7 +89,7 @@ export default function Header() {
                 )}
                 <div className="block sm:hidden">
                   {/* Mobile menu button*/}
-                  <Disclosure.Button className="relative inline-flex  items-center justify-center rounded-md p-2 text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-white">
+                  <DisclosureButton className="relative inline-flex  items-center justify-center rounded-md p-2 text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Open main menu</span>
                     {open ? (
@@ -97,16 +97,16 @@ export default function Header() {
                     ) : (
                       <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                     )}
-                  </Disclosure.Button>
+                  </DisclosureButton>
                 </div>
               </div>
             </div>
           </div>
 
-          <Disclosure.Panel className="sm:hidden">
+          <DisclosurePanel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2 flex flex-col gap-3 items-start">
               {navigation.map((item) => (
-                <Disclosure.Button
+                <DisclosureButton
                   key={item.name}
                   as={Link}
                   href={item.href}
@@ -114,7 +114,7 @@ export default function Header() {
                   aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
-                </Disclosure.Button>
+                </DisclosureButton>
               ))}
               <div className="flex gap-6 items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <Link
@@ -131,7 +131,7 @@ export default function Header() {
                 </Link>
               </div>
             </div>
-          </Disclosure.Panel>
+          </DisclosurePanel>
         </>
       )}
     </Disclosure>
