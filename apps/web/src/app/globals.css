@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap')
-layer(base);
-
 @import 'tailwindcss';
 
 @theme {
@@ -14,7 +11,7 @@ layer(base);
 
   --font-inter: Inter, sans-serif;
   --font-lato: Lato, sans-serif;
-  /* --font-montserrat: Montserrat, sans-serif; */
+  --font-montserrat: Montserrat, sans-serif;
 
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(
@@ -43,13 +40,6 @@ layer(base);
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
-}
-
-* {
-  font-family: "Montserrat", sans-serif;
-}
-.font-montserrat {
-  font-family: "Montserrat", sans-serif;
 }
 
 .linear_gradient {
