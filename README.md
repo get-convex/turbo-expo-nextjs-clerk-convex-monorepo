@@ -7,7 +7,7 @@ featuring:
 - React 19: Latest React with concurrent features
 - Next.js 15: Web app & marketing page with App Router
 - Tailwind CSS v4: Modern CSS-first configuration
-- React Native [Expo SDK 53](https://expo.dev/): Mobile/native app with New Architecture
+- React Native [Expo](https://expo.dev/): Mobile/native app with New Architecture
 - [Convex](https://convex.dev): Backend, database, server functions
 - [Clerk](https://clerk.dev): User authentication
 - OpenAI: Text summarization (optional)
