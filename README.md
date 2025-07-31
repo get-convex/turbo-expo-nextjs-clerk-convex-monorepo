@@ -83,7 +83,7 @@ npm run dev
 
 This will allow you to use the ⬆ and ⬇ keyboard keys to see logs for each
 of the Convex backend, web app, and mobile app separately.
-If you'd rather see all of the lod gs in one place, delete the
+If you'd rather see all of the logs in one place, delete the
 `"ui": "tui",` line in [turbo.json](./turbo.json).
 
 ## Deploying
