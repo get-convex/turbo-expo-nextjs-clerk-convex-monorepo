@@ -1,29 +1,26 @@
-# Fullstack monorepo template feat. Expo, Turbo, Next.js, Convex, Clerk
+# RecipeAI - AI-First Recipe Management App
 
-This is a modern TypeScript monorepo template with AI web and native apps
-featuring:
+An elegant, AI-powered recipe management application with beautiful minimalist design.
 
+**Tech Stack:**
 - Turborepo: Monorepo management
 - React 19: Latest React with concurrent features
-- Next.js 15: Web app & marketing page with App Router
+- Next.js 15: Web app with App Router
 - Tailwind CSS v4: Modern CSS-first configuration
-- React Native [Expo](https://expo.dev/): Mobile/native app with New Architecture
+- React Native [Expo](https://expo.dev/): Mobile/native app
 - [Convex](https://convex.dev): Backend, database, server functions
 - [Clerk](https://clerk.dev): User authentication
-- OpenAI: Text summarization (optional)
+- OpenAI: Intelligent recipe extraction and modifications
 
-The example app is a note taking app that can summarize notes using AI. Features
-include:
-
-- Marketing page
-- Dashboard page (web & native)
-- Note taking page (web & native)
-- Backend API that serves web & native with the same API
-- Relational database
-- End to end type safety (schema definition to frontend API clients)
-- User authentication
-- Asynchronous call to an OpenAI
-- Everything is realtime by default
+**Features:**
+- AI-native recipe extraction from copy/paste
+- Import recipes from URLs (YouTube, Instagram, websites)
+- Recipe variations and cooking session tracking
+- AI-powered recipe modifications and suggestions
+- Real-time sync across all devices
+- Beautiful, minimalist interface inspired by premium design
+- Cross-platform (web & native)
+- End-to-end type safety
 
 ## Using this example
 

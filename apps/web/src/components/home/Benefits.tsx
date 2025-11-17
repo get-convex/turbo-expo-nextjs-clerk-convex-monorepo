@@ -1,90 +1,65 @@
-import Image from "next/image";
+import { Brain, Zap, History, Globe } from "lucide-react";
 
-const benefits = [
+const features = [
   {
-    title: "Effortless Note-Taking",
-    description: "Capture thoughts effortlessly with our intuitive interface",
-    image: "/images/goodNews.png",
+    title: "AI-Powered Extraction",
+    description: "Paste any recipe and watch AI instantly parse ingredients and instructions with perfect accuracy.",
+    icon: Brain,
   },
   {
-    title: "Seamless Sync",
-    description:
-      "Access your notes anytime, anywhere, with seamless cloud synchronization.",
-    image: "/images/cloudSync.png",
+    title: "Instant Import",
+    description: "Save recipes from YouTube, Instagram, or any website with a single click.",
+    icon: Globe,
   },
   {
-    title: "Enhanced Productivity",
-    description:
-      "Let AI handle organization, so you can focus on what matters most.",
-    image: "/images/googleCalander.png",
+    title: "Smart Variations",
+    description: "Track every cooking session. AI helps you modify and improve recipes over time.",
+    icon: Zap,
   },
   {
-    title: "AI-Powered Insights",
-    description:
-      "Gain valuable insights with smart analytics based on your note patterns.",
-    image: "/images/bot.png",
+    title: "Version History",
+    description: "Never lose a great modification. Every variation is saved with notes and ratings.",
+    icon: History,
   },
 ];
 
 const Benefits = () => {
   return (
-    <section id="Benefits" className="relative pointer-events-none">
-      <Image
-        src={"/images/blue-circle.svg"}
-        width={503}
-        height={531}
-        alt=""
-        className="absolute hidden sm:block -left-40 -top-48 h-[531px]"
-      />
-      <div className="container py-16 px-2 md:px-0">
-        <p className="text-black text-[17px] sm:text-3xl not-italic font-medium leading-[90.3%] tracking-[-0.75px] text-center font-montserrat pb-2 sm:pb-[18px]">
-          Benefits
-        </p>
-        <h3 className=" text-black text-3xl sm:text-[57px] not-italic font-medium leading-[90.3%] tracking-[-1.425px] font-montserrat text-center pb-[46px] sm:pb-[87px]">
-          Why Choose UseNotes
-        </h3>
+    <section id="features" className="py-20 md:py-32 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl" />
 
-        <div className="relative">
-          <div className="hidden sm:flex justify-between items-center absolute inset-0 -z-10">
-            {Array(3)
-              .fill(0)
-              .map((_, index) => (
-                <Image
-                  src="/images/cricle.svg"
-                  width={183}
-                  height={193}
-                  alt="line"
-                  key={index}
-                />
-              ))}
-          </div>
+      <div className="container relative z-10">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-text-primary">
+            Why RecipeAI?
+          </h2>
+          <p className="text-xl text-text-secondary max-w-2xl mx-auto">
+            Intelligent features that transform how you cook
+          </p>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 z-10 ">
-            {benefits.map((benefit, index) => (
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
               <div
                 key={index}
-                className="flex gap-2 sm:gap-7 bg-white items-center border rounded-[17px] py-4 px-2 sm:py-12 sm:px-6 border-solid border-[#B8B5B5] shadow-xl"
+                className="card group hover:shadow-xl transition-all animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className=" min-w-16 sm:min-w-28">
-                  <Image
-                    src={benefit.image}
-                    width={100}
-                    height={100}
-                    alt="benefit"
-                    className="sm:w-[100px] w-[58px]"
-                  />
+                <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Icon className="w-7 h-7 text-accent" strokeWidth={2.5} />
                 </div>
-                <div className="">
-                  <h4 className="text-black text-[24px] sm:text-[42px] not-italic font-medium leading-[90.3%] tracking-[-1.05px] pb-2 sm:pb-6 font-montserrat">
-                    {benefit.title}
-                  </h4>
-                  <p className="font-montserrat pb-2 text-black text-[17px] sm:text-3xl not-italic font-normal leading-[90.3%] tracking-[-0.75px]">
-                    {benefit.description}
-                  </p>
-                </div>
+                <h3 className="text-2xl font-display font-bold mb-3 text-text-primary">
+                  {feature.title}
+                </h3>
+                <p className="text-text-secondary leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>

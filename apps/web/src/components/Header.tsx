@@ -1,8 +1,7 @@
 "use client";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Logo from "./common/Logo";
+import { Menu, X, ChefHat } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@clerk/clerk-react";
 import { UserNav } from "./common/UserNav";
@@ -11,12 +10,11 @@ import { usePathname } from "next/navigation";
 type NavigationItem = {
   name: string;
   href: string;
-  current: boolean;
 };
 
 const navigation: NavigationItem[] = [
-  { name: "Benefits", href: "#Benefits", current: true },
-  { name: "Reviews", href: "#reviews", current: false },
+  { name: "Features", href: "#features" },
+  { name: "How it Works", href: "#how-it-works" },
 ];
 
 export default function Header() {
@@ -24,45 +22,43 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <Disclosure as="nav" className=" ">
+    <Disclosure as="nav" className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-canvas/80 border-b border-border">
       {({ open }) => (
         <>
-          <div className="flex items-center bg-white h-16 sm:h-20">
-            <div className="container px-2 sm:px-0">
-              <div className="relative flex h-16 items-center justify-between">
-                <div className="flex sm:hidden shrink-0 items-center">
-                  <Logo isMobile={true} />
+          <div className="container">
+            <div className="flex h-20 items-center justify-between">
+              {/* Logo */}
+              <Link href="/" className="flex items-center gap-2 group">
+                <div className="w-10 h-10 rounded-2xl bg-accent flex items-center justify-center transition-transform group-hover:scale-105">
+                  <ChefHat className="w-6 h-6 text-white" strokeWidth={2.5} />
                 </div>
-                <div className="sm:flex hidden shrink-0 items-center">
-                  <Logo />
-                </div>
-                {pathname === "/" && (
-                  <div className="flex flex-1 items-center justify-center ">
-                    <div className="hidden sm:ml-6 sm:block">
-                      <ul className="flex space-x-28">
-                        {navigation.map((item) => (
-                          <li key={item.name}>
-                            <Link
-                              href={item.href}
-                              className="text-[#2D2D2D] text-center text-xl not-italic font-normal leading-[normal]"
-                              aria-current={item.current ? "page" : undefined}
-                            >
-                              {item.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
+                <span className="text-2xl font-display font-bold tracking-tight text-text-primary">
+                  RecipeAI
+                </span>
+              </Link>
+
+              {/* Desktop Navigation */}
+              {pathname === "/" && (
+                <nav className="hidden md:flex items-center gap-8">
+                  {navigation.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="text-base text-text-secondary hover:text-text-primary transition-colors"
+                    >
+                      {item.name}
+                    </a>
+                  ))}
+                </nav>
+              )}
+
+              {/* Desktop CTA */}
+              <div className="hidden md:flex items-center gap-4">
                 {user ? (
-                  <div className="hidden sm:flex absolute inset-y-0 right-0 gap-6 items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                    <Link href="/notes">
-                      <button
-                        type="button"
-                        className=" text-white text-center text-xl not-italic font-normal leading-[normal] font-montserrat px-[22px] py-[11px] button"
-                      >
-                        See your Notes
+                  <>
+                    <Link href="/recipes">
+                      <button className="btn-primary">
+                        My Recipes
                       </button>
                     </Link>
                     <UserNav
@@ -70,64 +66,57 @@ export default function Header() {
                       name={user?.fullName!}
                       email={user?.primaryEmailAddress?.emailAddress!}
                     />
-                  </div>
+                  </>
                 ) : (
-                  <div className="hidden sm:flex absolute inset-y-0 right-0 gap-6 items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                    <Link
-                      href="/notes"
-                      className="border rounded-lg border-solid border-[#2D2D2D] text-[#2D2D2D] text-center text-xl not-italic font-normal leading-[normal] font-montserrat px-[22px] py-2.5"
-                    >
-                      Sign in
+                  <>
+                    <Link href="/recipes">
+                      <button className="btn-ghost">
+                        Sign In
+                      </button>
                     </Link>
-                    <Link
-                      href="/notes"
-                      className=" text-white text-center text-xl not-italic font-normal leading-[normal] font-montserrat px-[22px] py-[11px] button"
-                    >
-                      Get Started
+                    <Link href="/recipes">
+                      <button className="btn-primary">
+                        Get Started
+                      </button>
                     </Link>
-                  </div>
+                  </>
                 )}
-                <div className="block sm:hidden">
-                  {/* Mobile menu button*/}
-                  <DisclosureButton className="relative inline-flex  items-center justify-center rounded-md p-2 text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span className="absolute -inset-0.5" />
-                    <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </DisclosureButton>
-                </div>
               </div>
+
+              {/* Mobile menu button */}
+              <DisclosureButton className="md:hidden p-2 rounded-xl text-text-secondary hover:bg-surface transition-colors">
+                {open ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </DisclosureButton>
             </div>
           </div>
 
-          <DisclosurePanel className="sm:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2 flex flex-col gap-3 items-start">
+          {/* Mobile Menu */}
+          <DisclosurePanel className="md:hidden border-t border-border bg-canvas">
+            <div className="container py-4 space-y-4">
               {navigation.map((item) => (
                 <DisclosureButton
                   key={item.name}
-                  as={Link}
+                  as="a"
                   href={item.href}
-                  className="text-[#2D2D2D] text-center text-xl not-italic font-normal leading-[normal]"
-                  aria-current={item.current ? "page" : undefined}
+                  className="block text-lg text-text-secondary hover:text-text-primary transition-colors"
                 >
                   {item.name}
                 </DisclosureButton>
               ))}
-              <div className="flex gap-6 items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <Link
-                  href="/notes"
-                  className="border rounded-lg border-solid border-[#2D2D2D] text-[#2D2D2D] text-center text-xl not-italic font-normal leading-[normal] font-montserrat px-5 py-[5px]"
-                >
-                  Sign in
+              <div className="pt-4 space-y-3">
+                <Link href="/recipes" className="block">
+                  <button className="btn-ghost w-full">
+                    Sign In
+                  </button>
                 </Link>
-                <Link
-                  href="/notes"
-                  className=" text-white text-center text-xl not-italic font-normal leading-[normal] font-montserrat px-5 py-1.5 button"
-                >
-                  Get Started
+                <Link href="/recipes" className="block">
+                  <button className="btn-primary w-full">
+                    Get Started
+                  </button>
                 </Link>
               </div>
             </div>

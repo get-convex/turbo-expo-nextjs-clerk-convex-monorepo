@@ -1,5 +1,5 @@
 {
-  "name": "convex-monorepo",
+  "name": "recipe-ai",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
