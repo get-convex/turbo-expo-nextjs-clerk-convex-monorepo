@@ -47,12 +47,12 @@ export default function Recipes() {
     );
   }
 
-  const filteredRecipes = recipes?.filter((recipe) => {
+  const filteredRecipes = recipes?.filter((recipe: any) => {
     const query = searchQuery.toLowerCase();
     return (
       recipe.title.toLowerCase().includes(query) ||
       recipe.description?.toLowerCase().includes(query) ||
-      recipe.tags?.some((tag) => tag.toLowerCase().includes(query))
+      recipe.tags?.some((tag: string) => tag.toLowerCase().includes(query))
     );
   });
 
@@ -128,7 +128,7 @@ export default function Recipes() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRecipes.map((recipe, index) => (
+              {filteredRecipes.map((recipe: any, index: number) => (
                 <Link
                   key={recipe._id}
                   href={`/recipes/${recipe._id}`}
@@ -180,7 +180,7 @@ export default function Recipes() {
                       {/* Tags */}
                       {recipe.tags && recipe.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-4">
-                          {recipe.tags.slice(0, 3).map((tag) => (
+                          {recipe.tags.slice(0, 3).map((tag: string) => (
                             <span
                               key={tag}
                               className="px-2 py-1 rounded-full bg-surface text-xs text-text-secondary"

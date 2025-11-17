@@ -134,7 +134,7 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
               Recipe Not Found
             </h2>
             <p className="text-lg text-text-secondary mb-8">
-              This recipe doesn't exist or has been deleted.
+              This recipe doesn&apos;t exist or has been deleted.
             </p>
             <Link href="/recipes">
               <button className="btn-primary">Back to Recipes</button>
@@ -201,7 +201,7 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
               {/* Tags */}
               {recipe.tags && recipe.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-6">
-                  {recipe.tags.map((tag) => (
+                  {recipe.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="px-3 py-1.5 rounded-full bg-surface text-sm text-text-secondary"
@@ -253,7 +253,7 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
               Ingredients
             </h2>
             <div className="space-y-3">
-              {recipe.ingredients.map((ingredient, i) => (
+              {recipe.ingredients.map((ingredient: { amount?: string; unit?: string; item: string; notes?: string }, i: number) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-2 h-2 rounded-full bg-accent flex-shrink-0 mt-2" />
                   <div className="flex-1">
@@ -278,7 +278,7 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
               Instructions
             </h2>
             <div className="space-y-4">
-              {recipe.instructions.map((instruction, i) => (
+              {recipe.instructions.map((instruction: string, i: number) => (
                 <div key={i} className="flex gap-4">
                   <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center font-display font-bold flex-shrink-0">
                     {i + 1}
@@ -429,7 +429,7 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
             </div>
           ) : (
             <div className="space-y-4">
-              {variations.map((variation, index) => (
+              {variations.map((variation: { _id: string; title: string; createdAt: number; rating?: number; notes?: string; modifications: string }, index: number) => (
                 <div
                   key={variation._id}
                   className="p-6 rounded-2xl border border-border hover:border-accent transition-colors"
@@ -447,7 +447,7 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
                         </span>
                         {variation.rating && (
                           <span className="flex items-center gap-1">
-                            {[...Array(variation.rating)].map((_, i) => (
+                            {[...Array(variation.rating)].map((_: any, i: number) => (
                               <Star key={i} className="w-4 h-4 fill-accent text-accent" />
                             ))}
                           </span>
