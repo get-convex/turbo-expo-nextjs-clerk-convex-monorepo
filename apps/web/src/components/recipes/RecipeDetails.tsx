@@ -14,8 +14,10 @@ import {
   Plus,
   Calendar,
   Star,
+  Edit,
 } from "lucide-react";
 import Link from "next/link";
+import EditRecipe from "./EditRecipe";
 
 interface RecipeDetailsProps {
   recipeId: Id<"recipes">;
@@ -30,6 +32,7 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
   const modifyRecipe = useAction(api.openai.modifyRecipe);
 
   const [isCreatingVariation, setIsCreatingVariation] = useState(false);
+  const [isEditingRecipe, setIsEditingRecipe] = useState(false);
   const [variationTitle, setVariationTitle] = useState("");
   const [variationNotes, setVariationNotes] = useState("");
   const [modificationRequest, setModificationRequest] = useState("");
@@ -210,12 +213,22 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
               )}
             </div>
 
-            <button
-              onClick={handleDelete}
-              className="p-3 rounded-xl hover:bg-surface text-text-secondary hover:text-accent transition-colors"
-            >
-              <Trash2 className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsEditingRecipe(true)}
+                className="p-3 rounded-xl hover:bg-surface text-text-secondary hover:text-accent transition-colors"
+                title="Edit Recipe"
+              >
+                <Edit className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleDelete}
+                className="p-3 rounded-xl hover:bg-surface text-text-secondary hover:text-accent transition-colors"
+                title="Delete Recipe"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           {recipe.source && (
@@ -456,6 +469,15 @@ export default function RecipeDetails({ recipeId }: RecipeDetailsProps) {
           )}
         </div>
       </div>
+
+      {/* Edit Recipe Modal */}
+      {recipe && (
+        <EditRecipe
+          isOpen={isEditingRecipe}
+          onClose={() => setIsEditingRecipe(false)}
+          recipe={recipe}
+        />
+      )}
     </div>
   );
 }

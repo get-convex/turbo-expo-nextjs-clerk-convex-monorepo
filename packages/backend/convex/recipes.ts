@@ -199,6 +199,32 @@ export const createRecipeVariation = mutation({
   },
 });
 
+// Update a variation
+export const updateRecipeVariation = mutation({
+  args: {
+    variationId: v.id("recipeVariations"),
+    title: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    modifications: v.optional(v.string()),
+    ingredients: v.optional(v.array(ingredientValidator)),
+    instructions: v.optional(v.array(v.string())),
+    rating: v.optional(v.number()),
+  },
+  handler: async (ctx, { variationId, ...updates }) => {
+    const userId = await getUserId(ctx);
+    if (!userId) throw new Error("User not found");
+
+    const variation = await ctx.db.get(variationId);
+    if (!variation) throw new Error("Variation not found");
+    if (variation.userId !== userId)
+      throw new Error("Not authorized to update this variation");
+
+    await ctx.db.patch(variationId, updates);
+
+    return variationId;
+  },
+});
+
 // Delete a variation
 export const deleteRecipeVariation = mutation({
   args: {
