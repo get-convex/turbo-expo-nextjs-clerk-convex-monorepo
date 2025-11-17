@@ -18,13 +18,13 @@ const LoginScreen = ({ navigation }) => {
         const { createdSessionId, setActive } = await startGoogleAuthFlow();
         if (createdSessionId) {
           setActive({ session: createdSessionId });
-          navigation.navigate("NotesDashboardScreen");
+          navigation.navigate("RecipesDashboardScreen");
         }
       } else if (authType === "apple") {
         const { createdSessionId, setActive } = await startAppleAuthFlow();
         if (createdSessionId) {
           setActive({ session: createdSessionId });
-          navigation.navigate("NotesDashboardScreen");
+          navigation.navigate("RecipesDashboardScreen");
         }
       }
     } catch (err) {

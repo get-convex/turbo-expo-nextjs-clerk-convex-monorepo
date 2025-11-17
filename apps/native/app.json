@@ -1,8 +1,8 @@
 {
   "expo": {
     "newArchEnabled": true,
-    "name": "NotesContract",
-    "slug": "NotesContract",
+    "name": "RecipeAI",
+    "slug": "recipe-ai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0D87E1"
+      "backgroundColor": "#F64C20"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
