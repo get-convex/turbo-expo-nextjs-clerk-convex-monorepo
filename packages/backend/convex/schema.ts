@@ -48,4 +48,26 @@ export default defineSchema({
   })
     .index("by_recipe", ["recipeId"])
     .index("by_user", ["userId"]),
+
+  collections: defineTable({
+    userId: v.string(),
+    name: v.string(),
+    description: v.optional(v.string()),
+    icon: v.optional(v.string()), // emoji or icon name
+    color: v.optional(v.string()), // color hex for UI
+    isDefault: v.optional(v.boolean()), // for system collections like "Favorites"
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_user", ["userId"]),
+
+  collectionRecipes: defineTable({
+    collectionId: v.id("collections"),
+    recipeId: v.id("recipes"),
+    userId: v.string(),
+    addedAt: v.number(),
+  })
+    .index("by_collection", ["collectionId"])
+    .index("by_recipe", ["recipeId"])
+    .index("by_user", ["userId"])
+    .index("by_collection_and_recipe", ["collectionId", "recipeId"]),
 });

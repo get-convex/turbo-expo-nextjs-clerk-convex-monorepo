@@ -8,136 +8,168 @@ import {
   Image,
   FlatList,
   Dimensions,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useUser } from "@clerk/clerk-expo";
 import { api } from "@packages/backend/convex/_generated/api";
 import { useQuery } from "convex/react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AddNewModal from "../components/AddNewModal";
 
 const RecipesDashboardScreen = ({ navigation }) => {
   const user = useUser();
   const imageUrl = user?.user?.imageUrl;
   const firstName = user?.user?.firstName;
+  const insets = useSafeAreaInsets();
 
   const allRecipes = useQuery(api.recipes.getRecipes);
-  const [search, setSearch] = useState("");
+  const collections = useQuery(api.collections.getCollections);
+  const [showAddModal, setShowAddModal] = useState(false);
 
-  const finalRecipes = search
-    ? allRecipes?.filter(
-        (recipe) =>
-          recipe.title.toLowerCase().includes(search.toLowerCase()) ||
-          recipe.description?.toLowerCase().includes(search.toLowerCase()) ||
-          recipe.tags?.some((tag) =>
-            tag.toLowerCase().includes(search.toLowerCase()),
-          ),
-      )
-    : allRecipes;
+  // Create "All recipes" as the default collection
+  const allRecipesCollection = {
+    _id: "all",
+    name: "All recipes",
+    color: "#F64C20",
+    icon: "restaurant",
+    recipeCount: allRecipes?.length || 0,
+    previewRecipes: allRecipes?.slice(0, 3) || [],
+  };
 
-  const renderItem = ({ item }) => (
+  // For now, just show all collections without recipe data
+  // We'll need to fetch recipe counts separately or update the backend query
+  const collectionsWithData = collections?.map((collection) => {
+    return {
+      ...collection,
+      recipeCount: 0, // TODO: Fetch actual count from collectionRecipes
+      previewRecipes: [],
+    };
+  }) || [];
+
+  // Combine all collections with "All recipes" at the top
+  const allCollections = [allRecipesCollection, ...collectionsWithData];
+
+  const renderCollectionCard = ({ item }) => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("RecipeDetailsScreen", {
-          recipeId: item._id,
+        navigation.navigate("CollectionDetailScreen", {
+          collectionId: item._id,
+          collectionName: item.name,
         })
       }
-      activeOpacity={0.7}
-      style={styles.recipeItem}
+      activeOpacity={0.6}
+      style={styles.collectionCard}
     >
-      <View style={styles.recipeIconContainer}>
-        <Text style={styles.recipeIcon}>👨‍🍳</Text>
-      </View>
-      <View style={styles.recipeContent}>
-        <Text style={styles.recipeTitle} numberOfLines={1}>
-          {item.title}
+      <View style={styles.collectionInfo}>
+        <Text style={styles.collectionName} numberOfLines={1}>
+          {item.name}
         </Text>
-        {item.description && (
-          <Text style={styles.recipeDescription} numberOfLines={2}>
-            {item.description}
-          </Text>
-        )}
-        <View style={styles.recipeMeta}>
-          {(item.prepTime || item.cookTime) && (
-            <View style={styles.metaItem}>
-              <Ionicons name="time-outline" size={14} color="#6B6866" />
-              <Text style={styles.metaText}>
-                {(item.prepTime || 0) + (item.cookTime || 0)} min
-              </Text>
-            </View>
-          )}
-          {item.servings && (
-            <View style={styles.metaItem}>
-              <Ionicons name="people-outline" size={14} color="#6B6866" />
-              <Text style={styles.metaText}>{item.servings}</Text>
-            </View>
-          )}
-        </View>
+        <Text style={styles.recipeCount}>
+          {item.recipeCount} recipe{item.recipeCount !== 1 ? 's' : ''}
+        </Text>
       </View>
+
+      {item.previewRecipes.length > 0 && (
+        <View style={styles.previewImagesContainer}>
+          {item.previewRecipes.map((recipe: any, index: number) => {
+            // Fanned stack from bottom-right corner
+            // Image[0] (back-left, small, no rotation)
+            // Image[1] (middle, medium, rotated −5°)
+            // Image[2] (front-right, large, rotated +2°, anchored bottom-right)
+            const rotations = ['0deg', '-5deg', '-10deg'];
+            const rightPositions = [0, 20, 30]; // Distance from right edge (negative = extends beyond)
+            const bottomPositions = [-10, -20, -30]; // Distance from bottom (adjust to move up/down)
+            const widthPercentages = [45, 52, 60]; // Width as % of container
+            const zIndexes = [3, 2, 1]; // Front-right on top
+            const skewAngles = ['2deg', '4deg', '8deg']; // Slight taper on top edge
+
+            return (
+              <View
+                key={recipe._id}
+                style={[
+                  styles.previewImageWrapper,
+                  {
+                    zIndex: zIndexes[index],
+                    right: rightPositions[index],
+                    bottom: bottomPositions[index],
+                    width: `${widthPercentages[index]}%`,
+                    transform: [{ rotate: rotations[index] }, { skewY: skewAngles[index] }],
+                  },
+                ]}
+              >
+                {recipe.imageUrl ? (
+                  <Image
+                    source={{ uri: recipe.imageUrl }}
+                    style={styles.previewImage}
+                  />
+                ) : (
+                  <View style={styles.previewImagePlaceholder}>
+                    <Ionicons name="restaurant" size={20} color="#6B6866" />
+                  </View>
+                )}
+              </View>
+            );
+          })}
+        </View>
+      )}
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.headerLeft}>
-            <View style={styles.logoContainer}>
-              <Ionicons name="restaurant" size={24} color="#FFFEFE" />
-            </View>
-            <Text style={styles.logoText}>RecipeAI</Text>
-          </View>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
+        <Text style={styles.logoText}>RecipeAI</Text>
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.iconButton}>
+            <Feather name="search" size={24} color="#1A1918" />
+          </TouchableOpacity>
           {imageUrl && (
-            <Image style={styles.avatar} source={{ uri: imageUrl }} />
+            <TouchableOpacity>
+              <Image style={styles.avatar} source={{ uri: imageUrl }} />
+            </TouchableOpacity>
           )}
         </View>
       </View>
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>My Recipes</Text>
-        <Text style={styles.subtitle}>Your personal collection</Text>
-      </View>
-
-      <View style={styles.searchContainer}>
-        <Feather name="search" size={20} color="#A8A5A3" style={styles.searchIcon} />
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          placeholder="Search recipes, ingredients, or tags..."
-          placeholderTextColor="#A8A5A3"
-          style={styles.searchInput}
-        />
-      </View>
-
-      {!finalRecipes || finalRecipes.length === 0 ? (
+      {!allRecipes || allRecipes.length === 0 ? (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyStateIcon}>🍳</Text>
+          <View style={styles.emptyStateImageContainer}>
+            <View style={styles.emptyStateCard1} />
+            <View style={styles.emptyStateCard2} />
+          </View>
           <Text style={styles.emptyStateTitle}>
-            {search ? "No recipes found" : "No recipes yet"}
-          </Text>
-          <Text style={styles.emptyStateText}>
-            {search
-              ? "Try adjusting your search"
-              : "Create your first recipe or\nimport one to get started"}
+            Add your first{'\n'}recipe to RecipeAI
           </Text>
         </View>
       ) : (
         <FlatList
-          data={finalRecipes}
-          renderItem={renderItem}
+          data={allCollections}
+          renderItem={renderCollectionCard}
           keyExtractor={(item) => item._id}
-          style={styles.recipesList}
-          contentContainerStyle={styles.recipesListContent}
+          numColumns={2}
+          style={styles.collectionsList}
+          contentContainerStyle={styles.collectionsListContent}
           showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.collectionRow}
         />
       )}
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("CreateRecipeScreen")}
+        onPress={() => setShowAddModal(true)}
         style={styles.createButton}
       >
-        <Ionicons name="add" size={24} color="#FFFEFE" />
-        <Text style={styles.createButtonText}>Create Recipe</Text>
+        <Ionicons name="add" size={32} color="#FFFEFE" />
       </TouchableOpacity>
+
+      <AddNewModal
+        visible={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSelectCollection={() => navigation.navigate("CreateCollectionScreen")}
+        onSelectRecipe={() => navigation.navigate("CreateRecipeScreen")}
+      />
     </View>
   );
 };
@@ -148,192 +180,163 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFEFE",
   },
   header: {
-    backgroundColor: "#F64C20",
-    paddingTop: 50,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
-  headerContent: {
+    backgroundColor: "#FFFEFE",
+    paddingBottom: 16,
+    paddingHorizontal: 24,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-  headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  logoContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: "rgba(255, 254, 254, 0.2)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   logoText: {
     fontSize: RFValue(20),
-    fontFamily: "MBold",
-    color: "#FFFEFE",
-    marginLeft: 12,
+    fontFamily: "PPBold",
+    color: "#1A1918",
+    letterSpacing: -0.5,
   },
-  avatar: {
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  iconButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: "#FFFEFE",
-  },
-  titleContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
-    paddingBottom: 16,
-  },
-  title: {
-    fontSize: RFValue(28),
-    fontFamily: "MBold",
-    color: "#1A1918",
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: RFValue(14),
-    fontFamily: "MRegular",
-    color: "#6B6866",
-  },
-  searchContainer: {
-    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F8F4F0",
-    borderRadius: 16,
+  },
+  avatar: {
+    width: 26,
+    height: 26,
+    borderRadius: 20,
+  },
+  collectionsList: {
+    flex: 1,
+    paddingTop: 24,
+  },
+  collectionsListContent: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginHorizontal: 20,
-    marginBottom: 20,
+    paddingBottom: 120,
   },
-  searchIcon: {
-    marginRight: 12,
+  collectionRow: {
+    justifyContent: "space-between",
+    marginBottom: 16,
   },
-  searchInput: {
-    flex: 1,
-    fontSize: RFValue(15),
-    fontFamily: "MRegular",
-    color: "#1A1918",
-  },
-  recipesList: {
-    flex: 1,
-  },
-  recipesListContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 100,
-  },
-  recipeItem: {
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
+  collectionCard: {
+    width: "48%",
+    backgroundColor: "#F8F4F0",
     borderRadius: 20,
     padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "#E8E4E0",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    minHeight: 180,
+    position: "relative",
+    overflow: "hidden",
   },
-  recipeIconContainer: {
-    width: 60,
-    height: 60,
-    backgroundColor: "#F8F4F0",
-    borderRadius: 16,
+  previewImagesContainer: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    left: 0,
+    height: "75%",
+  },
+  previewImageWrapper: {
+    position: "absolute",
+    bottom: 0,
+    height: "95%",
+    aspectRatio: 0.75,
+    backgroundColor: "#FFFEFE",
+    padding: 3,
+  },
+  previewImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  previewImagePlaceholder: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#E8E4E0",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 16,
   },
-  recipeIcon: {
-    fontSize: 32,
-  },
-  recipeContent: {
+  emptyCollectionPreview: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+    marginTop: 16,
   },
-  recipeTitle: {
-    fontSize: RFValue(16),
-    fontFamily: "MBold",
-    color: "#1A1918",
-    marginBottom: 4,
-  },
-  recipeDescription: {
-    fontSize: RFValue(13),
-    fontFamily: "MRegular",
-    color: "#6B6866",
+  collectionInfo: {
+    gap: 4,
     marginBottom: 8,
-    lineHeight: 18,
   },
-  recipeMeta: {
-    flexDirection: "row",
-    alignItems: "center",
+  collectionName: {
+    fontSize: RFValue(16),
+    fontFamily: "PPBold",
+    color: "#1A1918",
   },
-  metaItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  metaText: {
-    fontSize: RFValue(12),
-    fontFamily: "MRegular",
+  recipeCount: {
+    fontSize: RFValue(13),
+    fontFamily: "PPMedium",
     color: "#6B6866",
-    marginLeft: 4,
   },
   emptyState: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
-    paddingHorizontal: 40,
+    paddingBottom: 180,
   },
-  emptyStateIcon: {
-    fontSize: 64,
-    marginBottom: 16,
+  emptyStateImageContainer: {
+    width: 160,
+    height: 140,
+    marginBottom: 32,
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyStateCard1: {
+    width: 110,
+    height: 130,
+    backgroundColor: "#F5F0EB",
+    borderRadius: 16,
+    position: "absolute",
+    transform: [{ rotate: "-12deg" }],
+    left: 10,
+    top: 5,
+  },
+  emptyStateCard2: {
+    width: 110,
+    height: 130,
+    backgroundColor: "#E8E3DD",
+    borderRadius: 16,
+    position: "absolute",
+    transform: [{ rotate: "12deg" }],
+    right: 10,
+    top: 5,
   },
   emptyStateTitle: {
-    fontSize: RFValue(18),
-    fontFamily: "MBold",
+    fontSize: RFValue(26),
+    fontFamily: "PPBold",
     color: "#1A1918",
-    marginBottom: 8,
-  },
-  emptyStateText: {
-    fontSize: RFValue(14),
-    fontFamily: "MRegular",
-    color: "#6B6866",
     textAlign: "center",
-    lineHeight: 20,
+    lineHeight: RFValue(36),
+    letterSpacing: -0.5,
   },
   createButton: {
     position: "absolute",
-    bottom: 30,
-    left: 20,
-    right: 20,
-    backgroundColor: "#F64C20",
+    bottom: 50,
+    alignSelf: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    backgroundColor: "#1A1918",
     borderRadius: 100,
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 16,
-    shadowColor: "#F64C20",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.25,
     shadowRadius: 12,
-    elevation: 8,
-  },
-  createButtonText: {
-    color: "#FFFEFE",
-    fontSize: RFValue(16),
-    fontFamily: "MBold",
-    marginLeft: 8,
+    elevation: 10,
   },
 });
 

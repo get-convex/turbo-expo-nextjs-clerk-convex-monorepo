@@ -19,24 +19,23 @@ export default function App() {
     MMedium: require("./src/assets/fonts/Montserrat-Medium.ttf"),
     MRegular: require("./src/assets/fonts/Montserrat-Regular.ttf"),
     MLight: require("./src/assets/fonts/Montserrat-Light.ttf"),
+
+    PPBold: require("./src/assets/fonts/PPPangramSansCompact-Bold.ttf"),
+    PPSemibold: require("./src/assets/fonts/PPPangramSansCompact-Semibold.ttf"),
+    PPMedium: require("./src/assets/fonts/PPPangramSansCompact-Medium.ttf"),
+    PPObjectBold: require("./src/assets/fonts/PPObjectSans-Bold.ttf"),
   });
   if (!loaded) {
     return false;
   }
 
-  const STATUS_BAR_HEIGHT =
-    Platform.OS === "ios" ? 50 : StatusBar.currentHeight;
-
   return (
     <ConvexClientProvider>
       <View style={{ flex: 1 }}>
-        <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#0D87E1" }}>
-          <StatusBar
-            translucent
-            backgroundColor={"#0D87E1"}
-            barStyle="light-content"
-          />
-        </View>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#FFFEFE"
+        />
         <Navigation />
       </View>
     </ConvexClientProvider>

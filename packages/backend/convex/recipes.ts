@@ -142,6 +142,16 @@ export const deleteRecipe = mutation({
       await ctx.db.delete(variation._id);
     }
 
+    // Delete all collection links for this recipe
+    const collectionLinks = await ctx.db
+      .query("collectionRecipes")
+      .withIndex("by_recipe", (q) => q.eq("recipeId", args.recipeId))
+      .collect();
+
+    for (const link of collectionLinks) {
+      await ctx.db.delete(link._id);
+    }
+
     // Delete the recipe
     await ctx.db.delete(args.recipeId);
   },
