@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(yarn list:*)",
-      "Bash(yarn install:*)"
+      "Bash(yarn install:*)",
+      "Bash(npx expo install:*)"
     ],
     "deny": [],
     "ask": []

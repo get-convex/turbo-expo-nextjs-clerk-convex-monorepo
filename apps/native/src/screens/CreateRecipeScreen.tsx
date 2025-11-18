@@ -8,29 +8,62 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Image,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { Ionicons } from "@expo/vector-icons";
 import { api } from "@packages/backend/convex/_generated/api";
 import { useMutation, useAction } from "convex/react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as ImagePicker from "expo-image-picker";
+
+interface Ingredient {
+  id: string;
+  text: string;
+  isSection: boolean;
+}
+
+interface Step {
+  id: string;
+  text: string;
+  isSection: boolean;
+}
 
 export default function CreateRecipeScreen({ navigation }) {
-  const [activeTab, setActiveTab] = useState<"paste" | "manual">("paste");
+  const insets = useSafeAreaInsets();
+  const [activeTab, setActiveTab] = useState<"ai" | "manual">("ai");
   const [pastedText, setPastedText] = useState("");
   const [isExtracting, setIsExtracting] = useState(false);
 
-  // Manual form state
+  const [imageUri, setImageUri] = useState<string | null>(null);
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [servings, setServings] = useState("");
   const [prepTime, setPrepTime] = useState("");
   const [cookTime, setCookTime] = useState("");
-  const [ingredientsText, setIngredientsText] = useState("");
-  const [instructionsText, setInstructionsText] = useState("");
-  const [tags, setTags] = useState("");
+  const [ingredients, setIngredients] = useState<Ingredient[]>([
+    { id: "1", text: "", isSection: false },
+  ]);
+  const [steps, setSteps] = useState<Step[]>([
+    { id: "1", text: "", isSection: false },
+  ]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
 
   const extractRecipe = useAction(api.openai.extractRecipe);
   const createRecipe = useMutation(api.recipes.createRecipe);
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
 
   const handleExtractFromPaste = async () => {
     if (!pastedText.trim()) {
@@ -42,26 +75,27 @@ export default function CreateRecipeScreen({ navigation }) {
     try {
       const extracted = await extractRecipe({ text: pastedText });
 
-      // Pre-populate manual form with extracted data
       setTitle(extracted.title || "");
-      setDescription(extracted.description || "");
       setServings(extracted.servings?.toString() || "");
       setPrepTime(extracted.prepTime?.toString() || "");
       setCookTime(extracted.cookTime?.toString() || "");
 
-      // Convert ingredients array to text
-      const ingredientsText = extracted.ingredients
-        ?.map((ing: any) =>
-          `${ing.amount || ""} ${ing.unit || ""} ${ing.item}`.trim()
-        )
-        .join("\n") || "";
-      setIngredientsText(ingredientsText);
+      const extractedIngredients = extracted.ingredients?.map((ing: any, index: number) => ({
+        id: `ing-${index}`,
+        text: `${ing.amount || ""} ${ing.unit || ""} ${ing.item}`.trim(),
+        isSection: false,
+      })) || [];
+      setIngredients(extractedIngredients.length > 0 ? extractedIngredients : [{ id: "1", text: "", isSection: false }]);
 
-      // Convert instructions array to text
-      setInstructionsText(extracted.instructions?.join("\n\n") || "");
-      setTags(extracted.tags?.join(", ") || "");
+      const extractedSteps = extracted.instructions?.map((step: string, index: number) => ({
+        id: `step-${index}`,
+        text: step,
+        isSection: false,
+      })) || [];
+      setSteps(extractedSteps.length > 0 ? extractedSteps : [{ id: "1", text: "", isSection: false }]);
 
-      // Switch to manual tab to review
+      setTags(extracted.tags || []);
+
       setActiveTab("manual");
       Alert.alert("Success", "Recipe extracted! Review and save below.");
     } catch (error) {
@@ -72,54 +106,109 @@ export default function CreateRecipeScreen({ navigation }) {
     }
   };
 
-  const handleCreateRecipe = async () => {
+  const addIngredient = () => {
+    setIngredients([
+      ...ingredients,
+      { id: Date.now().toString(), text: "", isSection: false },
+    ]);
+  };
+
+  const addIngredientSection = () => {
+    setIngredients([
+      ...ingredients,
+      { id: Date.now().toString(), text: "", isSection: true },
+    ]);
+  };
+
+  const removeIngredient = (id: string) => {
+    setIngredients(ingredients.filter((ing) => ing.id !== id));
+  };
+
+  const updateIngredient = (id: string, text: string) => {
+    setIngredients(
+      ingredients.map((ing) => (ing.id === id ? { ...ing, text } : ing))
+    );
+  };
+
+  const addStep = () => {
+    setSteps([
+      ...steps,
+      { id: Date.now().toString(), text: "", isSection: false },
+    ]);
+  };
+
+  const addStepSection = () => {
+    setSteps([
+      ...steps,
+      { id: Date.now().toString(), text: "", isSection: true },
+    ]);
+  };
+
+  const removeStep = (id: string) => {
+    setSteps(steps.filter((step) => step.id !== id));
+  };
+
+  const updateStep = (id: string, text: string) => {
+    setSteps(steps.map((step) => (step.id === id ? { ...step, text } : step)));
+  };
+
+  const addTag = () => {
+    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tag: string) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
+  const handleSave = async () => {
     if (!title.trim()) {
       Alert.alert("Error", "Please enter a recipe title");
       return;
     }
 
-    if (!ingredientsText.trim() || !instructionsText.trim()) {
-      Alert.alert("Error", "Please enter ingredients and instructions");
+    const validIngredients = ingredients.filter((ing) => ing.text.trim());
+    const validSteps = steps.filter((step) => step.text.trim());
+
+    if (validIngredients.length === 0 || validSteps.length === 0) {
+      Alert.alert("Error", "Please add at least one ingredient and one step");
       return;
     }
 
     try {
-      // Parse ingredients from text (one per line)
-      const ingredients = ingredientsText
-        .split("\n")
-        .filter((line) => line.trim())
-        .map((line) => {
-          // Simple parsing: "amount unit item"
-          const parts = line.trim().split(" ");
-          if (parts.length >= 2) {
-            return {
-              amount: parts[0],
-              unit: parts.length >= 3 ? parts[1] : undefined,
-              item: parts.slice(parts.length >= 3 ? 2 : 1).join(" "),
-            };
-          }
-          return { item: line.trim() };
-        });
-
-      // Parse instructions from text (split by double newline or single if needed)
-      const instructions = instructionsText
-        .split(/\n\n|\n/)
-        .filter((step) => step.trim())
-        .map((step) => step.trim());
+      const parsedIngredients = validIngredients.map((ing) => {
+        if (ing.isSection) {
+          return { item: ing.text, isSection: true };
+        }
+        const parts = ing.text.trim().split(" ");
+        if (parts.length >= 2) {
+          return {
+            amount: parts[0],
+            unit: parts.length >= 3 ? parts[1] : undefined,
+            item: parts.slice(parts.length >= 3 ? 2 : 1).join(" "),
+          };
+        }
+        return { item: ing.text.trim() };
+      });
 
       await createRecipe({
         title: title.trim(),
-        description: description.trim() || undefined,
-        ingredients,
-        instructions,
+        ingredients: parsedIngredients,
+        instructions: validSteps.map((s) => s.text.trim()),
         servings: servings ? parseInt(servings) : undefined,
         prepTime: prepTime ? parseInt(prepTime) : undefined,
         cookTime: cookTime ? parseInt(cookTime) : undefined,
-        tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : undefined,
+        tags: tags.length > 0 ? tags : undefined,
+        imageUrl: imageUri || undefined,
       });
 
       Alert.alert("Success", "Recipe created!", [
-        { text: "OK", onPress: () => navigation.navigate("RecipesDashboardScreen") },
+        {
+          text: "OK",
+          onPress: () => navigation.navigate("RecipesDashboardScreen"),
+        },
       ]);
     } catch (error) {
       console.error("Failed to create recipe:", error);
@@ -129,31 +218,30 @@ export default function CreateRecipeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.headerButton}
-        >
-          <Ionicons name="arrow-back" size={24} color="#FFFEFE" />
+      <View style={[styles.header, { paddingTop: insets.top }]}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="#1A1918" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Create Recipe</Text>
-        <View style={styles.headerButton} />
+        <Text style={styles.headerTitle}>Add recipe</Text>
+        <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
+          <Ionicons name="checkmark" size={32} color="#FFFEFE" />
+        </TouchableOpacity>
       </View>
 
       {/* Tabs */}
       <View style={styles.tabs}>
         <TouchableOpacity
-          style={[styles.tab, activeTab === "paste" && styles.tabActive]}
-          onPress={() => setActiveTab("paste")}
+          style={[styles.tab, activeTab === "ai" && styles.tabActive]}
+          onPress={() => setActiveTab("ai")}
+          activeOpacity={0.6}
         >
           <Ionicons
             name="sparkles"
             size={18}
-            color={activeTab === "paste" ? "#F64C20" : "#6B6866"}
+            color={activeTab === "ai" ? "#F64C20" : "#6B6866"}
           />
           <Text
-            style={[styles.tabText, activeTab === "paste" && styles.tabTextActive]}
+            style={[styles.tabText, activeTab === "ai" && styles.tabTextActive]}
           >
             AI Extract
           </Text>
@@ -161,6 +249,7 @@ export default function CreateRecipeScreen({ navigation }) {
         <TouchableOpacity
           style={[styles.tab, activeTab === "manual" && styles.tabActive]}
           onPress={() => setActiveTab("manual")}
+          activeOpacity={0.6}
         >
           <Ionicons
             name="create"
@@ -177,11 +266,11 @@ export default function CreateRecipeScreen({ navigation }) {
 
       <ScrollView
         style={styles.content}
-        contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.contentContainer}
       >
-        {activeTab === "paste" ? (
-          <View style={styles.pasteTab}>
+        {activeTab === "ai" ? (
+          <View style={styles.aiTab}>
             <Text style={styles.description}>
               Paste any recipe text, and AI will extract ingredients and instructions.
             </Text>
@@ -200,6 +289,7 @@ export default function CreateRecipeScreen({ navigation }) {
                 styles.extractButton,
                 (isExtracting || !pastedText.trim()) && styles.extractButtonDisabled,
               ]}
+              activeOpacity={0.6}
             >
               {isExtracting ? (
                 <ActivityIndicator color="#FFFEFE" />
@@ -213,97 +303,205 @@ export default function CreateRecipeScreen({ navigation }) {
           </View>
         ) : (
           <View style={styles.manualTab}>
-            <Text style={styles.label}>Recipe Title *</Text>
+            {/* Photo Section */}
+            <View style={styles.photoSection}>
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.recipeImage} />
+              ) : (
+                <View style={styles.photoPlaceholder} />
+              )}
+              <TouchableOpacity onPress={pickImage} style={styles.changePhotoButton}>
+                <Text style={styles.changePhotoText}>Change photo</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Name */}
+            <Text style={styles.sectionLabel}>Name</Text>
             <TextInput
               value={title}
               onChangeText={setTitle}
-              placeholder="e.g., Grandma's Chocolate Chip Cookies"
+              placeholder="Recipe name"
               placeholderTextColor="#A8A5A3"
               style={styles.input}
             />
 
-            <Text style={styles.label}>Description</Text>
-            <TextInput
-              value={description}
-              onChangeText={setDescription}
-              placeholder="Brief description..."
-              placeholderTextColor="#A8A5A3"
-              multiline
-              style={[styles.input, styles.inputMultiline]}
-            />
-
-            <View style={styles.row}>
-              <View style={styles.rowItem}>
-                <Text style={styles.label}>Servings</Text>
+            {/* Servings, Prep Time, Cook Time */}
+            <View style={styles.timingsCard}>
+              <View style={styles.timingRow}>
+                <Text style={styles.timingLabel}>Servings</Text>
                 <TextInput
                   value={servings}
                   onChangeText={setServings}
-                  placeholder="4"
+                  placeholder="0"
                   placeholderTextColor="#A8A5A3"
                   keyboardType="number-pad"
-                  style={styles.input}
+                  style={styles.timingInput}
                 />
               </View>
-              <View style={styles.rowItem}>
-                <Text style={styles.label}>Prep (min)</Text>
+
+              <View style={styles.timingRow}>
+                <Text style={styles.timingLabel}>Prep Time</Text>
                 <TextInput
                   value={prepTime}
                   onChangeText={setPrepTime}
-                  placeholder="15"
+                  placeholder="0 min"
                   placeholderTextColor="#A8A5A3"
                   keyboardType="number-pad"
-                  style={styles.input}
+                  style={styles.timingInput}
                 />
               </View>
-              <View style={styles.rowItem}>
-                <Text style={styles.label}>Cook (min)</Text>
+
+              <View style={styles.timingRow}>
+                <Text style={styles.timingLabel}>Cook Time</Text>
                 <TextInput
                   value={cookTime}
                   onChangeText={setCookTime}
-                  placeholder="30"
+                  placeholder="0 h"
                   placeholderTextColor="#A8A5A3"
                   keyboardType="number-pad"
-                  style={styles.input}
+                  style={styles.timingInput}
                 />
               </View>
             </View>
 
-            <Text style={styles.label}>Ingredients * (one per line)</Text>
-            <TextInput
-              value={ingredientsText}
-              onChangeText={setIngredientsText}
-              placeholder={"1 cup flour\n2 eggs\n1 tsp salt"}
-              placeholderTextColor="#A8A5A3"
-              multiline
-              style={[styles.input, styles.inputMultiline, { height: 150 }]}
-            />
+            {/* Ingredients */}
+            <Text style={styles.sectionLabel}>Ingredients</Text>
+            <View style={styles.listCard}>
+              {ingredients.map((ingredient, index) => (
+                <View key={ingredient.id} style={styles.listItem}>
+                  <TouchableOpacity
+                    onPress={() => removeIngredient(ingredient.id)}
+                    style={styles.deleteButton}
+                  >
+                    <View style={styles.minusIcon} />
+                  </TouchableOpacity>
 
-            <Text style={styles.label}>Instructions * (one step per line)</Text>
-            <TextInput
-              value={instructionsText}
-              onChangeText={setInstructionsText}
-              placeholder={"Mix dry ingredients\n\nAdd wet ingredients\n\nBake at 350°F"}
-              placeholderTextColor="#A8A5A3"
-              multiline
-              style={[styles.input, styles.inputMultiline, { height: 180 }]}
-            />
+                  <TextInput
+                    value={ingredient.text}
+                    onChangeText={(text) => updateIngredient(ingredient.id, text)}
+                    placeholder={
+                      ingredient.isSection
+                        ? "Section name"
+                        : "e.g., 2 cups flour"
+                    }
+                    placeholderTextColor="#A8A5A3"
+                    style={[
+                      styles.listInput,
+                      ingredient.isSection && styles.sectionInput,
+                    ]}
+                  />
 
-            <Text style={styles.label}>Tags (comma-separated)</Text>
-            <TextInput
-              value={tags}
-              onChangeText={setTags}
-              placeholder="dinner, italian, pasta"
-              placeholderTextColor="#A8A5A3"
-              style={styles.input}
-            />
+                  <TouchableOpacity style={styles.dragHandle}>
+                    <Ionicons name="reorder-two" size={20} color="#A8A5A3" />
+                  </TouchableOpacity>
+                </View>
+              ))}
 
-            <TouchableOpacity
-              onPress={handleCreateRecipe}
-              style={styles.createButton}
-            >
-              <Ionicons name="checkmark" size={20} color="#FFFEFE" />
-              <Text style={styles.createButtonText}>Create Recipe</Text>
-            </TouchableOpacity>
+              <View style={styles.addButtonsRow}>
+                <TouchableOpacity
+                  onPress={addIngredient}
+                  style={styles.addButton}
+                  activeOpacity={0.6}
+                >
+                  <Ionicons name="add" size={16} color="#1A1918" />
+                  <Text style={styles.addButtonText}>Ingredient</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={addIngredientSection}
+                  style={styles.addButton}
+                  activeOpacity={0.6}
+                >
+                  <Ionicons name="add" size={16} color="#1A1918" />
+                  <Text style={styles.addButtonText}>Section</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Method */}
+            <Text style={styles.sectionLabel}>Method</Text>
+            <View style={styles.listCard}>
+              {steps.map((step, index) => (
+                <View key={step.id} style={styles.listItem}>
+                  <TouchableOpacity
+                    onPress={() => removeStep(step.id)}
+                    style={styles.deleteButton}
+                  >
+                    <View style={styles.minusIcon} />
+                  </TouchableOpacity>
+
+                  <TextInput
+                    value={step.text}
+                    onChangeText={(text) => updateStep(step.id, text)}
+                    placeholder={
+                      step.isSection ? "Section name" : "Describe this step"
+                    }
+                    placeholderTextColor="#A8A5A3"
+                    multiline
+                    style={[
+                      styles.listInput,
+                      styles.stepInput,
+                      step.isSection && styles.sectionInput,
+                    ]}
+                  />
+
+                  <TouchableOpacity style={styles.dragHandle}>
+                    <Ionicons name="reorder-two" size={20} color="#A8A5A3" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+
+              <View style={styles.addButtonsRow}>
+                <TouchableOpacity
+                  onPress={addStep}
+                  style={styles.addButton}
+                  activeOpacity={0.6}
+                >
+                  <Ionicons name="add" size={16} color="#1A1918" />
+                  <Text style={styles.addButtonText}>Step</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={addStepSection}
+                  style={styles.addButton}
+                  activeOpacity={0.6}
+                >
+                  <Ionicons name="add" size={16} color="#1A1918" />
+                  <Text style={styles.addButtonText}>Section</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Tags */}
+            <Text style={styles.sectionLabel}>Tags</Text>
+            <View style={styles.tagsCard}>
+              {tags.length > 0 && (
+                <View style={styles.tagsContainer}>
+                  {tags.map((tag) => (
+                    <View key={tag} style={styles.tag}>
+                      <Text style={styles.tagText}>{tag}</Text>
+                      <TouchableOpacity onPress={() => removeTag(tag)}>
+                        <Ionicons name="close" size={16} color="#6B6866" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              <TouchableOpacity onPress={addTag} style={styles.addTagButton}>
+                <Ionicons name="add" size={16} color="#1A1918" />
+                <TextInput
+                  value={tagInput}
+                  onChangeText={setTagInput}
+                  onSubmitEditing={addTag}
+                  placeholder="Tags"
+                  placeholderTextColor="#A8A5A3"
+                  style={styles.tagInput}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ height: 60 }} />
           </View>
         )}
       </ScrollView>
@@ -317,24 +515,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFEFE",
   },
   header: {
-    backgroundColor: "#F64C20",
-    paddingTop: 50,
+    backgroundColor: "#FFFEFE",
     paddingBottom: 16,
     paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8E4E0",
   },
   headerTitle: {
     fontSize: RFValue(18),
-    fontFamily: "MBold",
-    color: "#FFFEFE",
+    fontFamily: "PPBold",
+    color: "#1A1918",
+    flex: 1,
+    textAlign: "center",
+  },
+  saveButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#1A1918",
+    alignItems: "center",
+    justifyContent: "center",
   },
   tabs: {
     flexDirection: "row",
@@ -356,37 +559,36 @@ const styles = StyleSheet.create({
   },
   tabText: {
     fontSize: RFValue(14),
-    fontFamily: "MMedium",
+    fontFamily: "PPMedium",
     color: "#6B6866",
   },
   tabTextActive: {
     color: "#F64C20",
+    fontFamily: "PPBold",
   },
   content: {
     flex: 1,
   },
   contentContainer: {
     padding: 20,
-    paddingBottom: 40,
   },
-  pasteTab: {
-    flex: 1,
-  },
-  manualTab: {
+  aiTab: {
     flex: 1,
   },
   description: {
     fontSize: RFValue(14),
-    fontFamily: "MRegular",
+    fontFamily: "PPMedium",
     color: "#6B6866",
     marginBottom: 16,
   },
   pasteInput: {
-    backgroundColor: "#F8F4F0",
-    borderRadius: 16,
+    backgroundColor: "#FFFEFE",
+    borderWidth: 1,
+    borderColor: "#E8E4E0",
+    borderRadius: 12,
     padding: 16,
     fontSize: RFValue(14),
-    fontFamily: "MRegular",
+    fontFamily: "PPMedium",
     color: "#1A1918",
     minHeight: 300,
     textAlignVertical: "top",
@@ -406,48 +608,193 @@ const styles = StyleSheet.create({
   },
   extractButtonText: {
     fontSize: RFValue(15),
-    fontFamily: "MBold",
+    fontFamily: "PPBold",
     color: "#FFFEFE",
   },
-  label: {
-    fontSize: RFValue(13),
-    fontFamily: "MBold",
-    color: "#1A1918",
-    marginBottom: 8,
-    marginTop: 16,
-  },
-  input: {
-    backgroundColor: "#F8F4F0",
-    borderRadius: 16,
-    padding: 12,
-    fontSize: RFValue(14),
-    fontFamily: "MRegular",
-    color: "#1A1918",
-  },
-  inputMultiline: {
-    minHeight: 80,
-    textAlignVertical: "top",
-  },
-  row: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  rowItem: {
+  manualTab: {
     flex: 1,
   },
-  createButton: {
-    backgroundColor: "#F64C20",
+  photoSection: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  recipeImage: {
+    width: 140,
+    height: 140,
+    borderRadius: 12,
+    marginBottom: 16,
+  },
+  photoPlaceholder: {
+    width: 140,
+    height: 140,
+    borderRadius: 12,
+    backgroundColor: "#F8F4F0",
+    marginBottom: 16,
+  },
+  changePhotoButton: {
+    backgroundColor: "#F8F4F0",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
     borderRadius: 100,
+  },
+  changePhotoText: {
+    fontSize: RFValue(14),
+    fontFamily: "PPBold",
+    color: "#1A1918",
+  },
+  sectionLabel: {
+    fontSize: RFValue(16),
+    fontFamily: "PPBold",
+    color: "#1A1918",
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  input: {
+    backgroundColor: "#FFFEFE",
+    borderWidth: 1,
+    borderColor: "#E8E4E0",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: RFValue(15),
+    fontFamily: "PPMedium",
+    color: "#1A1918",
+    marginBottom: 16,
+  },
+  timingsCard: {
+    backgroundColor: "#FFFEFE",
+    borderWidth: 1,
+    borderColor: "#E8E4E0",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+  },
+  timingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 12,
+  },
+  timingLabel: {
+    fontSize: RFValue(15),
+    fontFamily: "PPMedium",
+    color: "#1A1918",
+  },
+  timingInput: {
+    fontSize: RFValue(15),
+    fontFamily: "PPBold",
+    color: "#F64C20",
+    textAlign: "right",
+    minWidth: 60,
+  },
+  listCard: {
+    backgroundColor: "#FFFEFE",
+    borderWidth: 1,
+    borderColor: "#E8E4E0",
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 24,
+  },
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    gap: 8,
+  },
+  deleteButton: {
+    width: 24,
+    height: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  minusIcon: {
+    width: 12,
+    height: 2,
+    backgroundColor: "#F64C20",
+    borderRadius: 1,
+  },
+  dragHandle: {
+    width: 24,
+    height: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  listInput: {
+    flex: 1,
+    fontSize: RFValue(14),
+    fontFamily: "PPMedium",
+    color: "#1A1918",
+    paddingVertical: 0,
+  },
+  stepInput: {
+    minHeight: 40,
+  },
+  sectionInput: {
+    fontFamily: "PPBold",
+  },
+  addButtonsRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 12,
+  },
+  addButton: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 16,
-    gap: 8,
-    marginTop: 24,
+    backgroundColor: "#E8E4E0",
+    borderRadius: 8,
+    paddingVertical: 12,
+    gap: 6,
   },
-  createButtonText: {
-    fontSize: RFValue(16),
-    fontFamily: "MBold",
-    color: "#FFFEFE",
+  addButtonText: {
+    fontSize: RFValue(13),
+    fontFamily: "PPBold",
+    color: "#1A1918",
+  },
+  tagsCard: {
+    backgroundColor: "#FFFEFE",
+    borderWidth: 1,
+    borderColor: "#E8E4E0",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+  },
+  tagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 12,
+  },
+  tag: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8F4F0",
+    borderRadius: 100,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    gap: 6,
+  },
+  tagText: {
+    fontSize: RFValue(13),
+    fontFamily: "PPMedium",
+    color: "#1A1918",
+  },
+  addTagButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E8E4E0",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 6,
+  },
+  tagInput: {
+    flex: 1,
+    fontSize: RFValue(13),
+    fontFamily: "PPMedium",
+    color: "#1A1918",
+    paddingVertical: 0,
   },
 });
