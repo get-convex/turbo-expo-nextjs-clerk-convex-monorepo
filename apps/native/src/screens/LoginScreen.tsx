@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
-import { useOAuth } from "@clerk/clerk-expo";
+import { useOAuth, useAuth } from "@clerk/clerk-expo";
 import { AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -13,23 +13,35 @@ const LoginScreen = ({ navigation }) => {
     strategy: "oauth_apple",
   });
 
+  const { isSignedIn } = useAuth();
+
+  React.useEffect(() => {
+    if (isSignedIn) {
+      navigation.replace("RecipesDashboardScreen");
+    }
+  }, [isSignedIn]);
+
   const onPress = async (authType: string) => {
     try {
       if (authType === "google") {
         const { createdSessionId, setActive } = await startGoogleAuthFlow();
         if (createdSessionId) {
           setActive({ session: createdSessionId });
-          navigation.navigate("RecipesDashboardScreen");
+          navigation.replace("RecipesDashboardScreen");
         }
       } else if (authType === "apple") {
         const { createdSessionId, setActive } = await startAppleAuthFlow();
         if (createdSessionId) {
           setActive({ session: createdSessionId });
-          navigation.navigate("RecipesDashboardScreen");
+          navigation.replace("RecipesDashboardScreen");
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("OAuth error", err);
+      // If user is already signed in, redirect them
+      if (err?.errors?.[0]?.code === "session_exists") {
+        navigation.replace("RecipesDashboardScreen");
+      }
     }
   };
 
