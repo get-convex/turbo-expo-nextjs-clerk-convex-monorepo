@@ -1,78 +1,37 @@
-import { Copy, Sparkles, ChefHat, TrendingUp } from "lucide-react";
-
-const steps = [
-  {
-    number: 1,
-    icon: Copy,
-    title: "Paste or Import",
-    description: "Copy any recipe from anywhere or import from your favorite sites",
-  },
-  {
-    number: 2,
-    icon: Sparkles,
-    title: "AI Extracts",
-    description: "Our AI instantly structures ingredients and instructions perfectly",
-  },
-  {
-    number: 3,
-    icon: ChefHat,
-    title: "Cook & Adapt",
-    description: "Follow along, make changes, and let AI suggest improvements",
-  },
-  {
-    number: 4,
-    icon: TrendingUp,
-    title: "Track Progress",
-    description: "Save variations, rate results, and perfect recipes over time",
-  },
-];
+import { Link2, Clipboard, Bookmark } from "lucide-react";
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 md:py-32 bg-surface">
-      <div className="container">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-text-primary">
-            How It Works
-          </h2>
-          <p className="text-xl text-text-secondary">
-            From discovery to mastery in four simple steps
+    <section className="py-32 bg-brand-beige">
+      <div className="container text-center space-y-16">
+        <div className="space-y-6 max-w-2xl mx-auto">
+          <h2 className="text-5xl md:text-6xl font-bold text-brand-black tracking-tight">Just save it</h2>
+          <p className="text-xl text-gray-600 leading-relaxed">
+            Found it on Instagram? Pinned it last month? Just save it in Recify and never lose it again.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div
-                key={index}
-                className="relative animate-fade-in"
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                {/* Connector line */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-accent/50 to-transparent -z-10" />
-                )}
+        <div className="grid md:grid-cols-1 gap-6 max-w-3xl mx-auto">
+          <div className="bg-white p-8 rounded-3xl shadow-sm flex items-center gap-8 text-left hover:shadow-md transition-shadow">
+            <div className="w-20 h-20 bg-brand-blue-light rounded-2xl flex items-center justify-center shrink-0">
+              <Link2 className="w-10 h-10 text-black" />
+            </div>
+            <span className="text-2xl font-bold text-black">Copy the recipe link from anywhere</span>
+          </div>
 
-                <div className="text-center">
-                  <div className="relative inline-flex mb-6">
-                    <div className="w-32 h-32 rounded-full bg-white border-4 border-accent/20 flex items-center justify-center">
-                      <Icon className="w-12 h-12 text-accent" strokeWidth={2} />
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center font-display font-bold text-lg">
-                      {step.number}
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-text-primary">
-                    {step.title}
-                  </h3>
-                  <p className="text-text-secondary">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+          <div className="bg-white p-8 rounded-3xl shadow-sm flex items-center gap-8 text-left hover:shadow-md transition-shadow">
+            <div className="w-20 h-20 bg-brand-orange-light rounded-2xl flex items-center justify-center shrink-0">
+              <Clipboard className="w-10 h-10 text-black" />
+            </div>
+            <span className="text-2xl font-bold text-black">Paste the link in Recify</span>
+          </div>
+
+          <div className="bg-white p-8 rounded-3xl shadow-sm flex items-center gap-8 text-left hover:shadow-md transition-shadow">
+            <div className="w-20 h-20 bg-brand-purple-light rounded-2xl flex items-center justify-center shrink-0">
+              <Bookmark className="w-10 h-10 text-black" />
+            </div>
+            <span className="text-2xl font-bold text-black">Recipe saved and organized</span>
+          </div>
         </div>
       </div>
     </section>

@@ -1,198 +1,60 @@
 @import 'tailwindcss';
 
-/* Import PP Pangram Sans Compact font */
-@font-face {
-  font-family: 'PP Pangram Sans Compact';
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-  src: local('PP Pangram Sans Compact Bold');
-}
-
 @theme {
   --breakpoint-*: initial;
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1440px;
+  --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
 
-  /* RecipeAI Color System - Refined Minimalism */
-  --color-canvas: #FFFEFE;        /* Near-white canvas */
-  --color-surface: #F8F4F0;       /* Warm off-white surface */
-  --color-accent: #F64C20;        /* Vibrant coral accent */
-  --color-accent-dark: #D43D15;   /* Darker coral for hover */
-  --color-text-primary: #1A1918;  /* Rich black for text */
-  --color-text-secondary: #6B6866; /* Warm gray for secondary text */
-  --color-text-tertiary: #A8A5A3; /* Light gray for tertiary */
-  --color-border: #E8E4E0;        /* Subtle border */
-  --color-border-light: #F0EDEA;  /* Lighter border */
+  /* Recify Brand Colors */
+  --color-brand-orange: #FF4F2D;
+  --color-brand-beige: #FDFBF7;
+  --color-brand-black: #1A1A1A;
+  --color-brand-gray: #F5F5F5;
+  --color-brand-blue-light: #BDE0FE;
+  --color-brand-orange-light: #FFD6A5;
+  --color-brand-purple-light: #D0CDE1;
 
-  /* Typography System */
-  --font-display: "PP Pangram Sans Compact", "PP Pangram Sans Compact Bold", "PP Pangram Sans Compact Bold Placeholder", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Typography */
+  --font-sans: var(--font-pangram), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-object), ui-sans-serif, system-ui, sans-serif;
 
-  /* Spacing Scale - Generous breathing room */
-  --spacing-section: 8rem;
-  --spacing-container: 6rem;
-
-  /* Animation timing */
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  /* Spacing */
+  --spacing-section: 6rem;
 }
 
 @utility container {
   margin-inline: auto;
-  max-width: 1280px;
-  padding-inline: 2rem;
+  max-width: 1200px;
+  padding-inline: 1.5rem;
 }
 
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-border, currentcolor);
-  }
-
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    background-color: var(--color-canvas);
-    color: var(--color-text-primary);
-    font-family: var(--font-body);
-    line-height: 1.6;
+    background-color: var(--color-brand-beige);
+    color: var(--color-brand-black);
+    font-family: var(--font-sans);
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+    line-height: 1.1;
   }
 }
 
-/* Distinctive UI Components */
 @layer components {
   .btn-primary {
-    background-color: var(--color-accent);
-    color: white;
-    font-family: var(--font-display);
-    font-weight: 700;
-    padding: 0.875rem 2rem;
-    border-radius: 100px;
-    transition: all 0.3s var(--ease-smooth);
-    box-shadow: 0 4px 12px rgba(246, 76, 32, 0.15);
-    letter-spacing: -0.01em;
+    @apply inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-black transition-transform hover:scale-105 active:scale-95;
   }
 
-  .btn-primary:hover {
-    background-color: var(--color-accent-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(246, 76, 32, 0.25);
-  }
-
-  .btn-primary:active {
-    transform: translateY(0);
-  }
-
-  .btn-ghost {
-    color: var(--color-text-primary);
-    font-family: var(--font-display);
-    font-weight: 700;
-    padding: 0.875rem 2rem;
-    border-radius: 100px;
-    transition: all 0.3s var(--ease-smooth);
-    background-color: transparent;
-    border: 1.5px solid var(--color-border);
-  }
-
-  .btn-ghost:hover {
-    background-color: var(--color-surface);
-    border-color: var(--color-accent);
-  }
-
-  .card {
-    background-color: white;
-    border-radius: 24px;
-    padding: 2rem;
-    border: 1px solid var(--color-border);
-    transition: all 0.4s var(--ease-smooth);
-  }
-
-  .card:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
-  }
-
-  .input {
-    background-color: var(--color-surface);
-    border: 1.5px solid var(--color-border);
-    border-radius: 16px;
-    padding: 1rem 1.25rem;
-    font-size: 1rem;
-    transition: all 0.3s var(--ease-smooth);
-    font-family: var(--font-body);
-  }
-
-  .input:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    background-color: white;
-    box-shadow: 0 0 0 4px rgba(246, 76, 32, 0.1);
-  }
-
-  .input::placeholder {
-    color: var(--color-text-tertiary);
-  }
-}
-
-/* Animations for delight */
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.6s var(--ease-smooth);
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.6s var(--ease-smooth);
-  }
-
-  .animate-scale-in {
-    animation: scaleIn 0.5s var(--ease-bounce);
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full bg-black px-6 py-3 text-sm font-bold text-white transition-transform hover:scale-105 active:scale-95;
   }
 }

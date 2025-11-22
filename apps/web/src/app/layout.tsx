@@ -1,10 +1,37 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
-import ConvexClientProvider from "./ConvexClientProvider";
+
+
+const ppPangram = localFont({
+  src: [
+    {
+      path: "../fonts/PPPangramSansCompact-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../fonts/PPPangramSansCompact-Semibold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../fonts/PPPangramSansCompact-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-pangram",
+});
+
+const ppObject = localFont({
+  src: "../fonts/PPObjectSans-Bold.ttf",
+  variable: "--font-object",
+});
 
 export const metadata: Metadata = {
-  title: "RecipeAI - Cook with Intelligence",
-  description: "AI-first recipe management platform. Extract recipes from text, create variations, and modify recipes with AI assistance.",
+  title: "Recify - Keeper & Organizer",
+  description: "All your favorite recipes, finally in one place.",
 };
 
 export default function RootLayout({
@@ -14,8 +41,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+      <body className={`${ppPangram.variable} ${ppObject.variable} antialiased`}>
+        {children}
       </body>
     </html>
   );
