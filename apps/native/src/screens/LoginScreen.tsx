@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useOAuth } from "@clerk/clerk-expo";
 import { AntDesign } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const LoginScreen = ({ navigation }) => {
   const { startOAuthFlow: startGoogleAuthFlow } = useOAuth({
@@ -33,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.card}>
         <Image
           source={require("../assets/icons/logo.png")} // Ensure the correct path to your logo image file
@@ -71,7 +72,7 @@ const LoginScreen = ({ navigation }) => {
           <Text>Sign up above.</Text>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

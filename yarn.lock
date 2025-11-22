@@ -5343,6 +5343,11 @@ expo-modules-core@2.5.0:
   dependencies:
     invariant "^2.2.4"
 
+expo-secure-store@~14.2.4:
+  version "14.2.4"
+  resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-14.2.4.tgz#673743567a6459fb4b5f9406d57d9a3b16bca69f"
+  integrity sha512-ePaz4fnTitJJZjAiybaVYGfLWWyaEtepZC+vs9ZBMhQMfG5HUotIcVsDaSo3FnwpHmgwsLVPY2qFeryI6AtULw==
+
 expo-system-ui@~5.0.11:
   version "5.0.11"
   resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-5.0.11.tgz#2bb70b2dd9f3f5137df85e43aa5d2d557432ad49"
