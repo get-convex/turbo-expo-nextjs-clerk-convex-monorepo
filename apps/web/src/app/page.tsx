@@ -1,9 +1,9 @@
-"use client";
-
 import Header from "@/components/Header";
 import Hero from "@/components/home/Hero";
 import HowItWorks from "@/components/home/HowItWorks";
-import Footer from "@/components/home/Footer";
+import Testimonials from "@/components/home/Testimonials";
+import FAQ from "@/components/home/FAQ";
+import FooterHero from "@/components/home/FooterHero";
 
 export default function Home() {
   return (
@@ -11,7 +11,9 @@ export default function Home() {
       <Header />
       <Hero />
       <HowItWorks />
-      <Footer />
+      <Testimonials />
+      <FAQ />
+      <FooterHero />
     </main>
   );
 }

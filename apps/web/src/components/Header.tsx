@@ -9,7 +9,7 @@ export default function Header() {
       <div className="container flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-white">
           <ChefHat className="h-8 w-8" strokeWidth={2.5} />
-          <span className="font-display text-2xl font-bold tracking-tight">Recify</span>
+          <span className="font-display text-2xl font-bold tracking-tight">RecipeAI</span>
         </Link>
 
         <div className="flex items-center gap-8">

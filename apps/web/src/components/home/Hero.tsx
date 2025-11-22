@@ -47,7 +47,7 @@ export default function Hero() {
               {/* Mock App UI */}
               <div className="p-6 space-y-6">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-2xl font-bold font-display text-black">Recify</h3>
+                  <h3 className="text-2xl font-bold font-display text-black">RecipeAI</h3>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
