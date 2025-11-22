@@ -16,6 +16,7 @@ import { api } from "@packages/backend/convex/_generated/api";
 import { useMutation, useAction } from "convex/react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
+import { AIExtractionLoader } from "../components/AIExtractionLoader";
 
 interface Ingredient {
   id: string;
@@ -73,36 +74,60 @@ export default function CreateRecipeScreen({ navigation }) {
 
     setIsExtracting(true);
     try {
+      // Extract recipe using AI
       const extracted = await extractRecipe({ text: pastedText });
 
-      setTitle(extracted.title || "");
-      setServings(extracted.servings?.toString() || "");
-      setPrepTime(extracted.prepTime?.toString() || "");
-      setCookTime(extracted.cookTime?.toString() || "");
+      // Validate extraction
+      if (!extracted.title || !extracted.ingredients || !extracted.instructions) {
+        throw new Error("Failed to extract recipe data");
+      }
 
-      const extractedIngredients = extracted.ingredients?.map((ing: any, index: number) => ({
-        id: `ing-${index}`,
-        text: `${ing.amount || ""} ${ing.unit || ""} ${ing.item}`.trim(),
-        isSection: false,
-      })) || [];
-      setIngredients(extractedIngredients.length > 0 ? extractedIngredients : [{ id: "1", text: "", isSection: false }]);
+      // Prepare ingredients for database
+      const parsedIngredients = extracted.ingredients.map((ing: any) => ({
+        amount: ing.amount || undefined,
+        unit: ing.unit || undefined,
+        item: ing.item,
+        notes: ing.notes || undefined,
+      }));
 
-      const extractedSteps = extracted.instructions?.map((step: string, index: number) => ({
-        id: `step-${index}`,
-        text: step,
-        isSection: false,
-      })) || [];
-      setSteps(extractedSteps.length > 0 ? extractedSteps : [{ id: "1", text: "", isSection: false }]);
+      // Create the recipe directly
+      const recipeId = await createRecipe({
+        title: extracted.title,
+        description: extracted.description || undefined,
+        ingredients: parsedIngredients,
+        instructions: extracted.instructions,
+        servings: extracted.servings || undefined,
+        prepTime: extracted.prepTime || undefined,
+        cookTime: extracted.cookTime || undefined,
+        tags: extracted.tags || undefined,
+        sourceType: "ai-extract",
+      });
 
-      setTags(extracted.tags || []);
+      // Reset the form
+      setPastedText("");
+      setIsExtracting(false);
 
-      setActiveTab("manual");
-      Alert.alert("Success", "Recipe extracted! Review and save below.");
+      // Navigate to the recipe details screen
+      navigation.navigate("RecipeDetailsScreen", {
+        recipeId: recipeId,
+      });
     } catch (error) {
       console.error("Failed to extract recipe:", error);
-      Alert.alert("Error", "Failed to extract recipe. Please try manual entry.");
-    } finally {
       setIsExtracting(false);
+      Alert.alert(
+        "Extraction Failed",
+        "We couldn't extract the recipe from the text. Please try again or use manual entry.",
+        [
+          {
+            text: "Try Manual Entry",
+            onPress: () => setActiveTab("manual"),
+          },
+          {
+            text: "OK",
+            style: "cancel",
+          },
+        ]
+      );
     }
   };
 
@@ -505,6 +530,9 @@ export default function CreateRecipeScreen({ navigation }) {
           </View>
         )}
       </ScrollView>
+
+      {/* AI Extraction Loading Modal */}
+      <AIExtractionLoader visible={isExtracting} />
     </View>
   );
 }
