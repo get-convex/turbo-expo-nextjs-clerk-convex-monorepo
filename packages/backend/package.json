@@ -4,15 +4,16 @@
   "description": "",
   "scripts": {
     "dev": "convex dev",
-    "setup": "convex dev --until-success"
+    "setup": "convex dev --until-success",
+    "typecheck": "tsc --noEmit -p convex"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "convex": "^1.25.0",
+    "convex": "^1.29.3",
     "openai": "^4.45.0"
   },
-   "devDependencies": {
+  "devDependencies": {
     "typescript": "5.8.3"
   }
 }
