@@ -5,7 +5,7 @@ featuring:
 
 - Turborepo: Monorepo management
 - React 19: Latest React with concurrent features
-- Next.js 15: Web app & marketing page with App Router
+- Next.js 16: Web app & marketing page with App Router
 - Tailwind CSS v4: Modern CSS-first configuration
 - React Native [Expo](https://expo.dev/): Mobile/native app with New Architecture
 - [Convex](https://convex.dev): Backend, database, server functions
