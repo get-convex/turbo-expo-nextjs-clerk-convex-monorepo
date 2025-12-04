@@ -102,7 +102,7 @@ const NotesDashboardScreen = ({ navigation }) => {
         onPress={() => navigation.navigate("CreateNoteScreen")}
         style={styles.newNoteButton}
       >
-        <AntDesign name="pluscircle" size={20} color="#fff" />
+        <AntDesign name="plus-circle" size={20} color="#fff" />
         <Text style={styles.newNoteButtonText}>Create a New Note</Text>
       </TouchableOpacity>
     </View>

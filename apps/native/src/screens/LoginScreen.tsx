@@ -58,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.buttonApple}
           onPress={() => onPress("apple")}
         >
-          <AntDesign name="apple1" size={24} color="black" />
+          <AntDesign name="apple" size={24} color="black" />
           <Text
             style={{ ...styles.buttonText, color: "#344054", marginLeft: 12 }}
           >
