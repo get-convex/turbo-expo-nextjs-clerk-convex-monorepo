@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "convex": "^1.29.3",
-    "openai": "^4.45.0"
+    "openai": "^6.9.1"
   },
   "devDependencies": {
     "typescript": "5.8.3"

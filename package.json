@@ -9,8 +9,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
   },
   "devDependencies": {
-    "prettier": "3.5.3",
-    "turbo": "2.6.1"
+    "prettier": "3.7.4",
+    "turbo": "2.6.2"
   },
   "engines": {
     "node": ">=18.8.0"
