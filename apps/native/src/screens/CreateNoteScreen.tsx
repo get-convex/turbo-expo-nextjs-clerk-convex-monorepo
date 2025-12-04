@@ -167,7 +167,7 @@ export default function CreateNoteScreen({ navigation }) {
         ]}
       >
         <TouchableOpacity onPress={createUserNote} style={styles.newNoteButton}>
-          <AntDesign name="pluscircle" size={20} color="#fff" />
+          <AntDesign name="plus-circle" size={20} color="#fff" />
           <Text style={styles.newNoteButtonText}>Create a New Note</Text>
         </TouchableOpacity>
       </Animated.View>
