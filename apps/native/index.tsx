@@ -1,8 +1,15 @@
-import { registerRootComponent } from "expo";
+import "@expo/metro-runtime";
+import React from "react";
+import { ExpoRoot } from "expo-router";
+import { renderRootComponent } from "expo-router/build/renderRootComponent";
 
-import App from "./App";
+const importMode = process.env.EXPO_ROUTER_IMPORT_MODE ?? "sync";
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in the Expo client or in a native build,
-// the environment is set up appropriately
-registerRootComponent(App);
+const ctx = (require as any).context(
+  "./app",
+  true,
+  /^(?:\.\/)(?!(?:(?:(?:.*\+api)|(?:\+html)|(?:\+middleware)))\.[tj]sx?$).*\.[tj]sx?$/,
+  importMode
+);
+
+renderRootComponent(() => <ExpoRoot context={ctx} />);

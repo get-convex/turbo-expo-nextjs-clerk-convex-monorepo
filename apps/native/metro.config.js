@@ -9,6 +9,9 @@ const workspaceRoot = path.resolve(projectRoot, "../..");
 
 const config = getDefaultConfig(projectRoot);
 
+// Ensure Metro treats the Expo app directory as the project root.
+config.projectRoot = projectRoot;
+
 // #1 - Watch all files in the monorepo
 config.watchFolders = [workspaceRoot];
 // #3 - Force resolving nested modules to the folders below

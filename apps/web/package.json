@@ -22,8 +22,8 @@
     "convex": "^1.29.3",
     "lucide-react": "^0.555.0",
     "next": "^16.0.9",
-    "react": "^19.2.2",
-    "react-dom": "^19.2.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

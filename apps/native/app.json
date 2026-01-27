@@ -4,6 +4,7 @@
     "name": "NotesContract",
     "slug": "NotesContract",
     "version": "1.0.0",
+    "scheme": "notescontract",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -23,8 +24,9 @@
       }
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": ["expo-font", "expo-router"]
   }
 }
