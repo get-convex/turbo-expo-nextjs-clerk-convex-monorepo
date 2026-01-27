@@ -10,6 +10,7 @@
 
 import type * as notes from "../notes.js";
 import type * as openai from "../openai.js";
+import type * as users from "../users.js";
 import type * as utils from "../utils.js";
 
 import type {
@@ -21,6 +22,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   notes: typeof notes;
   openai: typeof openai;
+  users: typeof users;
   utils: typeof utils;
 }>;
 

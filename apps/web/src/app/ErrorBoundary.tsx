@@ -14,7 +14,8 @@ export class ErrorBoundary extends Component<
   static getDerivedStateFromError(error: unknown) {
     const errorText = "" + (error as any).toString();
     if (
-      errorText.includes("@clerk/clerk-react") &&
+      (errorText.includes("@clerk/clerk-react") ||
+        errorText.includes("@clerk/nextjs")) &&
       errorText.includes("publishableKey")
     ) {
       const [clerkDashboardUrl] = errorText.match(/https:\S+/) ?? [];
