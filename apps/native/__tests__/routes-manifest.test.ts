@@ -7,13 +7,21 @@ const appRoot = envAppRoot
     ? envAppRoot
     : path.resolve(process.cwd(), envAppRoot)
   : path.resolve(__dirname, "../app");
-const expectedRoutes = [
-  "index",
+
+const expectedPaths = [
+  "",
+  "today",
+  "review",
+  "settings",
   "start-sprint",
   "close-loop",
-  "weekly-review",
-  "settings",
 ];
+
+const normalizePath = (pathValue: string) =>
+  pathValue
+    .replace(/\([^/]+\)\//g, "")
+    .replace(/\([^/]+\)/g, "")
+    .replace(/^\/+/, "");
 
 const collectPaths = (screens: Record<string, unknown>): string[] => {
   const paths: string[] = [];
@@ -51,13 +59,10 @@ describe("expo-router route manifest", () => {
     }
 
     const screens = root.screens as Record<string, unknown>;
+    const paths = collectPaths(screens).map(normalizePath);
 
-    expectedRoutes.forEach((route) => {
-      expect(screens).toHaveProperty(route);
+    expectedPaths.forEach((route) => {
+      expect(paths).toContain(route);
     });
-
-    const paths = collectPaths(screens);
-    expect(paths).toContain("");
-    expect(paths.length).toBeGreaterThan(0);
   });
 });

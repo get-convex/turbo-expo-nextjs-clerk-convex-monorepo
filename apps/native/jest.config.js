@@ -2,6 +2,9 @@ module.exports = {
   preset: "jest-expo",
   setupFiles: ["<rootDir>/jest.env.js"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  moduleNameMapper: {
+    "^react$": "<rootDir>/node_modules/react",
+  },
   collectCoverageFrom: [
     "app/**/*.{ts,tsx}",
     "src/**/*.{ts,tsx}",

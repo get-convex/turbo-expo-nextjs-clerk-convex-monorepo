@@ -33,6 +33,23 @@ jest.mock(
   { virtual: true }
 );
 
+jest.mock("@react-navigation/native-stack", () => {
+  const React = require("react");
+
+  return {
+    createNativeStackNavigator: () => ({
+      Navigator: ({ children }: { children: ReactNode }) => children,
+      Screen: ({ children }: { children: ReactNode }) => children,
+      Group: ({ children }: { children: ReactNode }) => children,
+    }),
+    NativeStackView: ({ state, descriptors }: any) => {
+      const route = state?.routes?.[state?.index ?? 0];
+      const descriptor = route ? descriptors?.[route.key] : null;
+      return descriptor?.render ? descriptor.render() : null;
+    },
+  };
+});
+
 global.__reanimatedWorkletInit = () => {};
 
 fetchMock.enableMocks();

@@ -9,26 +9,24 @@ const appRoot = envAppRoot
   : path.resolve(__dirname, "../app");
 
 describe("expo-router navigation", () => {
-  it("boots into the home route and navigates to Start Sprint", () => {
+  it("boots into Today and navigates to Start Sprint", () => {
     const router = renderRouter(appRoot);
 
-    expect(router.getPathname()).toBe("/");
+    expect(router.getPathname()).toBe("/today");
     expect(router.getSegments()).not.toContain("+not-found");
-    expect(screen.getByText("One commitment, done today")).toBeTruthy();
+    expect(screen.getByText("Commitment")).toBeTruthy();
 
     testRouter.navigate("/start-sprint");
     expect(screen.getByText("Sprint focus")).toBeTruthy();
   });
 
-  it("navigates to Close Loop and Weekly Review", () => {
+  it("navigates to Close Loop and Review", () => {
     renderRouter(appRoot);
 
     testRouter.navigate("/close-loop");
-    expect(
-      screen.getByText("Did you complete the commitment?")
-    ).toBeTruthy();
+    expect(screen.getByText("Did you complete the commitment?")).toBeTruthy();
 
-    testRouter.navigate("/weekly-review");
-    expect(screen.getByText("Outcome dashboard")).toBeTruthy();
+    testRouter.navigate("/review");
+    expect(screen.getByText("Metrics")).toBeTruthy();
   });
 });
