@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import {
   Animated,
   PlatformColor,
+  Pressable,
   ScrollView,
   Text,
   Vibration,
@@ -40,6 +41,7 @@ export default function StartSprintScreen() {
   const [isRunning, setIsRunning] = useState(false);
   const [durationIndex, setDurationIndex] = useState(0);
   const [showDurationPicker, setShowDurationPicker] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
   const [showRescopes, setShowRescopes] = useState(false);
   const [selectedRescope, setSelectedRescope] = useState<string | null>(null);
@@ -82,6 +84,17 @@ export default function StartSprintScreen() {
     ]).start(() => setShowCheck(false));
   };
 
+  const handleToggleHelp = () => {
+    setShowHelp((prev) => {
+      const next = !prev;
+      if (!next) {
+        setShowSteps(false);
+        setShowRescopes(false);
+      }
+      return next;
+    });
+  };
+
   const handleToggleSprint = () => {
     if (!canStartSprint) {
       return;
@@ -116,7 +129,7 @@ export default function StartSprintScreen() {
       style={{ flex: 1, backgroundColor: PlatformColor("systemGroupedBackground") }}
       contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 28 }}
     >
-      <Section title="Focus session">
+      <Section title="Your focus">
         <View style={{ padding: 16, gap: 8 }}>
           <Text selectable style={{ fontSize: 17, color: PlatformColor("label") }}>
             {sprintFocus}
@@ -125,7 +138,7 @@ export default function StartSprintScreen() {
             selectable
             style={{ fontSize: 15, color: PlatformColor("secondaryLabel"), lineHeight: 20 }}
           >
-            Default {durationLabel}. Change it if you need to.
+            Default {durationLabel}. Adjust if you need more time.
           </Text>
         </View>
         <Row
@@ -166,6 +179,7 @@ export default function StartSprintScreen() {
           }
           onPress={handleToggleSprint}
           disabled={!canStartSprint}
+          testID="focus-session-toggle"
           accessory={
             showCheck ? (
               <Animated.Text
@@ -196,66 +210,97 @@ export default function StartSprintScreen() {
               }
               router.push("/close-loop");
             }}
+            testID="focus-session-end-reflect"
           />
         ) : null}
       </View>
 
-      <Section title="Need help?">
-        <Row
-          title="See micro-steps"
-          onPress={() => setShowSteps((prev) => !prev)}
-          accessory={
-            <Text selectable style={{ fontSize: 15, color: PlatformColor("systemBlue") }}>
-              {showSteps ? "Hide" : "Show"}
-            </Text>
-          }
-        />
-        <Row
-          title="Rescope the goal"
-          onPress={() => setShowRescopes((prev) => !prev)}
-          accessory={
-            <Text selectable style={{ fontSize: 15, color: PlatformColor("systemBlue") }}>
-              {showRescopes ? "Hide" : "Show"}
-            </Text>
-          }
-        />
-      </Section>
-
-      {showSteps ? (
-        <Section title="Micro-steps">
-          {steps.map((step) => (
-            <Row
-              key={step.id}
-              title={step.label}
-              subtitle={`Step ${step.id} - ${step.minutes} min`}
-            />
-          ))}
-        </Section>
-      ) : null}
-
-      {showRescopes ? (
-        <Section
-          title="Rescope options"
-          footnote="Choose a smaller win if momentum stalls."
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={showHelp ? "Hide help options" : "Need help"}
+        onPress={handleToggleHelp}
+        testID="focus-session-need-help"
+        style={({ pressed }) => [
+          {
+            alignSelf: "flex-start",
+            paddingHorizontal: 12,
+            paddingVertical: 10,
+            minHeight: 44,
+            borderRadius: 10,
+          },
+          pressed && { backgroundColor: PlatformColor("tertiarySystemFill") },
+        ]}
+      >
+        <Text
+          selectable
+          style={{ fontSize: 15, fontWeight: "600", color: PlatformColor("systemBlue") }}
         >
-          {rescopes.map((option) => (
+          {showHelp ? "Hide help options" : "Need help?"}
+        </Text>
+      </Pressable>
+
+      {showHelp ? (
+        <>
+          <Section title="Need help?">
             <Row
-              key={option}
-              title={option}
-              onPress={() => {
-                triggerHaptic();
-                setSelectedRescope(option);
-              }}
+              title="Micro-steps"
+              subtitle="Break it into three quick steps."
+              onPress={() => setShowSteps((prev) => !prev)}
               accessory={
-                selectedRescope === option ? (
-                  <Text selectable style={{ fontSize: 16, color: PlatformColor("label") }}>
-                    {"\u2713"}
-                  </Text>
-                ) : null
+                <Text selectable style={{ fontSize: 15, color: PlatformColor("systemBlue") }}>
+                  {showSteps ? "Hide" : "Show"}
+                </Text>
               }
             />
-          ))}
-        </Section>
+            <Row
+              title="Rescope"
+              subtitle="Make it smaller for today."
+              onPress={() => setShowRescopes((prev) => !prev)}
+              accessory={
+                <Text selectable style={{ fontSize: 15, color: PlatformColor("systemBlue") }}>
+                  {showRescopes ? "Hide" : "Show"}
+                </Text>
+              }
+            />
+          </Section>
+
+          {showSteps ? (
+            <Section title="Micro-steps">
+              {steps.map((step) => (
+                <Row
+                  key={step.id}
+                  title={step.label}
+                  subtitle={`Step ${step.id} - ${step.minutes} min`}
+                />
+              ))}
+            </Section>
+          ) : null}
+
+          {showRescopes ? (
+            <Section
+              title="Rescope options"
+              footnote="Choose a smaller win if momentum stalls."
+            >
+              {rescopes.map((option) => (
+                <Row
+                  key={option}
+                  title={option}
+                  onPress={() => {
+                    triggerHaptic();
+                    setSelectedRescope(option);
+                  }}
+                  accessory={
+                    selectedRescope === option ? (
+                      <Text selectable style={{ fontSize: 16, color: PlatformColor("label") }}>
+                        {"\u2713"}
+                      </Text>
+                    ) : null
+                  }
+                />
+              ))}
+            </Section>
+          ) : null}
+        </>
       ) : null}
     </ScrollView>
   );

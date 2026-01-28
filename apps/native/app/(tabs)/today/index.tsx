@@ -11,7 +11,6 @@ import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { api } from "@packages/backend/convex/_generated/api";
 import Section from "../../../src/components/section";
 import PrimaryButton from "../../../src/components/primary-button";
-import SecondaryButton from "../../../src/components/secondary-button";
 import ProgressRow from "../../../src/components/progress-row";
 import { getLocalDateKey } from "../../../src/utils/date";
 
@@ -82,10 +81,6 @@ export default function TodayScreen() {
       ? `Starter: 1 minute on ${trimmedCommitment}.`
       : "Smallest meaningful outcome you can finish today.";
 
-  const calendarEnabled = useMemo(() => {
-    return dataSources?.find((source) => source.source === "calendar")?.enabled ?? false;
-  }, [dataSources]);
-
   const completionRate = momentum?.completionRate ?? 0;
   const completedValue = momentum?.completed ?? 0;
   const totalValue = momentum?.total ?? 0;
@@ -144,18 +139,12 @@ export default function TodayScreen() {
             label="Start focus session"
             onPress={() => router.push("/start-sprint")}
             accessibilityLabel="Start focus session"
+            testID="today-start-focus-session"
           />
-          {calendarEnabled ? (
-            <SecondaryButton
-              label="Schedule a focus block"
-              onPress={() => {}}
-              accessibilityLabel="Schedule a focus block"
-            />
-          ) : null}
         </View>
       </Section>
 
-      <Section title="This week">
+      <Section title="This week" footnote="Small wins build confidence.">
         <ProgressRow
           title="Completion rate"
           value={completionRateLabel}

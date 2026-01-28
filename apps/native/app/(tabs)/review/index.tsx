@@ -16,20 +16,10 @@ export default function ReviewScreen() {
   const metrics = useMemo(() => {
     const completionRate = snapshot?.completionRate ?? 0;
     const completionLabel = `${Math.round(completionRate * 100)}%`;
-    const automaticity = snapshot?.automaticity;
-    const consistencyLabel =
-      automaticity === null || automaticity === undefined
-        ? "Stable"
-        : automaticity > 0
-        ? "Up"
-        : automaticity < 0
-        ? "Down"
-        : "Stable";
 
     return [
       { label: "Completion rate", value: completionLabel },
       { label: "Reflections logged", value: `${totalReflections}` },
-      { label: "Consistency trend", value: consistencyLabel },
     ];
   }, [snapshot, totalReflections]);
 
@@ -40,18 +30,22 @@ export default function ReviewScreen() {
       contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 28 }}
     >
       {!hasEnoughData ? (
-        <Section title="Unlock trends">
+        <Section
+          title="Unlock trends"
+          footnote="One tap after a session is enough."
+        >
           <View style={{ padding: 16, gap: 12 }}>
             <Text
               selectable
               style={{ fontSize: 17, color: PlatformColor("label"), lineHeight: 22 }}
             >
-              Log 3 reflections to unlock trends.
+              Log 3 quick reflections to unlock trends.
             </Text>
             <PrimaryButton
               label="Reflect now"
               onPress={() => router.push("/close-loop")}
               accessibilityLabel="Reflect now"
+              testID="review-reflect-now"
             />
           </View>
         </Section>
@@ -64,8 +58,8 @@ export default function ReviewScreen() {
           </Section>
           <Section title="Details">
             <Row
-              title="Barrier pattern and identity evidence"
-              subtitle="See your blockers and reflection themes."
+              title="Patterns and wins"
+              subtitle="See blockers and what helped."
               showChevron
               onPress={() => router.push("/review/details")}
             />

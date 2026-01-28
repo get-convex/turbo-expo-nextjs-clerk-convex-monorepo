@@ -73,7 +73,7 @@ export default function CloseLoopScreen() {
   const outcomeValue = outcomes[outcomeIndex]?.value ?? "yes";
   const canSaveReflection = isAuthenticated && !isAuthLoading;
   const showBlockers = outcomeValue !== "yes";
-  const showNotes = showBlockers;
+  const showNotes = showBlockers && selectedBlockers.length > 0;
   const blockerTags = showBlockers ? selectedBlockers : [];
   const learnings = showNotes && whatHelped.trim().length > 0 ? whatHelped.trim() : undefined;
 
@@ -106,7 +106,7 @@ export default function CloseLoopScreen() {
       </Section>
 
       {showBlockers ? (
-        <Section title="Blockers">
+        <Section title="Blockers" footnote="Pick anything that got in the way.">
           {blockers.map((label) => (
             <Row
               key={label}
@@ -172,6 +172,7 @@ export default function CloseLoopScreen() {
             setShowPostSaveTip(true);
           }}
           disabled={!canSaveReflection}
+          testID="reflect-save"
           accessory={
             showCheck ? (
               <Animated.Text
@@ -194,7 +195,7 @@ export default function CloseLoopScreen() {
             selectable
             style={{ fontSize: 13, color: PlatformColor("secondaryLabel"), lineHeight: 18 }}
           >
-            Saved. For tomorrow, time-box the first 10 minutes before checking messages.
+            Saved. Nice job showing up today.
           </Text>
         ) : null}
       </View>

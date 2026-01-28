@@ -6,16 +6,15 @@ import Section from "../../../src/components/section";
 export default function ReviewDetailsScreen() {
   const snapshot = useQuery(api.metrics.getReviewSnapshot, {});
 
-  const barrierCopy = snapshot?.barrierLabel
+  const blockerCopy = snapshot?.barrierLabel
     ? `Most common blocker: ${snapshot.barrierLabel.toLowerCase()}.`
     : "No dominant blocker yet. Keep logging reflections to surface patterns.";
 
   const strategyCopy = snapshot?.barrierLabel
-    ? `Reduce ${snapshot.barrierLabel.toLowerCase()} by pre-deciding your first 60 seconds.`
-    : "Try pre-deciding your first 60 seconds before you start.";
+    ? `Try a 60-second start to reduce ${snapshot.barrierLabel.toLowerCase()}.`
+    : "Try a 60-second start before you begin.";
 
-  const identityEvidence =
-    snapshot?.identityEvidence ?? "No identity evidence captured yet.";
+  const winsCopy = snapshot?.identityEvidence ?? "No wins captured yet.";
 
   return (
     <ScrollView
@@ -23,15 +22,15 @@ export default function ReviewDetailsScreen() {
       style={{ flex: 1, backgroundColor: PlatformColor("systemGroupedBackground") }}
       contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 28 }}
     >
-      <Section title="Barrier pattern">
+      <Section title="Blocker pattern">
         <View style={{ padding: 16 }}>
           <Text selectable style={{ fontSize: 17, color: PlatformColor("label"), lineHeight: 22 }}>
-            {barrierCopy}
+            {blockerCopy}
           </Text>
         </View>
       </Section>
 
-      <Section title="Next step">
+      <Section title="Try next">
         <View style={{ padding: 16 }}>
           <Text selectable style={{ fontSize: 17, color: PlatformColor("label"), lineHeight: 22 }}>
             {strategyCopy}
@@ -39,13 +38,13 @@ export default function ReviewDetailsScreen() {
         </View>
       </Section>
 
-      <Section title="Identity evidence">
+      <Section title="Wins">
         <View style={{ padding: 16, gap: 8 }}>
           <Text selectable style={{ fontSize: 15, color: PlatformColor("secondaryLabel") }}>
-            Evidence captured this week
+            Wins this week
           </Text>
           <Text selectable style={{ fontSize: 17, color: PlatformColor("label"), lineHeight: 22 }}>
-            {identityEvidence}
+            {winsCopy}
           </Text>
         </View>
       </Section>

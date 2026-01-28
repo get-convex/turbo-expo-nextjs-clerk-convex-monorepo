@@ -1,11 +1,52 @@
 import { Stack } from "expo-router/stack";
-import { PlatformColor } from "react-native";
+import { useRouter } from "expo-router";
+import { SymbolView } from "expo-symbols";
+import { PlatformColor, Pressable, Text } from "react-native";
 import ConvexClientProvider from "../ConvexClientProvider";
 
 const systemGroupedBackground = PlatformColor("systemGroupedBackground") as unknown as string;
 const labelColor = PlatformColor("label") as unknown as string;
+const isIOS = process.env.EXPO_OS === "ios";
 
 export default function RootLayout() {
+  const router = useRouter();
+
+  const closeButton = () => (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Close"
+      testID="modal-close"
+      onPress={() => {
+        if (router.canDismiss()) {
+          router.dismiss();
+        } else if (router.canGoBack()) {
+          router.back();
+        } else {
+          router.replace("/today");
+        }
+      }}
+      hitSlop={10}
+      style={({ pressed }) => [
+        {
+          width: 44,
+          height: 44,
+          borderRadius: 22,
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        pressed && { backgroundColor: PlatformColor("tertiarySystemFill") },
+      ]}
+    >
+      {isIOS ? (
+        <SymbolView name="xmark" size={16} tintColor={PlatformColor("label")} />
+      ) : (
+        <Text selectable style={{ fontSize: 15, fontWeight: "600", color: labelColor }}>
+          Close
+        </Text>
+      )}
+    </Pressable>
+  );
+
   return (
     <ConvexClientProvider>
       <Stack
@@ -46,6 +87,7 @@ export default function RootLayout() {
             },
             headerTitleStyle: { color: labelColor },
             sheetGrabberVisible: true,
+            headerRight: closeButton,
           }}
         />
         <Stack.Screen
@@ -62,6 +104,7 @@ export default function RootLayout() {
             },
             headerTitleStyle: { color: labelColor },
             sheetGrabberVisible: true,
+            headerRight: closeButton,
           }}
         />
       </Stack>
