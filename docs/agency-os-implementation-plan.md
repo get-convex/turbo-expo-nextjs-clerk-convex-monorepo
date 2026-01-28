@@ -6,10 +6,14 @@
 - Online-first app with no offline mode; network is required for core flows.
 - Follow the Expo Router and UI guidelines from the Expo skill (routing in `app/`, ScrollView root, SF Symbols, Reanimated, Blur/Glass, etc.).
 - UX constraints from PRD: no feeds, no infinite scroll, no streak pressure as a primary mechanic; outcome-first metrics; time-to-value < 60 seconds on day 1.
+- Behavior-science alignment: identity-first onboarding, tiny-habit starters, self-efficacy building, non-punitive tone, and positive micro-reinforcement.
+- Privacy-first personalization: opt-in data sources, minimize data sent to servers, and prefer on-device inference/aggregation when feasible.
 
 ## Implementation plan
 
-Phase 1 — App foundation and core loop
+Assumption: Phase 1 is already implemented. Treat Phase 1 as completed and use the alignment checks to spot gaps; any missing items roll into Phase 2/4 polish.
+
+Phase 1 — App foundation and core loop (completed; verify alignment)
 
 - Add Expo Router entry point (`apps/native/index.tsx` -> `expo-router/entry`) and create `apps/native/app/` route tree.
 - Move font loading and providers into `apps/native/app/_layout.tsx` so the router owns the root.
@@ -26,6 +30,12 @@ Phase 1 — App foundation and core loop
 - Use `Link` from `expo-router` for navigation, `Link.Preview` where it improves iOS conventions.
 - Implement the core loop UX with PRD constraints: no feeds, no infinite scroll, no streak pressure, outcome-first framing.
 - Ensure time-to-value < 60 seconds on day 1 by allowing a first commitment with minimal inputs.
+- **Research alignment checks (backfill later if missing):**
+  - First commitment uses tiny-habit framing and identity/value language (e.g., "becoming the kind of person who...").
+  - One-tap self-monitoring with immediate positive feedback (micro-animation + subtle haptic).
+  - Neutral handling of misses (no red X or guilt language); "fresh start" copy.
+  - Lightweight progress visualization that avoids streak pressure (weekly completion rate or momentum indicator).
+  - Optional one-line micro-tip or encouragement in-context (no dedicated tips feed).
 - **Testing setup:**
   - Install test dependencies in `apps/native`: Jest + jest-expo, React Native Testing Library, jest-native matchers, MSW or fetch mocks for Convex/AI calls.
   - Configure Jest in `apps/native` with appropriate presets for Expo and React Native.
@@ -41,13 +51,14 @@ Phase 2 — Data model, Convex backend, and data sources
 - Store auth/session tokens in `expo-secure-store` only if needed; otherwise keep state in memory.
 - Define Convex tables:
   - `profile` (values, goals, constraints, identity statements)
+  - `checkins` (energy, focus, mood, availability, confidence; lightweight)
   - `commitments` (initiative action, done definition, time estimate, cue)
   - `if_then_plans` (cue, starter step, fallback plan)
   - `sprints` (start/end times, steps, outcomes)
   - `evidence_logs` (completion status, blocks, learnings, next step)
   - `barriers` (catalog + frequency)
   - `nudges` (decision points, type, delivered/acted)
-  - `metrics` (self-efficacy, perceived control, automaticity scores)
+  - `metrics` (self-efficacy, perceived control, automaticity, completion rate trend)
   - `experiments` (baseline period, micro-randomization assignments)
   - `data_sources` (enabled scopes, retention policy)
   - `ai_runs` (run type, input hash, model, status, output JSON, tokens, timestamps)
@@ -56,17 +67,22 @@ Phase 2 — Data model, Convex backend, and data sources
 - Build a Settings screen with explicit modular scopes (calendar, location, notifications, health, etc.) using native controls (Switch, SegmentedControl).
 - Provide “why this data is used” explanations and surface retention policies.
 - Store consent in `data_sources` and check permissions before accessing each source.
+- Ensure progress visualizations are derived from `evidence_logs`/`metrics` (weekly completion or momentum), not streak pressure.
 
 Phase 3 — Core domain services and AI integration
 
 - Commitment generator: uses goals/values, calendar availability, mood/energy input, and recent outcomes to produce one daily commitment; user must accept/edit/replace (autonomy support).
 - If-then plan builder: generates cue, 60-second starter, and fallback action; learns from prior success patterns.
+- Adaptive difficulty tuning: scale commitments up/down based on recent consistency; default to smaller steps after misses to protect self-efficacy.
 - Guided sprint coach: 5–25 minute time-boxed session; break the commitment into 3-5 micro steps with a timer; rescope on stall; light escalation after success.
 - Evidence log + weekly review: daily micro reflection; weekly retrospective that surfaces barrier patterns and suggests one environment/cue change.
 - Identity evidence: capture a short “what this proves about me” reflection in the weekly review to align with identity-as-lagging-indicator.
-- Run all model calls server-side in Convex actions using the Vercel AI SDK (`ai` + `zod`), never on-device; keep API keys in server env only.
+- Optional micro-tips: one-line, in-context behavioral insight or encouragement surfaced after completion or in weekly review (no tips feed).
+- Optional AI coach surface: on-demand Q&A with concise responses; keep it out of the primary flow unless invoked.
+- Run LLM calls server-side in Convex actions using the Vercel AI SDK (`ai` + `zod`); keep API keys in server env only. Use on-device heuristics or lightweight models for timing decisions when feasible.
 - Use `generateObject` for schema-constrained outputs; treat any schema mismatch as a retryable error and fall back to a server-side heuristic generator if needed.
 - Data flow (daily/weekly): device assembles minimal context -> Convex action calls model -> returns structured output -> user approves -> write to Convex as source of truth.
+- Privacy constraint: send only aggregated or user-approved context to AI; keep raw sensor data on-device where possible.
 - Store AI run metadata and outputs in Convex for auditability.
 - Prompt versioning: every AI run includes `promptVersion`, `schemaVersion`, `model`, and a stable `runType` for downstream analytics and experiments.
 - Guardrails: never fabricate calendar facts; if uncertain, ask for confirmation; prefer rescope vs push when stress/low energy is detected.
@@ -83,6 +99,9 @@ Phase 4 — JITAI, metrics, polish, and verification
 - Precision over volume: only notify when predicted compliance is high; otherwise defer to in-app prompts.
 - Tailoring signals (Expo Go-compatible first): calendar free/busy, time of day, app open/foreground, manual energy check-ins.
 - Mark data sources that require a custom build or iOS entitlements (Screen Time, Focus Mode, HealthKit) and keep them behind explicit toggles.
+- Implement Focus filters/time-sensitive notification categories so prompts respect Work/Sleep/Custom Focus modes.
+- Add opt-in HealthKit auto-completion for relevant habits and optional location-based triggers for place-tied routines.
+- Offer lightweight widgets and Siri Shortcuts for "mark done" and "start sprint" to reduce friction.
 - Progressive fading: when habits strengthen, reduce notification frequency and shift to weekly reflection to avoid app dependency.
 - Implement baseline mode (7-14 days) that logs behavior without nudges; store in `experiments`.
 - Add micro-randomization toggles for nudge type and timing; log proximal outcomes (started within 10 minutes, completion rate).

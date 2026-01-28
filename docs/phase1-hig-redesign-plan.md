@@ -6,6 +6,7 @@
 - Replace card-heavy layout with grouped list patterns and native controls.
 - Keep the app minimal and fast to value (single obvious primary action).
 - Prepare navigation and layout structure for Phase 2–4 features without adding them now.
+- Reinforce identity/tiny-habit framing, positive micro-feedback, and non-punitive copy.
 
 ## Confirmed Decisions
 
@@ -13,6 +14,7 @@
 - Keep accent neutral (no strong brand tint yet).
 - Use SF (system font) instead of custom fonts.
 - Keep daily reflection minimal.
+- Avoid streak pressure or punitive visuals; use neutral "not yet" states.
 
 ## Information Architecture (Phase 1 + future-ready)
 
@@ -100,23 +102,29 @@ Primary goal: quick commitment + start sprint.
 
 Layout:
 1. **Commitment section**
-   - Single text input (placeholder: “What will you finish today?”)
-   - Helper line (“Smallest meaningful outcome.”)
-   - Optional suggestion chips as secondary (keep minimal)
-2. **If‑Then plan preview** (Phase 2 ready)
+   - Single text input (placeholder: "What will you finish today?")
+   - Helper line ("Smallest meaningful outcome for who you're becoming.")
+   - Optional tiny-starter suggestion (e.g., "Start with 1 minute")
+2. **Momentum row (non-streak)**
+   - "This week: 3/5 completed" or a simple progress bar
+   - Neutral "Not yet today" state (no red X)
+3. **If‑Then plan preview** (Phase 2 ready)
    - Row with cue / starter / fallback placeholders
    - Tap opens future edit screen (not implemented now)
-3. **Sprint actions**
-   - Primary button: “Start sprint”
-   - Secondary: “Schedule a block” (placeholder for calendar integration)
-4. **Next support window** (Phase 4 ready)
+4. **Sprint actions**
+   - Primary button: "Start sprint"
+   - Secondary: "Schedule a block" (placeholder for calendar integration)
+5. **Next support window** (Phase 4 ready)
    - Compact row with time window + planned support type
-5. **Weekly review preview**
-   - Single row: “This week” + one metric teaser
+6. **Weekly review preview**
+   - Single row: "This week" + one metric teaser
+7. **Micro-tip (optional)**
+   - One-line encouragement or insight shown sparingly (no tips feed)
 
 HIG alignment:
 - Use grouped sections with standard row separators.
 - Keep a single primary CTA visible without scrolling when possible.
+- Provide subtle success feedback (checkmark animation + light haptic).
 
 ### Start Sprint (Modal / Form Sheet)
 
@@ -128,7 +136,8 @@ Layout:
 - Step list (3–5 items) as a clean list with minimal text
 - Rescope options (compact list)
 - Primary: Start / Pause
-- Secondary: “Finish & reflect”
+- Secondary: "Finish & reflect"
+- Copy emphasizes "start small" and normalizes rescoping
 
 Future ready:
 - AI-generated steps + rescope options (Phase 3)
@@ -139,8 +148,9 @@ Future ready:
 Minimal daily reflection:
 - Outcome (segmented control: Yes / Partial / Not yet)
 - Blockers (multi-select list with checkmarks)
-- One optional text field: “What helped most?”
+- One optional text field: "What helped most?"
 - One-line suggestion for next day adjustment (read-only for now)
+- Supportive copy for misses ("Not yet" vs "failed")
 
 Future ready:
 - AI adjustment suggestion (Phase 3)
@@ -151,7 +161,7 @@ Future ready:
 Weekly review + metrics summary, list-first.
 
 Layout:
-- Metrics rows (initiative completion, control, automaticity)
+- Metrics rows (initiative completion rate, control, automaticity)
 - Barrier pattern summary
 - One change for next week
 - Identity evidence block
@@ -183,6 +193,7 @@ Sections:
 - `Section` container with optional title + footnote.
 - `Row` for list-style items with optional accessory text or chevron.
 - `PrimaryButton` and `SecondaryButton` using semantic colors.
+- `ProgressRow` for weekly completion/momentum (non-streak).
 
 ## Interaction & Accessibility
 
@@ -191,6 +202,7 @@ Sections:
 - Keep `Text` selectable for user data.
 - Provide `accessibilityLabel` for inputs and buttons.
 - Use subtle haptics for primary actions (start/finish/rescope).
+- Use supportive, non-judgmental copy for incomplete states.
 
 ## Phase 2–4 Considerations (Reserved Slots)
 
@@ -211,10 +223,11 @@ Sections:
 6. Simplify Close Loop into minimal reflection fields.
 7. Update Settings to native grouped list patterns.
 8. Replace `Card`/`ChoicePill` usage with new Section/Row primitives.
+9. Add a non-streak momentum/progress row and neutral "not yet" state.
+10. Add subtle completion feedback (animation + light haptic).
 
 ## Open Decisions (Optional)
 
 - Should Review tab be a full “Review” or “Weekly” label in the tab bar?
 - Should Start Sprint duration be fixed (10 min) or user-selectable now?
 - Keep suggestion chips on Today, or hide behind a “Suggestions” row?
-
