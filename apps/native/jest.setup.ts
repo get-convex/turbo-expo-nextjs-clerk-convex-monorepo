@@ -4,6 +4,24 @@ import "whatwg-fetch";
 import fetchMock from "jest-fetch-mock";
 import type { ReactNode } from "react";
 
+jest.mock("@clerk/clerk-expo", () => ({
+  ClerkProvider: ({ children }: { children: ReactNode }) => children,
+  useAuth: () => ({ isLoaded: true, isSignedIn: true }),
+  useOAuth: () => ({ startOAuthFlow: jest.fn() }),
+  useUser: () => ({ user: null, isLoaded: true }),
+}));
+
+jest.mock("expo-symbols", () => ({
+  SymbolView: () => null,
+}));
+
+jest.mock("convex/react", () => ({
+  useQuery: jest.fn(() => undefined),
+  useMutation: jest.fn(() => () => Promise.resolve(null)),
+  useConvexAuth: jest.fn(() => ({ isAuthenticated: false, isLoading: false })),
+  ConvexReactClient: jest.fn(),
+}));
+
 jest.mock("react-native-reanimated", () => {
   const Reanimated = require("react-native-reanimated/mock");
   Reanimated.default.call = () => {};

@@ -8,11 +8,15 @@ import {
   Vibration,
   View,
 } from "react-native";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import { api } from "@packages/backend/convex/_generated/api";
+import type { Id } from "@packages/backend/convex/_generated/dataModel";
 import Section from "../../src/components/section";
 import Row from "../../src/components/row";
 import PrimaryButton from "../../src/components/primary-button";
 import SecondaryButton from "../../src/components/secondary-button";
 import SegmentedControl from "../../src/components/segmented-control";
+import { getLocalDateKey } from "../../src/utils/date";
 
 const steps = [
   { id: "1", label: "Open the doc and name the file", minutes: 2 },
@@ -28,15 +32,30 @@ const rescopes = [
 
 export default function StartSprintScreen() {
   const router = useRouter();
+  const todayKey = useMemo(() => getLocalDateKey(), []);
+  const commitmentRecord = useQuery(api.commitments.getForDate, { date: todayKey });
+  const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth();
+  const startSprint = useMutation(api.sprints.startSprint);
+  const endSprint = useMutation(api.sprints.endSprint);
   const [isRunning, setIsRunning] = useState(false);
   const [durationIndex, setDurationIndex] = useState(0);
+  const [showDurationPicker, setShowDurationPicker] = useState(false);
+  const [showSteps, setShowSteps] = useState(false);
+  const [showRescopes, setShowRescopes] = useState(false);
   const [selectedRescope, setSelectedRescope] = useState<string | null>(null);
+  const [activeSprintId, setActiveSprintId] = useState<Id<"sprints"> | null>(null);
   const checkScale = useRef(new Animated.Value(0)).current;
   const [showCheck, setShowCheck] = useState(false);
 
   const durationLabel = useMemo(() => {
     return ["10 min", "20 min", "30 min"][durationIndex] ?? "10 min";
   }, [durationIndex]);
+  const durationMinutes = useMemo(() => {
+    return [10, 20, 30][durationIndex] ?? 10;
+  }, [durationIndex]);
+
+  const sprintFocus = commitmentRecord?.title ?? "Write the first paragraph of the proposal.";
+  const canStartSprint = isAuthenticated && !isAuthLoading;
 
   const triggerHaptic = () => {
     if (process.env.EXPO_OS === "ios") {
@@ -64,14 +83,31 @@ export default function StartSprintScreen() {
   };
 
   const handleToggleSprint = () => {
+    if (!canStartSprint) {
+      return;
+    }
     triggerHaptic();
-    setIsRunning((prev) => {
-      const next = !prev;
-      if (!prev && next) {
-        triggerStartFeedback();
-      }
-      return next;
-    });
+    if (!isRunning) {
+      triggerStartFeedback();
+      void startSprint({
+        commitmentId: commitmentRecord?._id,
+        durationMinutes: durationMinutes,
+        steps: steps.map((step) => ({
+          id: step.id,
+          instruction: step.label,
+          durationMinutes: step.minutes,
+        })),
+      })
+        .then((id) => {
+          setActiveSprintId(id);
+        })
+        .catch(() => {});
+    } else if (activeSprintId) {
+      void endSprint({ sprintId: activeSprintId, outcome: "paused" }).catch(() => {});
+      setActiveSprintId(null);
+    }
+
+    setIsRunning((prev) => !prev);
   };
 
   return (
@@ -80,67 +116,56 @@ export default function StartSprintScreen() {
       style={{ flex: 1, backgroundColor: PlatformColor("systemGroupedBackground") }}
       contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 28 }}
     >
-      <Section title="Sprint focus">
+      <Section title="Focus session">
         <View style={{ padding: 16, gap: 8 }}>
           <Text selectable style={{ fontSize: 17, color: PlatformColor("label") }}>
-            Write the first paragraph of the proposal.
+            {sprintFocus}
           </Text>
           <Text
             selectable
             style={{ fontSize: 15, color: PlatformColor("secondaryLabel"), lineHeight: 20 }}
           >
-            Target: {durationLabel}. Start small and rescope without penalty.
+            Default {durationLabel}. Change it if you need to.
           </Text>
         </View>
+        <Row
+          title="Duration"
+          value={durationLabel}
+          onPress={() => setShowDurationPicker((prev) => !prev)}
+          accessory={
+            <Text selectable style={{ fontSize: 15, color: PlatformColor("systemBlue") }}>
+              {showDurationPicker ? "Hide" : "Change"}
+            </Text>
+          }
+        />
       </Section>
 
-      <Section title="Sprint duration" footnote="Pick a short window you can protect right now.">
-        <View style={{ padding: 16 }}>
-          <SegmentedControl
-            values={["10 min", "20 min", "30 min"]}
-            selectedIndex={durationIndex}
-            onChange={setDurationIndex}
-          />
-        </View>
-      </Section>
-
-      <Section title="Micro-steps">
-        {steps.map((step) => (
-          <Row
-            key={step.id}
-            title={step.label}
-            subtitle={`Step ${step.id} - ${step.minutes} min`}
-          />
-        ))}
-      </Section>
-
-      <Section
-        title="Rescope options"
-        footnote="Choose a smaller win if momentum stalls."
-      >
-        {rescopes.map((option) => (
-          <Row
-            key={option}
-            title={option}
-            onPress={() => {
-              triggerHaptic();
-              setSelectedRescope(option);
-            }}
-            accessory={
-              selectedRescope === option ? (
-                <Text selectable style={{ fontSize: 16, color: PlatformColor("label") }}>
-                  {"\u2713"}
-                </Text>
-              ) : null
-            }
-          />
-        ))}
-      </Section>
+      {showDurationPicker ? (
+        <Section
+          title="Duration"
+          footnote="Pick a short window you can protect right now."
+        >
+          <View style={{ padding: 16 }}>
+            <SegmentedControl
+              values={["10 min", "20 min", "30 min"]}
+              selectedIndex={durationIndex}
+              onChange={setDurationIndex}
+            />
+          </View>
+        </Section>
+      ) : null}
 
       <View style={{ gap: 12 }}>
         <PrimaryButton
-          label={isRunning ? "Pause sprint" : "Start sprint"}
+          label={
+            canStartSprint
+              ? isRunning
+                ? "Pause session"
+                : "Start focus session"
+              : "Sign in to start session"
+          }
           onPress={handleToggleSprint}
+          disabled={!canStartSprint}
           accessory={
             showCheck ? (
               <Animated.Text
@@ -158,14 +183,80 @@ export default function StartSprintScreen() {
             ) : null
           }
         />
-        <SecondaryButton
-          label="Finish & reflect"
-          onPress={() => {
-            triggerHaptic();
-            router.push("/close-loop");
-          }}
-        />
+        {isRunning ? (
+          <SecondaryButton
+            label="End & reflect"
+            onPress={() => {
+              triggerHaptic();
+              if (activeSprintId) {
+                void endSprint({ sprintId: activeSprintId, outcome: "completed" }).catch(
+                  () => {}
+                );
+                setActiveSprintId(null);
+              }
+              router.push("/close-loop");
+            }}
+          />
+        ) : null}
       </View>
+
+      <Section title="Need help?">
+        <Row
+          title="See micro-steps"
+          onPress={() => setShowSteps((prev) => !prev)}
+          accessory={
+            <Text selectable style={{ fontSize: 15, color: PlatformColor("systemBlue") }}>
+              {showSteps ? "Hide" : "Show"}
+            </Text>
+          }
+        />
+        <Row
+          title="Rescope the goal"
+          onPress={() => setShowRescopes((prev) => !prev)}
+          accessory={
+            <Text selectable style={{ fontSize: 15, color: PlatformColor("systemBlue") }}>
+              {showRescopes ? "Hide" : "Show"}
+            </Text>
+          }
+        />
+      </Section>
+
+      {showSteps ? (
+        <Section title="Micro-steps">
+          {steps.map((step) => (
+            <Row
+              key={step.id}
+              title={step.label}
+              subtitle={`Step ${step.id} - ${step.minutes} min`}
+            />
+          ))}
+        </Section>
+      ) : null}
+
+      {showRescopes ? (
+        <Section
+          title="Rescope options"
+          footnote="Choose a smaller win if momentum stalls."
+        >
+          {rescopes.map((option) => (
+            <Row
+              key={option}
+              title={option}
+              onPress={() => {
+                triggerHaptic();
+                setSelectedRescope(option);
+              }}
+              accessory={
+                selectedRescope === option ? (
+                  <Text selectable style={{ fontSize: 16, color: PlatformColor("label") }}>
+                    {"\u2713"}
+                  </Text>
+                ) : null
+              }
+            />
+          ))}
+        </Section>
+      ) : null}
     </ScrollView>
   );
 }

@@ -1,8 +1,31 @@
-import { PlatformColor } from "react-native";
+import { Redirect } from "expo-router";
+import { PlatformColor, View, ActivityIndicator } from "react-native";
+import { useAuth } from "@clerk/clerk-expo";
 
 const isTest = process.env.NODE_ENV === "test";
 
 export default function TabsLayout() {
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if (!isLoaded) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: PlatformColor("systemGroupedBackground"),
+        }}
+      >
+        <ActivityIndicator color={PlatformColor("label")} />
+      </View>
+    );
+  }
+
+  if (!isSignedIn) {
+    return <Redirect href="/sign-in" />;
+  }
+
   if (isTest) {
     const { Stack } = require("expo-router/stack");
 

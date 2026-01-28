@@ -1,6 +1,9 @@
 import { Stack } from "expo-router/stack";
 import { PlatformColor } from "react-native";
 
+const systemGroupedBackground = PlatformColor("systemGroupedBackground") as unknown as string;
+const labelColor = PlatformColor("label") as unknown as string;
+
 export default function TodayLayout() {
   return (
     <Stack
@@ -8,12 +11,12 @@ export default function TodayLayout() {
         headerLargeTitle: true,
         headerShadowVisible: false,
         headerLargeTitleShadowVisible: false,
-        headerStyle: { backgroundColor: PlatformColor("systemGroupedBackground") },
+        headerStyle: { backgroundColor: systemGroupedBackground },
         headerLargeStyle: {
-          backgroundColor: PlatformColor("systemGroupedBackground"),
+          backgroundColor: systemGroupedBackground,
         },
-        headerTitleStyle: { color: PlatformColor("label") },
-        headerLargeTitleStyle: { color: PlatformColor("label") },
+        headerTitleStyle: { color: labelColor },
+        headerLargeTitleStyle: { color: labelColor },
         headerBackButtonDisplayMode: "minimal",
       }}
     >

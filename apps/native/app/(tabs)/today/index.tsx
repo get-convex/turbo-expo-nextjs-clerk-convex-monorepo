@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "expo-router";
 import {
   PlatformColor,
@@ -7,22 +7,93 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import { api } from "@packages/backend/convex/_generated/api";
 import Section from "../../../src/components/section";
-import Row from "../../../src/components/row";
 import PrimaryButton from "../../../src/components/primary-button";
 import SecondaryButton from "../../../src/components/secondary-button";
 import ProgressRow from "../../../src/components/progress-row";
+import { getLocalDateKey } from "../../../src/utils/date";
 
 export default function TodayScreen() {
   const router = useRouter();
+  const todayKey = useMemo(() => getLocalDateKey(), []);
+  const { isAuthenticated } = useConvexAuth();
+  const commitmentRecord = useQuery(api.commitments.getForDate, { date: todayKey });
+  const momentum = useQuery(api.metrics.getWeeklyMomentum, {});
+  const dataSources = useQuery(api.dataSources.listDataSources, {});
+  const initializeDataSources = useMutation(api.dataSources.initializeDataSources);
+  const upsertCommitment = useMutation(api.commitments.upsertForDate);
   const [commitment, setCommitment] = useState("");
+  const hasEditedRef = useRef(false);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasInitializedRef = useRef(false);
 
-  const commitmentSummary = useMemo(() => {
-    if (commitment.trim().length > 0) {
-      return commitment.trim();
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    if (!dataSources || dataSources.length > 0) return;
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
+    void initializeDataSources().catch(() => {
+      hasInitializedRef.current = false;
+    });
+  }, [dataSources, initializeDataSources, isAuthenticated]);
+
+  useEffect(() => {
+    if (hasEditedRef.current) return;
+    if (!commitmentRecord?.title) return;
+    setCommitment(commitmentRecord.title);
+  }, [commitmentRecord?.title]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const trimmed = commitment.trim();
+    const savedTitle = commitmentRecord?.title ?? "";
+    if (trimmed.length === 0 && !commitmentRecord) return;
+    if (trimmed === savedTitle) return;
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
     }
-    return "Smallest meaningful outcome you can finish today.";
-  }, [commitment]);
+
+    saveTimeoutRef.current = setTimeout(() => {
+      void upsertCommitment({
+        date: todayKey,
+        title: trimmed,
+      }).catch(() => {});
+    }, 600);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [
+    commitment,
+    commitmentRecord?.title,
+    todayKey,
+    upsertCommitment,
+    isAuthenticated,
+  ]);
+
+  const trimmedCommitment = commitment.trim();
+  const helperText =
+    trimmedCommitment.length > 0
+      ? `Starter: 1 minute on ${trimmedCommitment}.`
+      : "Smallest meaningful outcome you can finish today.";
+
+  const calendarEnabled = useMemo(() => {
+    return dataSources?.find((source) => source.source === "calendar")?.enabled ?? false;
+  }, [dataSources]);
+
+  const completionRate = momentum?.completionRate ?? 0;
+  const completedValue = momentum?.completed ?? 0;
+  const totalValue = momentum?.total ?? 0;
+  const momentumLabel =
+    totalValue > 0
+      ? `${Math.round(completedValue * 10) / 10}/${totalValue} reflections`
+      : "No reflections yet";
+  const completionRateLabel = totalValue > 0 ? `${Math.round(completionRate * 100)}%` : "--";
 
   return (
     <ScrollView
@@ -30,14 +101,17 @@ export default function TodayScreen() {
       style={{ flex: 1, backgroundColor: PlatformColor("systemGroupedBackground") }}
       contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 28 }}
     >
-      <Section title="Commitment">
+      <Section title="Today's focus">
         <View style={{ padding: 16, gap: 12 }}>
           <TextInput
-            accessibilityLabel="Daily commitment"
+            accessibilityLabel="Today's focus"
             placeholder="What will you finish today?"
             placeholderTextColor={PlatformColor("tertiaryLabel")}
             value={commitment}
-            onChangeText={setCommitment}
+            onChangeText={(text) => {
+              hasEditedRef.current = true;
+              setCommitment(text);
+            }}
             style={{
               backgroundColor: PlatformColor("systemBackground"),
               borderRadius: 12,
@@ -59,97 +133,36 @@ export default function TodayScreen() {
               lineHeight: 20,
             }}
           >
-            Smallest meaningful outcome for who you're becoming.
+            {helperText}
           </Text>
-          <View style={{ gap: 6 }}>
-            <Text
-              selectable
-              style={{ fontSize: 13, color: PlatformColor("secondaryLabel") }}
-            >
-              Tiny starter
-            </Text>
-            <Text selectable style={{ color: PlatformColor("label"), fontSize: 15 }}>
-              Start with 1 minute.
-            </Text>
-          </View>
-          <View style={{ gap: 6 }}>
-            <Text
-              selectable
-              style={{ fontSize: 13, color: PlatformColor("secondaryLabel") }}
-            >
-              Current focus
-            </Text>
-            <Text selectable style={{ fontSize: 17, color: PlatformColor("label") }}>
-              {commitmentSummary}
-            </Text>
-          </View>
         </View>
       </Section>
 
-      <Section title="Momentum">
-        <ProgressRow
-          title="This week"
-          value="3/5 completed"
-          progress={0.6}
-          status="Not yet today"
-        />
-      </Section>
-
-      <Section title="If-then plan">
-        <Row
-          title="Preview"
-          subtitle="If [cue], then [starter]. Fallback: [fallback]."
-          accessory={
-            <Text selectable style={{ fontSize: 13, color: PlatformColor("secondaryLabel") }}>
-              Coming soon
-            </Text>
-          }
-        />
-      </Section>
-
-      <Section title="Sprint actions">
+      <Section title="Start focus session">
         <View style={{ padding: 16, gap: 12 }}>
           <PrimaryButton
-            label="Start sprint"
+            label="Start focus session"
             onPress={() => router.push("/start-sprint")}
-            accessibilityLabel="Start sprint"
+            accessibilityLabel="Start focus session"
           />
-          <SecondaryButton
-            label="Schedule a block"
-            disabled
-            accessibilityLabel="Schedule a focus block"
-          />
+          {calendarEnabled ? (
+            <SecondaryButton
+              label="Schedule a focus block"
+              onPress={() => {}}
+              accessibilityLabel="Schedule a focus block"
+            />
+          ) : null}
         </View>
-      </Section>
-
-      <Section title="Next support window">
-        <Row
-          title="11:30 AM"
-          subtitle="60-second starter"
-          titleStyle={{ fontSize: 19, fontWeight: "600" }}
-        />
       </Section>
 
       <Section title="This week">
-        <Row
-          title="Review"
-          subtitle="Completion rate 72%"
-          showChevron
-          onPress={() => router.push("/review")}
+        <ProgressRow
+          title="Completion rate"
+          value={completionRateLabel}
+          progress={completionRate}
+          status={momentumLabel}
         />
       </Section>
-
-      <Text
-        selectable
-        style={{
-          fontSize: 13,
-          color: PlatformColor("secondaryLabel"),
-          lineHeight: 18,
-          paddingHorizontal: 4,
-        }}
-      >
-        Tip: Make the first step so small it feels automatic.
-      </Text>
     </ScrollView>
   );
 }

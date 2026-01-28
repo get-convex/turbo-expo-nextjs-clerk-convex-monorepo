@@ -1,6 +1,9 @@
 import { Stack } from "expo-router/stack";
 import { PlatformColor } from "react-native";
 
+const systemGroupedBackground = PlatformColor("systemGroupedBackground") as unknown as string;
+const labelColor = PlatformColor("label") as unknown as string;
+
 export default function ReviewLayout() {
   return (
     <Stack
@@ -8,16 +11,17 @@ export default function ReviewLayout() {
         headerLargeTitle: true,
         headerShadowVisible: false,
         headerLargeTitleShadowVisible: false,
-        headerStyle: { backgroundColor: PlatformColor("systemGroupedBackground") },
+        headerStyle: { backgroundColor: systemGroupedBackground },
         headerLargeStyle: {
-          backgroundColor: PlatformColor("systemGroupedBackground"),
+          backgroundColor: systemGroupedBackground,
         },
-        headerTitleStyle: { color: PlatformColor("label") },
-        headerLargeTitleStyle: { color: PlatformColor("label") },
+        headerTitleStyle: { color: labelColor },
+        headerLargeTitleStyle: { color: labelColor },
         headerBackButtonDisplayMode: "minimal",
       }}
     >
       <Stack.Screen name="index" options={{ title: "Review" }} />
+      <Stack.Screen name="details" options={{ title: "Details" }} />
     </Stack>
   );
 }

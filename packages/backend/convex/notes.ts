@@ -1,11 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "../convex/_generated/api";
-import { Auth } from "convex/server";
-
-export const getUserId = async (ctx: { auth: Auth }) => {
-  return (await ctx.auth.getUserIdentity())?.subject;
-};
+import { getUserId, requireUserId } from "./auth";
 
 // Get all notes for a specific user
 export const getNotes = query({
@@ -44,8 +40,7 @@ export const createNote = mutation({
     isSummary: v.boolean(),
   },
   handler: async (ctx, { title, content, isSummary }) => {
-    const userId = await getUserId(ctx);
-    if (!userId) throw new Error("User not found");
+    const userId = await requireUserId(ctx);
     const noteId = await ctx.db.insert("notes", { userId, title, content });
 
     if (isSummary) {

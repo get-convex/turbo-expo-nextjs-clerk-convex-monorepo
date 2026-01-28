@@ -1,5 +1,4 @@
-import { useRef, useState } from "react";
-import { useRouter } from "expo-router";
+import { useMemo, useRef, useState } from "react";
 import {
   Animated,
   PlatformColor,
@@ -9,21 +8,31 @@ import {
   Vibration,
   View,
 } from "react-native";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import { api } from "@packages/backend/convex/_generated/api";
 import Section from "../../src/components/section";
 import Row from "../../src/components/row";
 import PrimaryButton from "../../src/components/primary-button";
-import SecondaryButton from "../../src/components/secondary-button";
 import SegmentedControl from "../../src/components/segmented-control";
+import { getLocalDateKey } from "../../src/utils/date";
 
-const outcomes = ["Yes", "Partial", "Not yet"];
+const outcomes = [
+  { label: "Yes", value: "yes" },
+  { label: "Partial", value: "partial" },
+  { label: "Not yet", value: "not_yet" },
+];
 const blockers = ["Energy", "Ambiguity", "Interruptions", "Tools", "Time"];
 
 export default function CloseLoopScreen() {
-  const router = useRouter();
+  const todayKey = useMemo(() => getLocalDateKey(), []);
+  const commitmentRecord = useQuery(api.commitments.getForDate, { date: todayKey });
+  const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth();
+  const logEvidence = useMutation(api.evidenceLogs.logEvidence);
   const [outcomeIndex, setOutcomeIndex] = useState(0);
   const [selectedBlockers, setSelectedBlockers] = useState<string[]>([]);
   const [whatHelped, setWhatHelped] = useState("");
   const [showCheck, setShowCheck] = useState(false);
+  const [showPostSaveTip, setShowPostSaveTip] = useState(false);
   const checkScale = useRef(new Animated.Value(0)).current;
 
   const triggerHaptic = () => {
@@ -53,12 +62,20 @@ export default function CloseLoopScreen() {
 
   const toggleBlocker = (label: string) => {
     triggerHaptic();
+    setShowPostSaveTip(false);
     setSelectedBlockers((current) =>
       current.includes(label)
         ? current.filter((item) => item !== label)
         : [...current, label]
     );
   };
+
+  const outcomeValue = outcomes[outcomeIndex]?.value ?? "yes";
+  const canSaveReflection = isAuthenticated && !isAuthLoading;
+  const showBlockers = outcomeValue !== "yes";
+  const showNotes = showBlockers;
+  const blockerTags = showBlockers ? selectedBlockers : [];
+  const learnings = showNotes && whatHelped.trim().length > 0 ? whatHelped.trim() : undefined;
 
   return (
     <ScrollView
@@ -69,73 +86,92 @@ export default function CloseLoopScreen() {
       <Section title="Outcome">
         <View style={{ padding: 16, gap: 12 }}>
           <Text selectable style={{ fontSize: 15, color: PlatformColor("secondaryLabel") }}>
-            Did you complete the commitment?
+            Did you complete today's focus?
           </Text>
           <SegmentedControl
-            values={outcomes}
+            values={outcomes.map((outcome) => outcome.label)}
             selectedIndex={outcomeIndex}
             onChange={(index) => {
               triggerHaptic();
+              setShowPostSaveTip(false);
+              const nextOutcome = outcomes[index]?.value ?? "yes";
+              if (nextOutcome === "yes") {
+                setSelectedBlockers([]);
+                setWhatHelped("");
+              }
               setOutcomeIndex(index);
             }}
           />
         </View>
       </Section>
 
-      <Section title="Blockers">
-        {blockers.map((label) => (
-          <Row
-            key={label}
-            title={label}
-            onPress={() => toggleBlocker(label)}
-            accessory={
-              selectedBlockers.includes(label) ? (
-                <Text selectable style={{ fontSize: 16, color: PlatformColor("label") }}>
-                  {"\u2713"}
-                </Text>
-              ) : null
-            }
-          />
-        ))}
-      </Section>
+      {showBlockers ? (
+        <Section title="Blockers">
+          {blockers.map((label) => (
+            <Row
+              key={label}
+              title={label}
+              onPress={() => toggleBlocker(label)}
+              accessory={
+                selectedBlockers.includes(label) ? (
+                  <Text selectable style={{ fontSize: 16, color: PlatformColor("label") }}>
+                    {"\u2713"}
+                  </Text>
+                ) : null
+              }
+            />
+          ))}
+        </Section>
+      ) : null}
 
-      <Section title="What helped most?">
-        <View style={{ padding: 16, gap: 12 }}>
-          <TextInput
-            accessibilityLabel="What helped most"
-            placeholder="Optional"
-            placeholderTextColor={PlatformColor("tertiaryLabel")}
-            value={whatHelped}
-            onChangeText={setWhatHelped}
-            multiline
-            textAlignVertical="top"
-            style={{
-              minHeight: 88,
-              backgroundColor: PlatformColor("systemBackground"),
-              borderRadius: 12,
-              borderCurve: "continuous",
-              borderWidth: 1,
-              borderColor: PlatformColor("separator"),
-              paddingHorizontal: 12,
-              paddingVertical: 10,
-              fontSize: 16,
-              color: PlatformColor("label"),
-              lineHeight: 20,
-            }}
-          />
-          <Text selectable style={{ fontSize: 13, color: PlatformColor("secondaryLabel") }}>
-            Next day adjustment: time-box the first 10 minutes before checking messages.
-          </Text>
-        </View>
-      </Section>
+      {showNotes ? (
+        <Section title="Optional note">
+          <View style={{ padding: 16, gap: 12 }}>
+            <TextInput
+              accessibilityLabel="Optional note"
+              placeholder="What got in the way?"
+              placeholderTextColor={PlatformColor("tertiaryLabel")}
+              value={whatHelped}
+              onChangeText={(text) => {
+                setShowPostSaveTip(false);
+                setWhatHelped(text);
+              }}
+              multiline
+              textAlignVertical="top"
+              style={{
+                minHeight: 88,
+                backgroundColor: PlatformColor("systemBackground"),
+                borderRadius: 12,
+                borderCurve: "continuous",
+                borderWidth: 1,
+                borderColor: PlatformColor("separator"),
+                paddingHorizontal: 12,
+                paddingVertical: 10,
+                fontSize: 16,
+                color: PlatformColor("label"),
+                lineHeight: 20,
+              }}
+            />
+          </View>
+        </Section>
+      ) : null}
 
       <View style={{ gap: 12 }}>
         <PrimaryButton
-          label="Save reflection"
+          label={canSaveReflection ? "Save" : "Sign in to save"}
           onPress={() => {
+            if (!canSaveReflection) return;
             triggerHaptic();
             triggerSaveFeedback();
+            void logEvidence({
+              commitmentId: commitmentRecord?._id,
+              outcomeLabel: outcomeValue,
+              blockerTags,
+              learnings,
+            }).catch(() => {});
+            setShowPostSaveTip(true);
           }}
+          disabled={!canSaveReflection}
           accessory={
             showCheck ? (
               <Animated.Text
@@ -153,13 +189,14 @@ export default function CloseLoopScreen() {
             ) : null
           }
         />
-        <SecondaryButton
-          label="See weekly review"
-          onPress={() => {
-            triggerHaptic();
-            router.push("/review");
-          }}
-        />
+        {showPostSaveTip ? (
+          <Text
+            selectable
+            style={{ fontSize: 13, color: PlatformColor("secondaryLabel"), lineHeight: 18 }}
+          >
+            Saved. For tomorrow, time-box the first 10 minutes before checking messages.
+          </Text>
+        ) : null}
       </View>
     </ScrollView>
   );

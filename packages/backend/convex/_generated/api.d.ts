@@ -8,8 +8,16 @@
  * @module
  */
 
+import type * as auth from "../auth.js";
+import type * as commitments from "../commitments.js";
+import type * as crons from "../crons.js";
+import type * as dataSources from "../dataSources.js";
+import type * as evidenceLogs from "../evidenceLogs.js";
+import type * as metrics from "../metrics.js";
 import type * as notes from "../notes.js";
 import type * as openai from "../openai.js";
+import type * as retention from "../retention.js";
+import type * as sprints from "../sprints.js";
 import type * as users from "../users.js";
 import type * as utils from "../utils.js";
 
@@ -20,8 +28,16 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  auth: typeof auth;
+  commitments: typeof commitments;
+  crons: typeof crons;
+  dataSources: typeof dataSources;
+  evidenceLogs: typeof evidenceLogs;
+  metrics: typeof metrics;
   notes: typeof notes;
   openai: typeof openai;
+  retention: typeof retention;
+  sprints: typeof sprints;
   users: typeof users;
   utils: typeof utils;
 }>;
