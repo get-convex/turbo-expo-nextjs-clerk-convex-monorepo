@@ -102,7 +102,7 @@ This monorepo template includes the following packages/apps:
 
 ### Apps and Packages
 
-- `web`: a [Next.js 15](https://nextjs.org/) app with Tailwind CSS and Clerk
+- `web`: a [Next.js 16](https://nextjs.org/) app with Tailwind CSS and Clerk
 - `native`: a [React Native](https://reactnative.dev/) app built with
   [expo](https://docs.expo.dev/)
 - `packages/backend`: a [Convex](https://www.convex.dev/) folder with the
