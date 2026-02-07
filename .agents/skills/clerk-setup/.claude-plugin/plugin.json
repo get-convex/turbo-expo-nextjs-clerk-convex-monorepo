@@ -1,0 +1,14 @@
+{
+  "name": "clerk-setup",
+  "description": "Add Clerk authentication to any project by following the official quickstart guides",
+  "version": "1.0.0",
+  "author": {
+    "name": "Clerk",
+    "email": "support@clerk.com"
+  },
+  "license": "MIT",
+  "homepage": "https://clerk.com/docs",
+  "repository": "https://github.com/clerk/skills",
+  "keywords": ["auth", "setup", "quickstart", "framework-detection"],
+  "category": "authentication"
+}

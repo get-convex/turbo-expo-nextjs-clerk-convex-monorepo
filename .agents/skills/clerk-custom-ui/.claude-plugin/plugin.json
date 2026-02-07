@@ -1,0 +1,14 @@
+{
+  "name": "clerk-custom-ui",
+  "description": "Build custom sign-in/sign-up flows and customize component appearance. Use for custom auth flows, appearance styling, non-standard patterns.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Clerk",
+    "email": "support@clerk.com"
+  },
+  "license": "MIT",
+  "homepage": "https://clerk.com/docs",
+  "repository": "https://github.com/clerk/skills",
+  "keywords": ["auth", "custom-ui", "appearance", "sign-in", "sign-up"],
+  "category": "authentication"
+}

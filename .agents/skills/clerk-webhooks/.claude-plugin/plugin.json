@@ -1,0 +1,14 @@
+{
+  "name": "clerk-webhooks",
+  "description": "Clerk webhooks for real-time events and data syncing. Listen for user creation, updates, deletion, and organization events. Build event-driven features like database sync, notifications, integrations.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Clerk",
+    "email": "support@clerk.com"
+  },
+  "license": "MIT",
+  "homepage": "https://clerk.com/docs",
+  "repository": "https://github.com/clerk/skills",
+  "keywords": ["webhooks", "events", "sync", "database", "notifications", "integrations"],
+  "category": "authentication"
+}

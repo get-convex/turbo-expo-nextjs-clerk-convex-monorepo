@@ -1,0 +1,73 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "han hook dispatch UserPromptSubmit",
+            "timeout": 30000
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "han hook dispatch SessionStart",
+            "timeout": 30000
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "core@han": true,
+    "bushido@han": true,
+    "react-native@han": true,
+    "npm@han": true,
+    "tailwind@han": true,
+    "architecture@han": true,
+    "databases@han": true,
+    "frontend@han": true,
+    "backend@han": true,
+    "mobile@han": true,
+    "expo@han": true,
+    "product@han": true,
+    "project-management@han": true,
+    "quality@han": true,
+    "security@han": true,
+    "atomic-design@han": true,
+    "git-storytelling@han": true,
+    "bdd@han": true,
+    "tdd@han": true,
+    "monorepo@han": true,
+    "notetaker@han": true,
+    "notion@han": true,
+    "zustand@han": true,
+    "typescript@han": true,
+    "biome@han": true,
+    "jest@han": true,
+    "android@han": true,
+    "ios@han": true,
+    "frontend-design@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "coderabbit@claude-plugins-official": true,
+    "act@han": true,
+    "yarn@han": true,
+    "mocha@han": true,
+    "prettier@han": true,
+    "eslint@han": true,
+    "esbuild@han": true,
+    "effect@han": true,
+    "cypress@han": true
+  }
+}

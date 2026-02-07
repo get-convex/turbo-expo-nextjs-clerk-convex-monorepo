@@ -1,0 +1,14 @@
+{
+  "name": "clerk-orgs",
+  "description": "Clerk Organizations for B2B SaaS - create multi-tenant apps with org switching, role-based access, verified domains, and enterprise SSO. Use for team workspaces, RBAC, org-based routing, member management.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Clerk",
+    "email": "support@clerk.com"
+  },
+  "license": "MIT",
+  "homepage": "https://clerk.com/docs",
+  "repository": "https://github.com/clerk/skills",
+  "keywords": ["organizations", "b2b", "saas", "multi-tenant", "rbac", "team-workspace", "sso", "verified-domains"],
+  "category": "authentication"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "clerk-testing",
+  "description": "E2E testing for Clerk apps. Use with Playwright or Cypress for auth flow tests.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Clerk",
+    "email": "support@clerk.com"
+  },
+  "license": "MIT",
+  "homepage": "https://clerk.com/docs",
+  "repository": "https://github.com/clerk/skills",
+  "keywords": ["testing", "e2e", "playwright", "cypress"],
+  "category": "authentication"
+}

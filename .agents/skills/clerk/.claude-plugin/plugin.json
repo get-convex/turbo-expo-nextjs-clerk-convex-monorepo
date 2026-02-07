@@ -1,0 +1,14 @@
+{
+  "name": "clerk",
+  "description": "Clerk authentication router - automatically routes to the right skill based on your task",
+  "version": "1.0.0",
+  "author": {
+    "name": "Clerk",
+    "email": "support@clerk.com"
+  },
+  "license": "MIT",
+  "homepage": "https://clerk.com/docs",
+  "repository": "https://github.com/clerk/skills",
+  "keywords": ["clerk", "auth", "router"],
+  "category": "authentication"
+}
