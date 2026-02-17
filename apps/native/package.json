@@ -14,7 +14,7 @@
     "@clerk/clerk-expo": "^2.19.6",
     "@expo/vector-icons": "^15.0.3",
     "@packages/backend": "*",
-    "@react-native/virtualized-lists": "^0.82.1",
+    "@react-native/virtualized-lists": "^0.84.0",
     "@react-navigation/bottom-tabs": "^7.8.11",
     "@react-navigation/native": "^7.1.24",
     "@react-navigation/native-stack": "^7.8.5",
