@@ -13,7 +13,7 @@
   "dependencies": {
     "@clerk/clerk-expo": "^2.19.6",
     "@expo/vector-icons": "^15.0.3",
-    "@packages/backend": "*",
+    "@packages/backend": "workspace:*",
     "@react-native/virtualized-lists": "^0.82.1",
     "@react-navigation/bottom-tabs": "^7.8.11",
     "@react-navigation/native": "^7.1.24",

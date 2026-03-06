@@ -29,9 +29,12 @@ include:
 
 ### 1. Install dependencies
 
-If you don't have `yarn` installed, run `npm install --global yarn`.
+Enable Corepack (if needed), then install dependencies:
 
-Run `yarn`.
+```sh
+corepack enable
+pnpm install
+```
 
 ### 2. Configure Convex
 
@@ -40,7 +43,7 @@ Run `yarn`.
 > that.
 
 ```sh
-npm run setup --workspace packages/backend
+pnpm --filter @packages/backend setup
 ```
 
 The script will log you into Convex if you aren't already and prompt you to
@@ -78,7 +81,7 @@ environment variables.
 Run the following command to run both the web and mobile apps:
 
 ```sh
-npm run dev
+pnpm dev
 ```
 
 This will allow you to use the ⬆ and ⬇ keyboard keys to see logs for each
@@ -91,7 +94,7 @@ If you'd rather see all of the logs in one place, delete the
 In order to both deploy the frontend and Convex, run this as the build command from the apps/web directory:
 
 ```sh
-cd ../../packages/backend && npx convex deploy --cmd 'cd ../../apps/web && turbo run build' --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL
+cd ../../packages/backend && pnpm convex deploy --cmd 'cd ../../apps/web && pnpm turbo run build' --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL
 ```
 
 There is a vercel.json file in the apps/web directory with this configuration for Vercel.
@@ -110,7 +113,7 @@ This monorepo template includes the following packages/apps:
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-To install a new package, `cd` into that directory, such as [packages/backend](./packages/backend/), and then run `yarn add mypackage@latest`
+To install a new package, `cd` into that directory, such as [packages/backend](./packages/backend/), and then run `pnpm add mypackage@latest`
 
 ### Utilities
 

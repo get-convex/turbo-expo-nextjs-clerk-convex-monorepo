@@ -9,8 +9,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
   },
   "devDependencies": {
+    "convex": "^1.32.0",
+    "expo": "~54.0.33",
     "prettier": "3.7.4",
-    "turbo": "2.6.2"
+    "turbo": "2.6.2",
+    "vercel": "^50.28.0"
   },
   "engines": {
     "node": ">=20.19.4"
@@ -19,5 +22,5 @@
     "apps/*",
     "packages/*"
   ],
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "pnpm@10.30.3"
 }
