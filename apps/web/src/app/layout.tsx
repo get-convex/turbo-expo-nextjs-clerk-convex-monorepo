@@ -25,6 +25,10 @@ export default function RootLayout({
         className={cn(inter.className, montserrat.className, lato.className)}
       >
         <ClerkProvider>
+          <p className="bg-amber-100 px-4 py-3 text-center text-sm text-amber-950">
+            Temporary demo: accounts expire 24 hours after signup and their notes
+            are automatically deleted. Please don’t store anything important.
+          </p>
           <ConvexClientProvider>{children}</ConvexClientProvider>
         </ClerkProvider>
       </body>

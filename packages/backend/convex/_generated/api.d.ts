@@ -8,6 +8,8 @@
  * @module
  */
 
+import type * as crons from "../crons.js";
+import type * as demoCleanup from "../demoCleanup.js";
 import type * as notes from "../notes.js";
 import type * as openai from "../openai.js";
 import type * as utils from "../utils.js";
@@ -19,6 +21,8 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  crons: typeof crons;
+  demoCleanup: typeof demoCleanup;
   notes: typeof notes;
   openai: typeof openai;
   utils: typeof utils;
